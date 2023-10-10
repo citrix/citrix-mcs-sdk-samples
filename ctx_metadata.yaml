@@ -1,0 +1,10 @@
+owner: kristenbeh
+pipeline:
+  citool: ''
+  releaseBranch: ''
+  sonarqube: null
+productionUse: Internal
+repoType: Other
+reporting:
+  product: CVAD
+  teamname: MCS
