@@ -24,6 +24,7 @@ $AzureResourceGroup = "AzureResourceGroup"
 Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 
 $RootPath = "XDHyp:\Connections\$($ConnectionName)\" + $AzureRegion + ".region"
+#Note - To multi-network scenario, please add more subtnet path with the same format and put comma as separator. 
 $NetworkPath = "XDHyp:\Connections\" + $ConnectionName + "\" + $AzureRegion + ".region\virtualprivatecloud.folder\" + $AzureResourceGroup + ".resourcegroup\" + `
 $AzureNetwork + ".virtualprivatecloud\" + $AzureSubnet + ".network"
 $HostingUnitPath = "XDHyp:\HostingUnits\$HostingUnitName"

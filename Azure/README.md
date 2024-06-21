@@ -7,6 +7,10 @@ Scripts in this folder are tailored to Azure and its unique features. As mention
 	- An Azure hosting unit must specify a region. This is where your MCS resources will be provisioned.
 	- An Azure hosting unit must specify at least one network. This is the network that your provisioned VMs will use.
 - **Identity**
+  - MCS provisioned Azure VMs support non-domain-joined, AD joined, Azure AD joined and Hybrid Azure AD joined as machine identity types.
+  - MCS provisioned Azure AD joined VMs support to be placed in Azure AD dynamic security group.
+  - MCS provisioned Azure VMs support Microsoft Intune as device management type.
+  - To learn more about how to create machine identities joined catalogs see https://docs.citrix.com/en-us/citrix-daas/install-configure/create-machine-identities-joined-catalogs 
 - **ProvScheme**
 	- Azure ProvSchemes supports a variety of Custom Properties, which can be used to customize your configuration.
 	- To learn more about Azure ProvSchemes, see https://docs.citrix.com/en-us/citrix-daas/install-configure/machine-catalogs-create/create-machine-catalog-citrix-azure
