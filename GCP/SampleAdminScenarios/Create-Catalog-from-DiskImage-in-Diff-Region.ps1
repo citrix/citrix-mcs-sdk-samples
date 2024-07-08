@@ -1,0 +1,57 @@
+﻿<#
+.SYNOPSIS
+    Creates a provisioning scheme and a broker catalog. Applicable for Citrix DaaS and on-prem.
+.DESCRIPTION
+    Create-Catalog-from-DiskImage-in-Diff-Region.ps1 creates an MCS ProvisioningScheme from an Image in a different region. In GCP an Image is a replica of a disk that contains the applications and operating system needed to start a VM.
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
+#>
+
+# /*************************************************************************
+# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * This file is subject to the license terms contained
+# * in the license file that is distributed with this file.
+# *************************************************************************/
+
+# Add Citrix snap-ins
+Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
+
+# [User Input Required] Set parameters for New-ProvScheme
+$isCleanOnBoot = $false
+$provisioningSchemeName = "demo-provScheme"
+$identityPoolName = "demo-identitypool"
+$hostingUnitName = "GcpHostingUnitName"
+$masterImageName = "demo-masterimage"
+$vpcName = "vpc-name" # Name of the VPC to be used. It should be one of the VPCs that was used while creating the Hosting Unit.
+$subnetName = "subnet-name" # Name of the subnet to be used. It should be one of the subnets that was used while creating the Hosting Unit.
+$numberOfVms = 1
+
+# [User Input Required] Set parameters for New-BrokerCatalog
+$AllocationType = "Random"
+$Description = "Sample description for catalog"
+$PersistUserChanges = "Discard"
+$SessionSupport = "MultiSession"
+
+# Set path for master image from another region. All the disk images are displayed under images folder whether they are from the same region or different region.
+$masterImage = "XDHyp:\HostingUnits\$hostingUnitName\images.folder\$masterImageName.image"
+# Set path for network mapping
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$vpcName.virtualprivatecloud\$subnetName.network"}
+
+# Create the ProvisioningScheme
+$createdProvScheme = New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
+	-ProvisioningSchemeName $provisioningSchemeName `
+	-HostingUnitName $hostingUnitName `
+	-IdentityPoolName $identityPoolName `
+	-InitialBatchSizeHint $numberOfVms `
+	-MasterImageVM $masterImage `
+	-NetworkMapping $networkMapping
+
+# Create a Broker catalog. This allows you to see and manage the catalog from Studio
+New-BrokerCatalog -Name $ProvisioningSchemeName `
+	-ProvisioningSchemeId $createdProvScheme.ProvisioningSchemeUid `
+    -AllocationType $AllocationType `
+    -Description $Description `
+    -IsRemotePC $False `
+    -PersistUserChanges $PersistUserChanges `
+    -ProvisioningType "MCS" `
+    -Scope @() `
+    -SessionSupport $SessionSupport
