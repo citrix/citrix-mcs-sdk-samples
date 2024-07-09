@@ -4,7 +4,7 @@ The Set-Item command is utilized for updating the network path of a hosting unit
 Follow this link to know more about [Set-Item](https://developer-docs.citrix.com/en-us/citrix-virtual-apps-desktops-sdk/current-release/HostService/about_HypHostSnapIn.html).
 
 ## Errors that can be encountered during this operation
-1. Failed to edit the hosting unit if the provided AzureNetwork/AzureResourceGroup/AzureRegion/NetworkNames are invalid. We use these values to construct the NetworkPath in the script so you would an error message for example "The NetworkPath supplied for the HostingUnit is invalid". 
+1. Failed to edit the hosting unit if the provided AzureNetwork/AzureResourceGroup/AzureRegion/NetworkNames are invalid. We use these values to construct the NetworkPath in the script so you would see an error message. For example, "The NetworkPath supplied for the HostingUnit is invalid". 
 2. Failed to edit the hosting unit if the provided HostingUnitName is invalid. Error message example "Cannot find path 'XDHyp:\HostingUnits\Name' because it does not exist."
 
 ## Next steps
