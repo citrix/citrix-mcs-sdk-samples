@@ -8,7 +8,7 @@
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc.
+# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/

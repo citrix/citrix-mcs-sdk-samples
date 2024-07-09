@@ -14,16 +14,17 @@ For Cloud deployments (DaaS), these scripts can be run via the Remote PowerShell
 
 For on-prem deployments (CVAD), the cmdlets can be run directly on the DDC or remotely. With CVAD, you will need to specify the `-AdminAddress` parameter when calling the Citrix cmdlets. For example, `-AdminAddress` can be added to the New-ProvScheme command as shown here: 
 ```powershell
-New-ProvScheme -AdminAddress "localhost:19097"
--CleanOnBoot:$isCleanOnBoot 
--ProvisioningSchemeName $provisioningSchemeName 
--HostingUnitName $hostingUnitName 
--IdentityPoolName $identityPoolName 
--InitialBatchSizeHint $numberOfVms 
--MasterImageVM $masterImageVm 
--NetworkMapping $networkMapping 
--CustomProperties $customProperties 
--MachineProfile $machineProfile
+New-ProvScheme `
+    -AdminAddress $adminAddress `
+    -CleanOnBoot:$isCleanOnBoot `
+    -ProvisioningSchemeName $provisioningSchemeName `
+    -HostingUnitName $hostingUnitName `
+    -IdentityPoolName $identityPoolName `
+    -InitialBatchSizeHint $numberOfVms `
+    -MasterImageVM $masterImageVm `
+    -NetworkMapping $networkMapping `
+    -CustomProperties $customProperties `
+    -MachineProfile $machineProfile
 ```
 For more information, refer to https://support.citrix.com/article/CTX222326/how-to-configure-powershell-sdk-and-execute-commands-remotely-in-xenappxendesktop-7x
 
@@ -141,5 +142,7 @@ For each of the above operations, you can optionally configure a high-level logg
 
 **Note:** Some provisioning operations, such as New-ProvScheme and New-ProvVM, are long-running tasks. You can check the status of a task via the [Get-ProvTask](https://developer-docs.citrix.com/en-us/citrix-daas-sdk/machinecreation/get-provtask) command.
 
-## License Agreement
-To review our license agreement, please see [LICENSE.txt](LICENSE.txt)
+## License
+This project is licensed under the BSD license. The text can be found in the [LICENSE.txt](LICENSE.txt).
+
+Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
