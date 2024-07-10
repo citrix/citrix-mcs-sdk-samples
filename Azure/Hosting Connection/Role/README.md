@@ -129,7 +129,13 @@ The fields for Role Name and Role Description are pre-filled but can be modified
 
 <br>
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fgithub.com%2Fcitrix%2Fcitrix-mcs-sdk-samples%2Fblob%2Fmain%2FAzure%2FRole%2FRoleCreationAndAssignmentTemplate.json" target="_blank"> <img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"> </a>
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fcitrix%2Fcitrix-mcs-sdk-samples%2Fmain%2FAzure%2FHosting%2520Connection%2FRole%2FRoleCreationAndAssignmentTemplate.json
+" target="_blank">
+    <img src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure">
+</a>
+
+<br>
+
 
 The screenshot below illustrates the Azure Custom Deployment page, highlighting the sections where you can find and input the Service Principal ID and Subscription ID.
 
