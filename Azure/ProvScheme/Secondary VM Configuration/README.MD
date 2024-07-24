@@ -3,24 +3,34 @@
 Public clouds can sometimes run out of capacity for a specific VM size. Also, if you use Azure Spot VMs, then the VMs are evicted at any time based on Azure’s capacity needs. In such a case of insufficient capacity on Azure or a Spot VM power-on failure, MCS now falls back on the backup VM sizes. You can provide a list of backup VM sizes using a custom property _BackupVmConfiguration_. MCS tries the backup VM sizes in the order that is provided by you in the list. If MCS fails on all backup VM sizes provided, you get an error message. This feature is supported only for a catalog that uses a machine profile and is applicable to both persistent and non-persistent MCS machine catalogs. This feature is currently supported only for Azure environments. 
 
 The backup configuration is currently triggered in the following scenarios:
-1. MCS now offers Azure Spot VM provisioning, allowing you to take advantage of unused capacity at significant cost saving. When Spot VMs are currently unavailable for the current ServiceOffering or the Spot price rises beyond what is specified as the max price in a billing profile, the VM can fail to Power On.
-2. When the available cores for a particular Service Offering in a region are lower than what you have requested, it can also lead to power on failures.
+1. When the available cores for a particular Service Offering in a region are lower than what you have requested, it can lead to power on failures.
+2. MCS now offers Azure Spot VM provisioning, allowing you to take advantage of unused capacity at significant cost saving. When Spot VMs are currently unavailable for the current ServiceOffering or the Spot price rises beyond what is specified as the max price in a billing profile, the VM can fail to Power On.
 
 In the above scenarios, instead of failing, MCS will immediately try the list of backup VM sizes to find one that will work for the current power action.
 
 ## How to configure backup configuration
-[Create-WithBackupVmConfiguration.ps1](Create-WithBackupVmConfiguration.ps1) has an example script on how to use the custom property _BackupVmConfiguration_ on new Provisioning Schemes.
+[Create-WithBackupVmConfiguration.ps1](Create-WithBackupVmConfiguration.ps1) has an example script on how to use the custom property _BackupVmConfiguration_ on new Provisioning Schemes. This script uses a list of ServiceOfferings with Regular priority
+```
+New-ProvScheme -ProvisioningSchemeName "demo" -MasterImageVM "XDHyp:\HostingUnits\azure-zones\image.folder\TestResourceGroup.resourcegroup\TestSnapshot.snapshot" -MachineProfile "XDHyp:\HostingUnits\azure-zones\machineprofile.folder\TestResourceGroup.resourcegroup\TestMachineProfileVM.vm" -CustomProperties "<CustomProperties xmlns=`"http://schemas.citrix.com/2014/xd/machinecreation`" xmlns:xsi=`"http://www.w3.org/2001/XMLSchema-instance`"> <Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"['ServiceOffering':'Standard_D2as_v4','ServiceOffering':'Standard_D2s_v3']`"/></CustomProperties>"
+```
+
+[Create-WithBackupVmConfigurationWithSpot.ps1](Create-WithBackupVmConfigurationWithSpot.ps1) has an example script on how to use the custom property _BackupVmConfiguration_ on new Provisioning Schemes. This script uses a list of ServiceOfferings with a mix Regular and Spot priorities.
 ```
 New-ProvScheme -ProvisioningSchemeName "demo" -MasterImageVM "XDHyp:\HostingUnits\azure-zones\image.folder\TestResourceGroup.resourcegroup\TestSnapshot.snapshot" -MachineProfile "XDHyp:\HostingUnits\azure-zones\machineprofile.folder\TestResourceGroup.resourcegroup\TestMachineProfileVM.vm" -CustomProperties "<CustomProperties xmlns=`"http://schemas.citrix.com/2014/xd/machinecreation`" xmlns:xsi=`"http://www.w3.org/2001/XMLSchema-instance`"> <Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{'ServiceOffering':'Standard_D2as_v4', 'Type': 'Spot'}, {'ServiceOffering':'Standard_D2as_v4','Type': 'Regular'},{'ServiceOffering': 'Standard_D2s_v3', 'Type': 'Spot'}]`"/></CustomProperties>"
 ```
 
-[Set-BackupVmConfiguration.ps1](Set-BackupVmConfiguration.ps1) has an example script on how to use the custom property _BackupVmConfiguration_ on existing Provisioning Schemes.
+[Set-BackupVmConfiguration.ps1](Set-BackupVmConfiguration.ps1) has an example script on how to use the custom property _BackupVmConfiguration_ with Regular priority on existing Provisioning Schemes.
+```
+Set-ProvScheme -ProvisioningSchemeName "demo" -CustomProperties "<CustomProperties xmlns=`"http://schemas.citrix.com/2014/xd/machinecreation`" xmlns:xsi=`"http://www.w3.org/2001/XMLSchema-instance`"> <Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{'ServiceOffering':'Standard_D2as_v4'}, {'ServiceOffering':'Standard_D2as_v4'},{'ServiceOffering': 'Standard_D2s_v3'}]`"/></CustomProperties>"
+```
+
+[Set-BackupVmConfigurationWithSpot.ps1](Set-BackupVmConfigurationWithSpot.ps1) has an example script on how to use the custom property _BackupVmConfiguration_ with a mix of Regular and Spot priorities on existing Provisioning Schemes.
 ```
 Set-ProvScheme -ProvisioningSchemeName "demo" -CustomProperties "<CustomProperties xmlns=`"http://schemas.citrix.com/2014/xd/machinecreation`" xmlns:xsi=`"http://www.w3.org/2001/XMLSchema-instance`"> <Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{'ServiceOffering':'Standard_D2as_v4', 'Type': 'Spot'}, {'ServiceOffering':'Standard_D2as_v4','Type': 'Regular'},{'ServiceOffering': 'Standard_D2s_v3', 'Type': 'Spot'}]`"/></CustomProperties>"
 ```
 
 ## Prerequisites to setting up _BackupVmConfiguration_ custom property:
-(If any of the following is not meet, we will through out an error.)
+(If any of the following is not met, we will throw out an error.)
 <ol>
 <li> It is only supported when the machine profile is in use.</li>
 <li> Type is optional and can have one of two values: Spot and Regular. When not specified will default to Regular</li>
