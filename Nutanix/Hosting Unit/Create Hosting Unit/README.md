@@ -4,6 +4,8 @@ This page explains the use of the Create-HostingUnit.ps1 script.
 
 This script creates a Hosting Unit.
 
+The Hosting Unit has an associated RootPath. The value of the RootPath will be: `XDHyp:\Connections\<connection name>\`
+
 ## Using the script
 
 ### Parameters
@@ -23,6 +25,11 @@ The script can be executed like the example below:
     -Name myHostingUnit `
     -ConnectionName "nutanix" `
     -NetworkPath @("XDHyp:\Connections\nutanix\mynetwork.network") `
-    -StoragePath @("XDHyp:\Connections\nutanix\myStorage.storage")
-    -PersonalvDiskStoragePath @() `
+    -PersonalvDiskStoragePath @()
+
+.\Create-HostingUnit.ps1 `
+    -Name myHostingUnit `
+    -ConnectionName "nutanix" `
+    -NetworkPath @("XDHyp:\Connections\nutanix\mynetwork.network","XDHyp:\Connections\nutanix\mynetwork2.network") `
+    -PersonalvDiskStoragePath @()
 ```

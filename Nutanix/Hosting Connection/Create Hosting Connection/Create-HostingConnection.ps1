@@ -20,6 +20,8 @@
     5. HypervisorAddress: The IP address of the hypervisor
     6. Persist: Boolean value that sets if the connection is persistent
     7. Scope: Administration scopes for connection
+    8. PluginId: Name of the plugin factory (default value "AcropolisFactory")
+        - Other possible values for PluginId are- "AcropolisPCFactory" for Nutanix AHV PC, and "AcropolisXIFactory" for Nutanix AHV DRaaS
 #>
 
 # /*************************************************************************
@@ -39,7 +41,8 @@ param(
     [Parameter(mandatory=$true)]
     [string] $HypervisorAddress = $null,
     [bool] $Persist = $true,
-    [string[]] $Scope = @()
+    [string[]] $Scope = @(),
+    [string] $PluginId = "AcropolisFactory"
 )
 
 # Enable Citrix PowerShell Cmdlets
@@ -59,7 +62,7 @@ $params = @{
     "Persist" = $Persist;
     "Scope"= $Scope;
     "HypervisorAddress"= $hypervisorAddress;
-    "PluginId"= "AcropolisFactory";
+    "PluginId"= $PluginId;
     "SecurePassword"= $SecurePass;
     "UserName"= $UserName;
     "ZoneUid"= $ZoneUid;

@@ -3,13 +3,20 @@
     Create a new Hosting Unit
 .DESCRIPTION
     This powershell script creates a new Hosting Unit.
-    NOTE: It does not create a Hosting Unit and it's associated resources, refer to the Create-HostingUnit.ps1 script.
+    The RootPath associated with the HostingUnit will be "XDHyp:\Connections\<connection name>\"
     The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR).
 .EXAMPLE
+    # Create a Hosting Unit
     .\Create-HostingUnit.ps1 `
         -Name myHostingUnit `
         -ConnectionName "nutanix" `
         -NetworkPath @("XDHyp:\Connections\nutanix\mynetwork.network") `
+        -PersonalvDiskStoragePath @() `
+
+    .\Create-HostingUnit.ps1 `
+        -Name myHostingUnit `
+        -ConnectionName "nutanix" `
+        -NetworkPath @("XDHyp:\Connections\nutanix\mynetwork.network","XDHyp:\Connections\nutanix\mynetwork2.network") `
         -PersonalvDiskStoragePath @() `
 .INPUTS
     1. Name: Name of Hosting Unit to create
