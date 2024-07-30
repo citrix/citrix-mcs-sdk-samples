@@ -13,6 +13,7 @@
 .EXAMPLE
     .\Create-ADAccount.ps1 `
         -IdentityPoolName "MyIdentityPool" `
+        -UserName "myUser"
         -Count 1 `
         -AdminAddress "MyDDC.MyDomain.local"
 #>
@@ -26,6 +27,8 @@
 param(
     [Parameter(mandatory=$true)]
     [string] $IdentityPoolName,
+    [Parameter(mandatory=$true)]
+    [string] $UserName,
     [int] $Count = 1,
     [string] $AdminAddress
 )
@@ -33,10 +36,21 @@ param(
 # Enable Citrix PowerShell Cmdlets
 Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2" 
 
-$params = @{
-    IdentityPoolName  = $IdentityPoolName
-    Count = $Count
+$adUserName = "$Domain\$UserName"
+
+# Build the secure password
+$SecurePasswordInput = Read-Host $"Please enter the Active Directory password for the user $UserName" -AsSecureString
+$EncryptedPasswordInput = $SecurePasswordInput | ConvertFrom-SecureString
+$securedPassword = ConvertTo-SecureString -String $EncryptedPasswordInput
+
+# Configure the common parameters for New-AcctIdentityPool.
+$newAcctADAccountParameters = @{
+    IdentityPoolUid = $newAcctIdentityPoolResult.IdentityPoolUid
+    ADUserName      = $adUserName
+    ADPassword      = $securedPassword
+    Count           = $Count
 }
 
-# Add AD Accounts
-& New-AcctADAccount @params
+# If operating in an On-Prem environment, configure the AdminAddress.
+if ($AdminAddress) { $newAcctADAccountParameters['AdminAddress'] = $AdminAddress }
+& New-AcctADAccount @newAcctADAccountParameters

@@ -17,6 +17,8 @@ This script creates a Hosting Connection to the hypervisor. See the [Hosting Uni
     - `ConnectionType`: Type of the hosting connection ("Custom" by default for Nutanix)
     - `Persist`: Boolean value that sets if the connection is persistent
     - `Scope`: Administration scopes for connection
+    - `PluginId`: Name of the plugin factory (default value "AcropolisFactory")
+        - Other possible values for PluginId are- "AcropolisPCFactory" for Nutanix AHV PC, and "AcropolisXIFactory" for Nutanix AHV DRaaS
 
 ### Example
 The script can be executed like the example below. The example includes only the required parameters, add any extra parameters that may be relevant to your environment.
