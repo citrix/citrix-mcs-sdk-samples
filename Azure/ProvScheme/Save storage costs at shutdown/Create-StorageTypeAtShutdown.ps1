@@ -24,7 +24,9 @@ $isCleanOnBoot = $false
 $provisioningSchemeName = "demo-provScheme"
 $identityPoolName = $provisioningSchemeName
 $hostingUnitName = "demo-hostingUnit"
-$resourceGroupName = "demo-resourceGroup"
+$machineProfileResourceGroupName = "demo-machineProfileResourceGroupName"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroupName"
+$masterImageResourceGroupName = "demo-masterImageResourceGroupName"
 $masterImage = "demo-snapshot.snapshot"
 $machineProfile = "demo-machineProfile.vm"
 $region = "East US"
@@ -32,9 +34,10 @@ $networkName = "demo-network"
 $subnetName = "default"
 $numberOfVms = 1
 
-$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$resourceGroupName.resourcegroup\$masterImage"
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$networkName.virtualprivatecloud\$subnetName.network"}
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$resourceGroupName.resourcegroup\$machineProfile"
+# Set masterImagePath, networkMapping and machineProfilePath parameters
+$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImage"
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$networkName.virtualprivatecloud\$subnetName.network"}
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfile"
 
 # Set the StorageTypeAtShutdown custom property.
 # The only valid values for StorageTypeAtShutdown are 'Standard_LRS' or ''. Using '' means that you are not using the feature.

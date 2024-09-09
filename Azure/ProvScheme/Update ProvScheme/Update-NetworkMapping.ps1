@@ -22,10 +22,11 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 $provisioningSchemeName = "demo-provScheme"
 $hostingUnitName = "demo-hostingUnit"
 $resourceGroupName = "demo-resourceGroup"
+$region = "East US"
 $vNet = "MyVnet"
 $subnet = "subnet1"
 
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\East US.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
 
 # Modify the Provisioning Scheme
 Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -NetworkMapping $networkMapping

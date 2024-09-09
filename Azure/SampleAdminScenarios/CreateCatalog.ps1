@@ -14,7 +14,7 @@
 # *************************************************************************/
 
 # Add Citrix snap-ins
-Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
+Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Citrix.Broker.Admin.V2"
 
 #####################################################
 # Step 0: Set parameters #
@@ -29,13 +29,15 @@ $ResourceLocation = "ResourceLocation"
 $isCleanOnBoot = $false
 $provisioningSchemeName = "demo-provScheme"
 $hostingUnitName = "demo-hostingUnit"
-$resourceGroupName = "demo-resourceGroup"
+$machineProfileResourceGroupName = "demo-machineProfileResourceGroupName"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroupName"
+$masterImageResourceGroupName = "demo-masterImageResourceGroupName"
 $masterImageSnapshotName = "demo-snapshot"
 $region = "East US"
 $vNet = "MyVnet"
 $subnet = "subnet1"
 $machineProfileVmName = "demo-machineProfile"
-$numberOfVms = 1
+$numberOfVms = 2
 $nicDevicePosition = "0"
 
 # [User Input Required] Set parameters for New-BrokerCatalog
@@ -84,9 +86,9 @@ if (-not $isValidProvSchemeName.Available) {
     throw "ProvScheme with name '$($provisioningSchemeName)' already exists. Please use another name."
 }
 
-$masterImageVm = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$resourceGroupName.resourcegroup\$masterImageSnapshotName.snapshot"
-$networkMapping = @{$nicDevicePosition="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$resourceGroupName.resourcegroup\$machineProfileVmName.vm"
+$masterImageVm = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImageSnapshotName.snapshot"
+$networkMapping = @{$nicDevicePosition="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfileVmName.vm"
 
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

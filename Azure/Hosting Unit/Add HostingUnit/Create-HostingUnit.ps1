@@ -16,12 +16,12 @@
 $ConnectionName = "AzureConnection"
 $AzureRegion = "AzureRegion"
 $AzureNetwork = "AzureNetwork"
-$AzureSubnet ="AzureSubnet"
+$AzureSubnet = "AzureSubnet"
 $HostingUnitName ="AzureHostingUnitName"
 $AzureResourceGroup = "AzureResourceGroup"
 
 # Enable Citrix PowerShell Cmdlets
-Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
+Add-PSSnapin -Name "Citrix.Host.Admin.V2"
 
 $RootPath = "XDHyp:\Connections\$($ConnectionName)\" + $AzureRegion + ".region"
 #Note - To multi-network scenario, please add more subtnet path with the same format and put comma as separator. 

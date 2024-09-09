@@ -32,12 +32,16 @@ if($null -eq $zoneUid)
 # Add Citrix snap-ins
 Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 
-# [User Input Required] Set parameters for New-AcctIdentityPool
-
+# The type of identity type. This can be ActiveDirectory, AzureAD, HybridAzureAD, or Workgroup.
+# Setup value to be Workgroup to support no domain join case.
+$identityType = "Workgroup"
 # The type of device management type.
 # This can be Intune, IntuneWithCitrixTags, or None.
 # Setup value to be None here to support no domain join case.
 $deviceManagementType = "None"
+
+# [User Input Required] Set parameters for New-AcctIdentityPool
+
 # The name of the identity pool. This must not contain any of the following characters \/;:#.*?=<>|[]()””’
 $identityPoolName = "demo-identitypool01"
 # Defines the template name for AD accounts created in the identity pool.
@@ -51,9 +55,6 @@ $namingScheme = "demo-###"
 # This defines the format of the variable part of the AD account names that will be created.
 # Setup value to be Numeric as a demo.
 $namingSchemeType = "Numeric"
-# The type of identity type. This can be ActiveDirectory, AzureAD, HybridAzureAD, or Workgroup.
-# Setup value to be Workgroup to support no domain join case.
-$identityType = "Workgroup"
 # Specifies the next number to be used when creating new AD accounts in the identity pool.
 $startCount = 1
 

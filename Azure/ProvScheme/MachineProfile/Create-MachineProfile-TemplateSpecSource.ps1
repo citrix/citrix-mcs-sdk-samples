@@ -22,15 +22,21 @@ $isCleanOnBoot = $false
 $provisioningSchemeName = "demo-provScheme"
 $identityPoolName = $provisioningSchemeName
 $hostingUnitName = "demo-hostingUnit"
-$resourceGroupName = "demo-resourceGroup"
+$machineProfileResourceGroupName = "demo-machineProfileResourceGroupName"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroupName"
+$masterImageResourceGroupName = "demo-masterImageResourceGroupName"
 $masterImageSnapshotName = "demo-snapshot.snapshot"
 $region = "East US"
 $networkName = "demo-network"
 $subnetName = "default"
 $numberOfVms = 1
+$templateSpecName = "demo-templateSpec"
+$templateSpecVersion = "demo-templateSpecVersion"
 
-$masterImageVm = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$resourceGroupName.resourcegroup\$masterImageSnapshotName"
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$networkName.virtualprivatecloud\$subnetName.network"}
+# Set machineProfilePath, masterImagePath and networkMapping parameters
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$templateSpecName.templatespec\$templateSpecVersion.templatespecversion"
+$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImageSnapshotName"
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$networkName.virtualprivatecloud\$subnetName.network"}
 
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -38,18 +44,13 @@ $customProperties = @"
 </CustomProperties>
 "@
 
-# Set the MachineProfile parameter
-$templateSpecName = "demo-templateSpec"
-$templateSpecVersion = "demo-templateSpecVersion"
-$machineProfile = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$resourceGroupName.resourcegroup\$templateSpecName.templatespec\$templateSpecVersion.templatespecversion"
-
 # Create the ProvisioningScheme
 New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
 -ProvisioningSchemeName $provisioningSchemeName `
 -HostingUnitName $hostingUnitName `
 -IdentityPoolName $identityPoolName `
 -InitialBatchSizeHint $numberOfVms `
--MasterImageVM $masterImageVm `
+-MasterImageVM $masterImagePath `
 -NetworkMapping $networkMapping `
 -CustomProperties $customProperties `
--MachineProfile $machineProfile                   # The -MachineProfile parameter must be specified
+-MachineProfile $machineProfilePath                   # The -MachineProfile parameter must be specified
