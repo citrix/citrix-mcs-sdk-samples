@@ -13,7 +13,7 @@
 # *************************************************************************/
 
 # Add Citrix snap-ins
-Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
+Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Citrix.Broker.Admin.V2"
 
 #------------------------------------------------- Create a ProvisioningScheme -----------------------------------------------------#
 # [User Input Required] Set parameters for New-ProvScheme
@@ -21,20 +21,24 @@ $isCleanOnBoot = $true
 $provisioningSchemeName = "demo-provScheme"
 $identityPoolName = $provisioningSchemeName
 $hostingUnitName = "demo-hostingUnit"
-$masterImageResourceGroupName = "demo-resourceGroup"
+$masterImageResourceGroupName = "demo-masterImageResourceGroup"
 $masterImage = "demo-snapshot.snapshot"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroup"
+$region = "East US"
 $vNet = "MyVnet"
 $subnet = "subnet1"
-$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImage"
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\East US.region\virtualprivatecloud.folder\$masterImageResourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
 $numberOfVms = 1
-
 
 # [User Input Required] Setup the parameters for New-BrokerCatalog
 $allocationType = "Random"
 $description = "This is meant to be use as placeholders"
 $persistUserChanges = "Discard"
 $sessionSupport = "MultiSession"
+
+# Set serviceOffering, masterImagePath and networkMapping parameters
+$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImage"
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
+$serviceOffering = "XDHyp:\HostingUnits\$hostingUnitName\serviceoffering.folder\Standard_B2als_v2.serviceoffering"
 
 
 # Create the ProvisioningScheme
@@ -45,6 +49,7 @@ $createdProvScheme = New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
 -InitialBatchSizeHint $numberOfVms `
 -MasterImageVM $masterImagePath `
 -NetworkMapping $networkMapping `
+-ServiceOffering $serviceOffering
 
 
 # Create the Broker Catalog. This allows you to see the catalog in Studio

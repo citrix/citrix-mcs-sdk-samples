@@ -22,15 +22,20 @@ $isCleanOnBoot = $true
 $provisioningSchemeName = "demo-provScheme"
 $identityPoolName = $provisioningSchemeName
 $hostingUnitName = "demo-hostingUnit"
-$masterImageResourceGroupName = "demo-resourceGroup"
+$machineProfileResourceGroupName = "demo-machineProfileResourceGroupName"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroupName"
+$masterImageResourceGroupName = "demo-masterImageResourceGroupName"
 $masterImage = "demo-snapshot.snapshot"
+$region = "East US"
 $vNet = "MyVnet"
 $subnet = "subnet1"
 $machineProfile = "demo-machineProfile.vm"
-$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImage"
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\East US.region\virtualprivatecloud.folder\$masterImageResourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$masterImageResourceGroupName.resourcegroup\$machineProfile"
 $numberOfVms = 1
+
+# Set machineProfilePath, masterImagePath and networkMapping parameters
+$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImage"
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfile"
 
 # Set the PersistWbc custom property.
 # Persist the write back cache disk for the non-persistent provisioned virtual machine between power cycles. Specify either True or False.

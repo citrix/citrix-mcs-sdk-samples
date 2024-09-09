@@ -15,13 +15,13 @@
 
 # [User Input Required]
 $ConnectionName = "AzureConnection"
-$UserName = "AppId" #should be Guid
-$SubscriptionId = "SubscriptionId"  #should be Guid
-$TenantId ="TenantId"  #should be Guid
-$zoneName = "zoneName"
+$UserName = "AppId" 					# Azure application ID
+$SubscriptionId = "SubscriptionId"  	# Azure subscription ID
+$TenantId ="TenantId"  					# Azure AD Directory ID
+$zoneName = "zoneName"					# Zone/resource location
 
 # Enable Citrix PowerShell Cmdlets
-Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Citrix.Broker.Admin.V2"
+Add-PSSnapin -Name "Citrix.Host.Admin.V2", "Citrix.Broker.Admin.V2"
 
 $secureUserInput = Read-Host 'Please enter your application secret' -AsSecureString
 $encryptedInput = ConvertFrom-SecureString -SecureString $secureUserInput
@@ -63,7 +63,7 @@ if($null -eq $zoneUid)
 #####################################################
 
 $connection = New-Item -ConnectionType "Custom" `
-	-CustomProperties $CustomProperties`
+	-CustomProperties $CustomProperties `
 	-HypervisorAddress @($HypervisorAddress) `
 	-Path @("XDHyp:\Connections\$($ConnectionName)") `
 	-Metadata $Metadata `

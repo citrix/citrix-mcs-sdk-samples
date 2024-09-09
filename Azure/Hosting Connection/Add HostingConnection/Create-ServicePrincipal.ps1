@@ -13,10 +13,10 @@
 # *************************************************************************/
 
 # [User Input Required]
-$ApplicationName = "MyAppId2" #name of the application you would like to give
-$SubscriptionId = "SubscriptionId"  #should be Guid
-$TenantId = "TenantId" #should be Guid
-$roleName = "Role" #like Contributer
+$ApplicationName = "MyAppId2"           # The name of your application
+$SubscriptionId = "SubscriptionId"      # Azure subscription ID
+$TenantId = "TenantId"                  # Azure AD Directory ID
+$roleName = "Role"                      # Like Contributor
 
 # Note - Open Powershell as Administrator
 # Install the Az modules before importing. Refer to the README file in the "Add HostingConnection" folder.

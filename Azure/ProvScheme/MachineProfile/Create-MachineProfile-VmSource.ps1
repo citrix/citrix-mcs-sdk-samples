@@ -22,15 +22,20 @@ $isCleanOnBoot = $false
 $provisioningSchemeName = "demo-provScheme"
 $identityPoolName = $provisioningSchemeName
 $hostingUnitName = "demo-hostingUnit"
-$resourceGroupName = "demo-resourceGroup"
+$machineProfileVmName = "demo-vmName"
+$machineProfileResourceGroupName = "demo-machineProfileResourceGroupName"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroupName"
+$masterImageResourceGroupName = "demo-masterImageResourceGroupName"
 $masterImageSnapshotName = "demo-snapshot.snapshot"
 $region = "East US"
 $networkName = "demo-network"
 $subnetName = "default"
 $numberOfVms = 1
 
-$masterImageVm = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$resourceGroupName.resourcegroup\$masterImageSnapshotName"
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$networkName.virtualprivatecloud\$subnetName.network"}
+# Set machineProfile, masterImagePath and networkMapping parameters
+$machineProfile = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfileVmName.vm"
+$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImageSnapshotName"
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$networkName.virtualprivatecloud\$subnetName.network"}
 
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -38,17 +43,13 @@ $customProperties = @"
 </CustomProperties>
 "@
 
-# Set the MachineProfile parameter
-$machineProfileVmName = "demo-vmName"
-$machineProfile = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$resourceGroupName.resourcegroup\$machineProfileVmName.vm"
-
 # Create the ProvisioningScheme
 New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
 -ProvisioningSchemeName $provisioningSchemeName `
 -HostingUnitName $hostingUnitName `
 -IdentityPoolName $identityPoolName `
 -InitialBatchSizeHint $numberOfVms `
--MasterImageVM $masterImageVm `
+-MasterImageVM $masterImagePath `
 -NetworkMapping $networkMapping `
 -CustomProperties $customProperties `
 -MachineProfile $machineProfile                   # The -MachineProfile parameter must be specified

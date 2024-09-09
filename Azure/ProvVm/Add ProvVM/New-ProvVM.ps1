@@ -17,8 +17,8 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Cit
 
 # [User Input Required] Set parameters for New-ProvVM
 $provisioningSchemeName = "demo-provScheme"
-$numberOfVms = 5
-$userName = "demo-username"
+$numberOfVms = 2
+$userName = "demo-username"                     # AD username with permissions to create computer accounts
 $identityPoolName = "demo-identityPoolName"
 $catalogName = "demo-catalog"
 

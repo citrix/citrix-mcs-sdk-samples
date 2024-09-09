@@ -18,19 +18,24 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 
 #------------------------------------------------- Create a ProvisioningScheme -----------------------------------------------------#
 # [User Input Required] Set parameters for New-ProvScheme
-$isCleanOnBoot = $false
+$isCleanOnBoot = $true
 $provisioningSchemeName = "demo-provScheme"
 $identityPoolName = $provisioningSchemeName
 $hostingUnitName = "demo-hostingUnit"
-$resourceGroupName = "demo-resourceGroup"
+$machineProfileResourceGroupName = "demo-machineProfileResourceGroupName"
+$networkMappingResourceGroupName = "demo-networkMappingResourceGroupName"
+$masterImageResourceGroupName = "demo-masterImageResourceGroupName"
 $masterImage = "demo-snapshot.snapshot"
+$region = "East US"
 $vNet = "MyVnet"
 $subnet = "subnet1"
 $machineProfile = "demo-machineProfile.vm"
-$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$resourceGroupName.resourcegroup\$masterImage"
-$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\East US.region\virtualprivatecloud.folder\$resourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$resourceGroupName.resourcegroup\$machineProfile"
 $numberOfVms = 1
+
+# Set machineProfilepath, masterImagePath and networkMapping parameters
+$masterImagePath = "XDHyp:\HostingUnits\$hostingUnitName\image.folder\$masterImageResourceGroupName.resourcegroup\$masterImage"
+$networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\virtualprivatecloud.folder\$networkMappingResourceGroupName.resourcegroup\$vNet.virtualprivatecloud\$subnet.network"}
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfile"
 
 # Set the Zones custom property.
 # You are allowed to specify more than one availability zone in a comma separated format. In this case, MCS will internally pick an availability zone for the resources.
