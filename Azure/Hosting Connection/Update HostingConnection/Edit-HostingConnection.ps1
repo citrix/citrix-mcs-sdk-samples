@@ -9,6 +9,7 @@
         4. CustomProperties are updated on HostingConnection when the CustomProperties are provided. Here ProxyHypervisorTrafficThroughConnector custom property is added.
         This custom property enables network traffic (API calls from Citrix Cloud to Azure hypervisor) to be routed through Cloud Connectors in your environment.
         5. Password is updated on HostingConnection when UpdatePassword is true.
+        6. Hosting Connection is updated to include user/system assigned identity when updateAuthMode is set to True and AuthenticationMode is provided.
     The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
 #>
 
@@ -20,9 +21,11 @@
 
 # [User Input Required]
 $ConnectionName = "AzureConnection"
-$UserName = "AppId" #should be Guid
-$SubscriptionId = "SubscriptionId"  #should be Guid
-$TenantId ="TenantId"  #should be Guid
+$updateAuthMode = $true                                     # True if you want to update existing hypervisor to Azure Managed Identity, else False
+$AuthenticationMode = "SystemAssignedManagedIdentity"       # Can be SystemAssignedManagedIdentity or UserAssignedManagedIdentity
+$UserName = "AppId"                                         # Azure Application ID. ManagedIdentities Client ID if updateAuthMode is True and AuthenticationMode is UserAssignedManagedIdentity
+$SubscriptionId = "SubscriptionId"                          # Azure subscription ID
+$TenantId ="TenantId"                                       # Azure AD Directory ID
 $UpdatePassword = $true
 $RenameConnection = "RenameAzureConnection"
 $MaintenanceMode = $true
@@ -95,4 +98,25 @@ if($UpdatePassword)
 if($RenameConnection -ne "")
 {
     Rename-Item -NewName $RenameConnection -Path $connectionPath
+}
+
+#####################################################################################
+# To update existing hypversisor connection to use a system/user assigned identity #
+#####################################################################################
+
+if($updateAuthMode)
+{
+    $cred = Get-Credential
+    $customPropsAuthMode = '<CustomProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.citrix.com/2014/xd/machinecreation">'`
+    + '<Property xsi:type="StringProperty" Name="SubscriptionId" Value="' + $SubscriptionId + '" />'`
+    + '<Property xsi:type="StringProperty" Name="ManagementEndpoint" Value="https://management.azure.com/" />'`
+    + '<Property xsi:type="StringProperty" Name="AuthenticationAuthority" Value="https://login.microsoftonline.com/" />'`
+    + '<Property xsi:type="StringProperty" Name="StorageSuffix" Value="core.windows.net" />'`
+    + '<Property xsi:type="StringProperty" Name="TenantId" Value="' + $TenantId + '" />'`
+    + '<Property xsi:type="StringProperty" Name="AzureAdDeviceManagement" Value="false" />'`
+    + '<Property xsi:type="StringProperty" Name="ProxyHypervisorTrafficThroughConnector" Value="true" />'`
+    + '<Property xsi:type="StringProperty" Name="AuthenticationMode" Value="' + $AuthenticationMode + '" />'`
+    + '</CustomProperties>'
+
+    Set-Item -LiteralPath $connectionPath -CustomProperties $customPropsAuthMode -UserName $cred.username -Password $cred.password
 }

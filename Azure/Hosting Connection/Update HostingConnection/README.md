@@ -23,6 +23,10 @@ Set-Item -LiteralPath $connectionPath -CustomProperties $CustomProperties -UserN
 Additionally, you can adjust the ProxyHypervisorTrafficThroughConnector property via custom properties, similar to MaximumConcurrentProvisioningOperations. The possible values for ProxyHypervisorTrafficThroughConnector are either True or False(This script configures the property via custom properties, setting it to True. You have the flexibility to modify it according to your preferences.). 
 For further details about ProxyHypervisorTrafficThroughConnector refer this [link](https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-azure-resource-manager.html#create-a-secure-environment-for-azure-managed-traffic).
 
+In order to update an already existing hypervisor connection to Azure Managed Identity, make sure you have enabled Azure Managed Identity on Citrix Cloud Connector and provided relevant permissions to it. You need to set ProxyHypervisorTrafficThroughConnector in custom properties to True as well. Following this, you need to set the variables in the script with the values as mentioned:
+- Set updateAuthMode variable to True
+- Set AuthenticationMode variable to either SystemAssignedManagedIdentity or UserAssignedManagedIdentity depending on your requirement
+
 ## Errors that can be encountered during this operation
 1. Failed to edit the hosting connection if the provided ConnectionName is invalid. Error message you would see is "Provided ConnectionName is not valid. Please give the right ConnectionName".
 2. In the case of invalid credentials, attempting to edit custom properties on the hosting connection will fail, even if no error message is displayed after executing the script. Consequently, there will be no observed updates to the custom properties on the hosting connection. 
