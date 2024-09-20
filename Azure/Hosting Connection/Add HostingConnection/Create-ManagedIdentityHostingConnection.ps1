@@ -4,7 +4,6 @@
 .DESCRIPTION
     Create-ManagedIdentityHostingConnection.ps1 creates the HostingConnection with Managed Identities property when ConnectionName,
     UserName, SubscriptionId, TenantId, zoneNames, and AuthenticationMode are provided
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
 #>
 
 # /*************************************************************************

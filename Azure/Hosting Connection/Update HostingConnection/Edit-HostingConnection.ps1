@@ -9,7 +9,7 @@
         4. CustomProperties are updated on HostingConnection when the CustomProperties are provided. Here ProxyHypervisorTrafficThroughConnector custom property is added.
         This custom property enables network traffic (API calls from Citrix Cloud to Azure hypervisor) to be routed through Cloud Connectors in your environment.
         5. Password is updated on HostingConnection when UpdatePassword is true.
-        6. Hosting Connection is updated to include user/system assigned identity when updateAuthMode is set to True and AuthenticationMode is provided.
+        6. Hosting Connection is updated to include user/system assigned identity when updateAuthMode is set to True and AuthenticationMode is provided. This feature is cloud only and not available for on-prem at this point.
     The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
 #>
 
