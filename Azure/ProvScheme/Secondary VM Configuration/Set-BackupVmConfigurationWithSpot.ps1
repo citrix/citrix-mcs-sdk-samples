@@ -24,7 +24,7 @@ $provisioningSchemeName = "demo-provScheme"
 # Update the CustomProperties to include the new value for BackupVmConfiguration consisting of ServiceOfferings with a mix of Spot and Regular priorities
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{'ServiceOffering': 'Standard_D4a_v4', 'Type': 'Spot'}, {'ServiceOffering': 'Standard_D8a_v4', 'Type': 'Regular'}]`"/>
+<Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{&quot;ServiceOffering&quot;: &quot;Standard_D4a_v4&quot;, &quot;Type&quot;: &quot;Spot&quot;}, {&quot;ServiceOffering&quot;: &quot;Standard_D8a_v4&quot;, &quot;Type&quot;: &quot;Regular&quot;}]`"/>
 </CustomProperties>
 "@
 
