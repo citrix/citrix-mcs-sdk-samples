@@ -42,7 +42,7 @@ $machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folde
 # This configures backup Service Offerings with a mix of Regular and Spot Priorities
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-<Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{'ServiceOffering': 'Standard_D4a_v4', 'Type': 'Spot'}, {'ServiceOffering': 'Standard_D8a_v4', 'Type': 'Regular'}, {'ServiceOffering': 'Standard_D16a_v4', 'Type': 'Spot'}]`"/>
+<Property xsi:type=`"StringProperty`" Name=`"BackupVmConfiguration`" Value=`"[{&quot;ServiceOffering&quot;: &quot;Standard_D4a_v4&quot;, &quot;Type&quot;: &quot;Spot&quot;}, {&quot;ServiceOffering&quot;: &quot;Standard_D8a_v4&quot;, &quot;Type&quot;: &quot;Regular&quot;}, {&quot;ServiceOffering&quot;: &quot;Standard_D16a_v4&quot;, &quot;Type&quot;: &quot;Spot&quot;}]`"/>
 </CustomProperties>
 "@
 
