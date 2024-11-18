@@ -18,7 +18,7 @@ $CustomProperties = '<CustomProperties xmlns="http://schemas.citrix.com/2014/xd/
 + '</CustomProperties>'
 
 $cred = Get-Credential
-Set-Item -LiteralPath $connectionPath -CustomProperties $CustomProperties -UserName $cred.username -Password $cred.password
+Set-Item -LiteralPath $connectionPath -CustomProperties $CustomProperties -UserName $cred.username -SecurePassword $cred.password
 ```
 Additionally, you can adjust the ProxyHypervisorTrafficThroughConnector property via custom properties, similar to MaximumConcurrentProvisioningOperations. The possible values for ProxyHypervisorTrafficThroughConnector are either True or False(This script configures the property via custom properties, setting it to True. You have the flexibility to modify it according to your preferences.). 
 For further details about ProxyHypervisorTrafficThroughConnector refer this [link](https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-azure-resource-manager.html#create-a-secure-environment-for-azure-managed-traffic).

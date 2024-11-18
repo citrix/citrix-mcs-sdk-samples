@@ -76,7 +76,7 @@ if(($MetadataKey -ne "") -and ($MetadataValue -ne ""))
 if($CustomProperties -ne '')
 {
     $cred = Get-Credential
-    Set-Item -LiteralPath $connectionPath -CustomProperties $CustomProperties -UserName $cred.username -Password $cred.password
+    Set-Item -LiteralPath $connectionPath -CustomProperties $CustomProperties -UserName $cred.username -SecurePassword $cred.password
 }
 
 #########################################
@@ -118,5 +118,5 @@ if($updateAuthMode)
     + '<Property xsi:type="StringProperty" Name="AuthenticationMode" Value="' + $AuthenticationMode + '" />'`
     + '</CustomProperties>'
 
-    Set-Item -LiteralPath $connectionPath -CustomProperties $customPropsAuthMode -UserName $cred.username -Password $cred.password
+    Set-Item -LiteralPath $connectionPath -CustomProperties $customPropsAuthMode -UserName $cred.username -SecurePassword $cred.password
 }
