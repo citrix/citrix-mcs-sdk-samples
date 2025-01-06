@@ -23,13 +23,13 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 $identityPoolName = "demo-identitypool01"
 
 ####################################
-# Step 2: Remove the AD Account(s) #
+# Step 2: Remove the Identities    #
 ####################################
-# Get the all the AD Accounts in the identity pool
-$adAccountNames = Get-AcctADAccount -IdentityPoolName $identityPoolName | Select-Object -ExpandProperty ADAccountName
-if($null -ne $adAccountNames -and $adAccountNames -ne '')
+# Get the all the identities in the identity pool
+$identityAccountName = Get-AcctIdentity -IdentityPoolName $identityPoolName | Select-Object -ExpandProperty IdentityAccountName
+if($null -ne $identityAccountName -and $identityAccountName -ne '')
 {
-    Remove-AcctADAccount -IdentityPoolName $identityPoolName -ADAccountName $adAccountNames
+    Remove-AcctIdentity -IdentityPoolName $identityPoolName -IdentityAccountName $identityAccountName
 }
 
 ################################################
