@@ -67,7 +67,7 @@ The script can be executed with parameters as shown in the example below:
     -SessionSupport "Single"  `
     -AllocationType "Random"  `
     -PersistUserChanges "Discard" `
-    -CleanOnBoot $True `
+    -CleanOnBoot:$true `
     -MasterImage "XDHyp:\HostingUnits\Myresource\MyVM.vm\MySnapshot.snapshot"  `
     -CustomProperties "" `
     -Scope @() `
@@ -160,38 +160,44 @@ Creating a provisioning scheme for managing virtual machines by using New-ProvSc
     6. CleanOnBoot.
     Indicates whether the VMs created from this provisioning scheme are reset to their initial condition each time they are started.
 
-    7. UseWriteBackCache.
+    7.  MachineProfile
+    Machine Profile provides a way to specify a template that will be used for provisioning machines in a provisioning scheme.
+    All hardware properties (e.g., CPU Count, Memory, etc) are captured from the machine profile template. 
+
+    8. UseWriteBackCache.
     Indicates whether write-back cache is enabled for the VMs created from this provisioning scheme. Use additional parameters to configure the write-back cache. 
     
-    8. WriteBackCacheDiskSize.
+    9. WriteBackCacheDiskSize.
     The size in GB of any temporary storage disk used by the write-back cache. Should be used in conjunction with WriteBackCacheMemorySize. 
 
-    9. WriteBackCacheMemorySize.
+    10. WriteBackCacheMemorySize.
     The size in MB of any write-back cache if required. Should be used in conjunction with WriteBackCacheDiskSize. Setting RAM Cache to 0 but specifying Disk Cache effectively disables the RAM Cache. However, there will be some memory still used to allow the I/O Optimization to operate.
 
-    10. WriteBackCacheDriveLetter. 
+    11.  WriteBackCacheDriveLetter. 
     The customized drive letter of write-back cache disk which can be any character between ‘E’ and ‘Z’. If not specified, the drive letter is auto assigned by operating system, i.e. generally ‘D’, but ‘E’ when ‘D’ is assigned to other disk like Azure temp disk. It only works with VDA 2305 or higher.
 
-    11. CustomProperties.
+    12.  CustomProperties.
     The properties of the provisioning scheme that are specific to the target hosting infrastructure. See about_ProvCustomProperties for more information.	
 
-    12. MachineProfile.
-    Currently only supported with Azure. Defines the inventory path to the source VM used by the provisioning scheme as a template. This profile identifies the properties for the VMs created from the scheme. The VM must be in the hosting unit that HostingUnitName or HostingUnitUid refers to. If any properties are present in the MachineProfile but not the CustomProperties, values from the template will be written back to the CustomProperties.	
-
-    13. VMCpuCount.
+    13.  VMCpuCount.
     The number of processors that will be used to create VMs from the provisioning scheme.	
 
-    14. VMMemoryMB.
+    14.  VMMemoryMB.
     The maximum amount of memory that will be used to created VMs from the provisioning scheme in MB.	
 
-    15. NetworkMapping.
+    15.  NetworkMapping.
     Specifies how the attached NICs are mapped to networks. If this parameter is omitted, VMs are created with a single NIC, which is mapped to the default network in the hosting unit. If this parameter is supplied, machines are created with the number of NICs specified in the map, and each NIC is attached to the specified network.	
 
-    16. InitialBatchSizeHint.
+    16.  InitialBatchSizeHint.
     Provides a predictive hint for the number of initial VMs that will be added to the MCS catalog when the scheme is successfully created. Callers should supply this parameter in situations where the completion of New-ProvScheme will be closely followed by a New-ProvVM call to create an initial batch of VMs in the catalog.	
 
-    17. Scope
-    The administration scopes to be applied to the new provisioning scheme.	
+    17.  DataDiskPersistence.
+    Supported Values: 'Persistent' and 'NonPersistent'.
+    Indicates whether the changes to the disk contents of the Prov-VMs will persist accross reboot.
+    When the value to this parameter is set to 'Persistent' or 'NonPersistent', the data disk created will have 'Dependent' or 'Independent - Nonpersistent' Disk Mode in VMware respectively.
+
+    18.  Scope
+    The administration scopes to be applied to the new provisioning scheme.
 
 **Step 4: Create New ProvVM(s).**
 
@@ -251,19 +257,21 @@ Adding broker machines to the broker catalog to manage the macines in the site b
 
 
 
-## 4. Specialized Script using Full Clone: Add-MachineCatalog-FullClone.ps1
+## 4. Specialized Scenario - Using Full Clone:
 
-Expanding on the base script, the specialized script `Add-MachineCatalog-FullClone.ps1` incorporates the Full Clone feature of VMware, necessitating an additional parameter for its operation.
+Utilizing the Full Clone feature, necessitates the following additional parameters for its operation:
 
-    1. UseFullDiskCloneProvisioning: Indicates whether VMs should be created using the dedicated full disk clone feature. By default, the Fast Clone approach is used unless this parameter is explicitly set to enable Full Clone.
+    1. CleanOnBoot: A flag to set non-persistent catalog, ensuring VMs are reset to their baseline state at each startup. This should be set to false to enable the Full Clone feature.
+    2. UseFullDiskCloneProvisioning: Indicates whether VMs should be created using the dedicated full disk clone feature. By default, the Fast Clone approach is used unless this parameter is explicitly set to enable Full Clone.
 
 The script can be executed with parameters as shown in the example below:
 
 ```powershell
-.\Add-MachineCatalog-FullClone.ps1 `
+.\Add-MachineCatalog.ps1 `
     -ProvisioningSchemeName "MyCatalog" `
     -HostingUnitName "Myresource" `
     -NetworkName "MyNetwork" `
+    -AdminAddress "MyDDC.MyDomain.local" `
     -Domain "MyDomain.local" `
     -UserName "MyUserName" `
     -Password "MyPassword" `
@@ -274,12 +282,12 @@ The script can be executed with parameters as shown in the example below:
     -SessionSupport "Single"  `
     -AllocationType "Random"  `
     -PersistUserChanges "Discard" `
-    -CleanOnBoot $True `
+    -CleanOnBoot:$false `
     -MasterImage "XDHyp:\HostingUnits\Myresource\MyVM.vm\MySnapshot.snapshot"  `
     -CustomProperties "" `
     -Scope @() `
     -Count 2 `
-    -UseFullDiskCloneProvisioning $True
+    -UseFullDiskCloneProvisioning:$true
 ```
 
 The following page provides the details the VMware feature - Full Clone: 
@@ -287,9 +295,9 @@ The following page provides the details the VMware feature - Full Clone:
 * [The Full Clone of VMware](../../ProvScheme/Full%20Clone/)
 
 
-## 5. Specialized Script using Write-Back Cache: Add-MachineCatalog-WriteBackCache.ps1
+## 5. Specialized Scenario - Using Write-Back Cache:
 
-Expanding on the base script, the specialized script `Add-MachineCatalog-WriteBackCache.ps1` incorporates the Write-Back Cache feature of VMware, necessitating an additional parameter for its operation.
+Utilizing the Write-Back Cache feature, necessitates the following additional parameters for its operation:
 
     1. CleanOnBoot: A flag to set non-persistent catalog, ensuring VMs are reset to their baseline state at each startup. This should be set to True to enable the Write-Back Cache.
     
@@ -308,6 +316,7 @@ The script can be executed with parameters as shown in the example below:
     -ProvisioningSchemeName "MyCatalog" `
     -HostingUnitName "Myresource" `
     -NetworkName "MyNetwork" `
+    -AdminAddress "MyDDC.MyDomain.local" `
     -Domain "MyDomain.local" `
     -UserName "MyUserName" `
     -Password "MyPassword" `
@@ -318,12 +327,12 @@ The script can be executed with parameters as shown in the example below:
     -SessionSupport "Single"  `
     -AllocationType "Random"  `
     -PersistUserChanges "Discard" `
-    -CleanOnBoot $True `
+    -CleanOnBoot:$true `
     -MasterImage "XDHyp:\HostingUnits\Myresource\MyVM.vm\MySnapshot.snapshot"  `
     -CustomProperties "" `
     -Scope @() `
     -Count 2 `
-    -UseWriteBackCache $True `
+    -UseWriteBackCache:$true `
     -WriteBackCacheDiskSize 128 `
     -WriteBackCacheMemorySize 256 `
     -WriteBackCacheDriveLetter "W"
@@ -333,15 +342,87 @@ The following page provides the details the VMware feature - Write-Back Cache:
 
 * [The Write-Back Cache of VMware](../../ProvScheme/Write-Back%20Cache/)
 
+## 6. Specialized Scenario - Using Data Disk:
 
-## 6. Common Errors During Operation
+Utilizing the Data Disk feature, necessitates the following additional parameters for its operation:
 
-1. If the domain is invalid, the error message is "New-AcctIdentityPool : An invalid URL was given for the service.  The value given was 'YourInput.MyDomain.local'."
+    1. DataDiskPersistence: Supported Values: `'Persistent'` and `'NonPersistent'`. Indicates whether the changes to the disk contents of the Prov-VMs will persist accross reboot.
+    2. CleanOnBoot: Required to be enabled, if using NonPersistent data disk. 
+
+The script can be executed with parameters as shown in the example below:
+
+```powershell
+.\Add-MachineCatalog.ps1 `
+    -ProvisioningSchemeName "MyCatalog" `
+    -HostingUnitName "Myresource" `
+    -NetworkName "MyNetwork" `
+    -AdminAddress "MyDDC.MyDomain.local" `
+    -Domain "MyDomain.local" `
+    -UserName "MyUserName" `
+    -Password "MyPassword" `
+    -ZoneUid "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" `
+    -NamingScheme "MyVM###" `
+    -NamingSchemeType "Numeric" `
+    -ProvisioningType "MCS" `
+    -SessionSupport "Single"  `
+    -AllocationType "Random"  `
+    -PersistUserChanges "Discard" `
+    -MasterImage "XDHyp:\HostingUnits\Myresource\MyVM.vm\MySnapshot.snapshot"  `
+    -CustomProperties "" `
+    -Scope @() `
+    -Count 2 `
+    -DataDiskPersistence "Persistent"
+```
+
+The following page provides the details of the VMware feature - Data Disk: 
+
+* [The Data Disk Feature of VMware](../../ProvScheme/Data%20Disk/)
+* **IMPORTANT** [VMware Data Disk Supported Scenarios](../../ProvScheme/Data%20Disk/README.md#3-vmware-data-disk-supported-scenarios)
+
+## 7. Specialized Scenario - Using Machine Profile:
+
+Utilizing the Machine Profile feature, necessitates the following additional parameters for its operation:
+
+    1. MachineProfile: The path for the VM Template.
+    
+The script can be executed with parameters as shown in the example below:
+
+```powershell
+.\Add-MachineCatalog-WriteBackCache.ps1 `
+    -ProvisioningSchemeName "MyCatalog" `
+    -HostingUnitName "Myresource" `
+    -NetworkName "MyNetwork" `
+    -AdminAddress "MyDDC.MyDomain.local" `
+    -Domain "MyDomain.local" `
+    -UserName "MyUserName" `
+    -Password "MyPassword" `
+    -ZoneUid "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee" `
+    -NamingScheme "MyVM###" `
+    -NamingSchemeType "Numeric" `
+    -ProvisioningType "MCS" `
+    -SessionSupport "Single"  `
+    -AllocationType "Random"  `
+    -PersistUserChanges "Discard" `
+    -CleanOnBoot:$true `
+    -MasterImage "XDHyp:\HostingUnits\Myresource\MyVM.vm\MySnapshot.snapshot"  `
+    -MachineProfile "XDHyp:\HostingUnits\Myresource\MyVM-Template.template" `
+    -CustomProperties "" `
+    -Scope @() `
+    -Count 2 `
+```
+
+The following page provides the details the VMware feature - Machine Profile: 
+
+* [The Machine Profile of VMware](../../ProvScheme/Machine%20Profile/README.md)
+
+## 8. Common Errors During Operation
+
+1. If the domain is invalid, the error message is "New-AcctIdentityPool : An invalid URL was given for the service. The value given was 'YourInput.MyDomain.local'."
 
 2. If the master image path is invalid, the error message is "Get-HypConfigurationObjectForItem : 'Citrix.Hypervisor' resolved to more than one provider name. Possible matches include: Citrix.Host.PowerShellSnapIn\Citrix.Hypervisor 
 Citrix.Host.Admin.V2\Citrix.Hypervisor."
 
-## 7. Reference Documents
+## 9. Reference Documents
 
 For comprehensive information and further reading, the following resources are recommended. These include CVAD SDK documentation and other relevant references (as applicable):
 
@@ -357,5 +438,4 @@ For comprehensive information and further reading, the following resources are r
 10. [CVAD SDK - New-ProvVM](https://developer-docs.citrix.com/en-us/citrix-virtual-apps-desktops-sdk/current-release/MachineCreation/New-ProvVM.html)
 11. [CVAD SDK - Lock-ProvVM](https://developer-docs.citrix.com/en-us/citrix-virtual-apps-desktops-sdk/current-release/MachineCreation/Lock-ProvVM.html)
 12. [CVAD SDK - Get-HypConfigurationObjectForItem](https://developer-docs.citrix.com/en-us/citrix-virtual-apps-desktops-sdk/current-release/HostService/Get-HypConfigurationObjectForItem.html)
-
-
+13. [CVAD SDK - About Machine Profile](https://developer-docs.citrix.com/en-us/citrix-daas-sdk/MachineCreation/about_Prov_MachineProfile.html)

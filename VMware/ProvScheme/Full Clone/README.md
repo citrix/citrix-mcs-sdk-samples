@@ -1,4 +1,4 @@
-# Using Fast Clone and Full Clone Features of VMware for Machine Catalog Creation
+﻿# Using Fast Clone and Full Clone Features of VMware for Machine Catalog Creation
 
 This page describes the use of VMware's Full Clone feature while creating a ProvScheme in Citrix Virtual Apps and Desktops (CVAD). The script `Create-ProvScheme-FullClone.ps1` shows an example usage of `New-ProvScheme` with the Full Clone feature.
 
@@ -27,12 +27,13 @@ When setting up a static desktop on a dedicated virtual machine with local disk 
 
 ## 2. Understanding the Concise Script using Full Clone Feature
 
-To enable Full Clone, set the **UseFullDiskCloneProvisoning** parameter in the **New-ProvScheme** cmdlet as shown below:
+To enable Full Clone, set the **UseFullDiskCloneProvisoning** parameter and disable **CleanOnBoot** parameter in the **New-ProvScheme** cmdlet as shown below:
 
 ```powershell
 New-ProvScheme `
     -ProvisioningSchemeName "MyMachineCatalog" `
-    # Additional  Parameters... `
+    # Additional Parameters... `
+    -CleanOnBoot:$false
     -UseFullDiskCloneProvisoning
 ```
 
@@ -42,7 +43,7 @@ New-ProvScheme `
 
 ## 3. Example Full Scripts Utilizing Full Clone.
 
-1. [Creation of a Machine Catalog with Full Clone](../../SampleAdminScenarios/Add%20Machine%20Catalog/Add-MachineCatalog-FullClone.ps1)
+1. [Creation of a Machine Catalog with Full Clone](../../SampleAdminScenarios/Add%20Machine%20Catalog/Add-MachineCatalog.ps1)
 
 
 

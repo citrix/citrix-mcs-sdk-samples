@@ -22,6 +22,12 @@
     15. CustomProperties: Specific properties for the hosting infrastructure.
     16. Scope: Administration scopes for the identity pool.
     17. Count: Number of accounts to be created.
+    18. UseFullDiskCloneProvisioning: This flag enables the use of Full Clone provisioning.
+    19. UseWriteBackCache: A flag to enable the Write-Back Cache feature. This should be set to True to enable the Write-Back Cache.
+    20. WriteBackCacheDiskSize: Specifies the disk size of the Write-Back Cache.
+    21. WriteBackCacheMemorySize: Defines the memory size of the Write-Back Cache.
+    22. WriteBackCacheDriveLetter: Assigns the drive letter for the Write-Back Cache disk.
+    23. DataDiskPersistence: Sets disk persistence for the data disk. Supported Values: 'Persistent' and 'NonPersistent'.
 .OUTPUTS
     1. A New Identity Pool.
     4. New ADAccount(s).
@@ -30,7 +36,7 @@
     2. A New Broker Catalog.
     6. New Broker Machine(s).
 .NOTES
-    Version      : 1.0.0
+    Version      : 1.1.0
     Author       : Citrix Systems, Inc.
 .EXAMPLE
     .\Add-MachineCatalog.ps1 `
@@ -47,7 +53,7 @@
         -SessionSupport "Single"  `
         -AllocationType "Random"  `
         -PersistUserChanges "Discard" `
-        -CleanOnBoot $True `
+        -CleanOnBoot:$true `
         -MasterImage "XDHyp:\HostingUnits\Myresource\MyVM.vm\MySnapshot.snapshot"  `
         -CustomProperties "" `
         -Scope @() `
@@ -83,7 +89,8 @@ param(
     [switch] $UseWriteBackCache = $false,
     [int] $WriteBackCacheDiskSize,
     [int] $WriteBackCacheMemorySize,
-    [string] $WriteBackCacheDriveLetter
+    [string] $WriteBackCacheDriveLetter,
+    [string] $DataDiskPersistence
 )
 
 # Enable Citrix PowerShell Cmdlets
@@ -187,7 +194,7 @@ $vmMemoryMB = (Get-HypConfigurationObjectForItem -LiteralPath $MasterImage).Memo
 $newProvSchemeParameters = @{
     ProvisioningSchemeName  = $ProvisioningSchemeName
     HostingUnitName         = $HostingUnitName
-    IdentityPoolName        = $identityPoolName
+    IdentityPoolName        = $ProvisioningSchemeName
     ProvisioningSchemeType  = $ProvisioningType
     MasterImageVM           = $MasterImage
     CustomProperties        = $CustomProperties
@@ -197,6 +204,11 @@ $newProvSchemeParameters = @{
     InitialBatchSizeHint    = $initialBatchSizeHint
     Scope                   = $Scope
     CleanOnBoot             = $CleanOnBoot
+}
+
+# Use the Machine Profile
+if ($MachineProfile) {
+    $newProvSchemeParameters['MachineProfile'] = $MachineProfile
 }
 
 # If UseFullDiskCloneProvisioning is specified, configure the UseFullDiskCloneProvisioning.
@@ -209,6 +221,9 @@ if ($UseWriteBackCache) {
     $newProvSchemeParameters['WriteBackCacheMemorySize'] = $WriteBackCacheMemorySize
     $newProvSchemeParameters['WriteBackCacheDriveLetter'] = $WriteBackCacheDriveLetter
 }
+
+# If DataDiskPersistence is specified, configure the DataDiskPersistence.
+if ($DataDiskPersistence) { $newProvSchemeParameters['DataDiskPersistence'] = $DataDiskPersistence }
 
 # If operating in an On-Prem environment, configure the AdminAddress.
 if ($AdminAddress) { $newProvSchemeParameters['AdminAddress'] = $AdminAddress }
