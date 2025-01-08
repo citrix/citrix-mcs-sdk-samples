@@ -1,8 +1,8 @@
 ﻿<#
 .SYNOPSIS
-    Creates a ProvScheme using Full Clone.
+    Creates a ProvScheme using Machine Profile.
 .DESCRIPTION
-    Create-ProvScheme-FullClone.ps1 creates a ProvScheme that utilizes Full Clone.
+    Create-ProvScheme-MachineProfile.ps1 creates a ProvScheme that utilizes VM Template.
     The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
 .INPUTS
     N/A
@@ -12,7 +12,7 @@
     Version      : 1.1.0
     Author       : Citrix Systems, Inc.
 .EXAMPLE
-    .\Create-ProvScheme-FullClone.ps1
+    .\Create-ProvScheme-MachineProfile.ps1
 #>
 
 # /*************************************************************************
@@ -27,6 +27,7 @@ $IdentityPoolName        = "MyMachineCatalog"
 $HostingUnitName         = "MyHostingUnit"
 $ProvisioningSchemeType  = "MCS"
 $MasterImageVM           = "XDHyp:\HostingUnits\MyHostingUnit\MyVM.vm\MySnapshot.snapshot"
+$MachineProfile          = "XDHyp:\HostingUnits\MyHostingUnit\MyVM-Template.template"
 $NetworkMapping          = @{"0"="XDHyp:\HostingUnits\MyHostingUnit\MyNetwork.network"}
 $VMCpuCount              = 1
 $VMemoryMB              = 1024
@@ -42,6 +43,7 @@ New-ProvScheme `
     -HostingUnitName $HostingUnitName `
     -ProvisioningSchemeName $ProvisioningSchemeType `
     -MasterImageVM $MasterImageVM `
+    -MachineProfile $MachineProfile `
     -NetworkMapping $NetworkMapping `
     -VMCpuCount $VMCpuCount `
     -VMMemoryMB $VMemoryMB `
