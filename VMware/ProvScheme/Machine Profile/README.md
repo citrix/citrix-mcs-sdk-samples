@@ -2,14 +2,12 @@
 
 This page describes the use of VMware's Machine Profile feature while creating a ProvScheme in Citrix Virtual Apps and Desktops (CVAD). The script `Create-ProvScheme-FullClone.ps1` shows an example usage of `New-ProvScheme` with the Machine Profile feature.
 
-
-
 ## 1. Understanding the Machine Profile Features
-
 
 - **Machine Profile:**
     - **Desription:** Machine Profile provides a way to specify a template that will be used for provisioning machines in a provisioning scheme.
     All hardware properties (e.g., CPU Count, Memory, etc) are captured from the machine profile template. 
+	- MCS creates a difference disk for each VM. Write operations are directed to this difference disk. However, the base disk is shared among all VMs, meaning that all read operations are conducted on this common base disk. 
 
 - **Vmware Specific Information:**
     - **Desription:** When using VMware, the following resource can be used as machine profile input.
@@ -43,12 +41,17 @@ This page describes the use of VMware's Machine Profile feature while creating a
 
 When setting up a static desktop on a dedicated virtual machine with local disk changes saved, Machine Creation Service (MCS) offers two disk types: partially cloned disk (so-called Fast Clone) and fully cloned disk (so-called Machine Profile). 
 
-- **Machine Profile:**
-    - **Desription:** MCS creates a difference disk for each VM. Write operations are directed to this difference disk. However, the base disk is shared among all VMs, meaning that all read operations are conducted on this common base disk. The figure below illustrates the architecture. 
+## 2. How to use Machine Profile Feature
 
-## 2. Understanding the Concise Script using Machine Profile Feature
+To configure Machine through PowerShell, use the `MachineProfile` parameter available with the New-ProvScheme operation. The MachineProfile parameter is a string containing a Citrix inventory item path. Currently, only one inventory type is supported for the MachineProfile source:    
+**Template**: The MachineProfile points to a template that exists in the host. For example:
+```powershell
+$machineProfile = "XDHyp:\HostingUnits\demo-hostingunit\demo-machineprofile-template.template"
+```
+**MachineProfile**: Defines the inventory path to the source VM used by the provisioning scheme as a template. This profile identifies the properties for the VMs created from the scheme.
 
-To enable Machine Profile, set the **MachineProfile** parameter in the **New-ProvScheme** cmdlet as shown below:
+### Create Provisioning scheme
+When using New-ProvScheme, specify the `MachineProfile` parameter:
 
 ```powershell
 New-ProvScheme `
@@ -57,12 +60,17 @@ New-ProvScheme `
     -MachineProfile "XDHyp:\HostingUnits\Myresource\MyVM-Template.template" `
 ```
 
-**MachineProfile** Defines the inventory path to the source VM used by the provisioning scheme as a template. This profile identifies the properties for the VMs created from the scheme.
-
+### Update Provisioning scheme with machine profile
+You can also change the MachineProfile configuration on an existing catalog using the Set-ProvScheme command. 
+```powershell
+Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -MachineProfile $machineProfile
+```
+**Note**: The updated machine profile will be applicable to new machines post operation, not to the existing machines. 
 
 ## 3. Example Full Scripts Utilizing Machine Profile.
 
-1. [Creation of a Machine Catalog with Machine Profile](../../SampleAdminScenarios/Add%20Machine%20Catalog/Add-MachineCatalog.ps1)
+1. [Creation of a Machine Catalog with Machine Profile](Create-ProvScheme-MachineProfile.ps1)
+2. [Update a Machine Catalog with Machine Profile](Set-ProvScheme-MachineProfile.ps1)
 
 
 

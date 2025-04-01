@@ -3,7 +3,7 @@
     Creates a ProvScheme using Machine Profile.
 .DESCRIPTION
     Create-ProvScheme-MachineProfile.ps1 creates a ProvScheme that utilizes VM Template.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2305.
 .INPUTS
     N/A
 .OUTPUTS
