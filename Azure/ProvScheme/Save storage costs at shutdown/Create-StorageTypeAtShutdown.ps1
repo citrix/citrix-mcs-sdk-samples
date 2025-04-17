@@ -40,7 +40,7 @@ $networkMapping = @{"0"="XDHyp:\HostingUnits\$hostingUnitName\$region.region\vir
 $machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfile"
 
 # Set the StorageTypeAtShutdown custom property.
-# The only valid values for StorageTypeAtShutdown are 'Standard_LRS' or ''. Using '' means that you are not using the feature.
+# The only valid values for StorageTypeAtShutdown are 'Standard_LRS', 'StandardSSD_LRS' (added in CVAD 2511), or ''. Using '' means that you are not using the feature.
 # In this example, we also set the StorageType custom property to 'Premium_LRS.' StorageType is the desired StorageType when the VM is powered on.
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
