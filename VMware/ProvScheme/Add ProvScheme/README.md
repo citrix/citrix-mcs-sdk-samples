@@ -44,6 +44,8 @@ The `Add-ProvScheme.ps1` script creates a Machine Catalog and requires the follo
     
     18. WriteBackCacheDriveLetter: Assigns the drive letter for the Write-Back Cache disk.
     
+    19. DataDiskPersistence: Sets disk persistence for the data disk. Supported Values: 'Persistent' and 'NonPersistent'.
+    
 It's important to note the usage of the `CleanOnBoot` parameter: Set this to `$True` for creating `a non-persistent catalog` where VMs revert to their original state at each reboot. For `a persistent catalog` where changes are maintained, set it to `$False`.
 
 The script can be executed with parameters as shown in the example below:
@@ -61,7 +63,7 @@ The script can be executed with parameters as shown in the example below:
     -VMMemoryMB 1024 `
     -Scope @() `
     -InitialBatchSizeHint 1 `
-    -CleanOnBoot $true `
+    -CleanOnBoot:$true `
     -AdminAddress "MyDDC.MyDomain.local"
 ```
 
@@ -71,9 +73,10 @@ Administrators should tailor these parameters to fit their specific environment.
 
 ## 2. Overview of the Base Script
 
-The base script is segmented into six key steps, providing a structured approach to catalog creation:
+The base script is segmented into the following key steps, providing a structured approach to ProvScheme creation:
 
     1. Create a New Provisioning Scheme.
+       1. Adds feature specific parameters passed in the script
     
 
 
@@ -135,17 +138,23 @@ Creating a provisioning scheme for managing virtual machines by using New-ProvSc
     16. InitialBatchSizeHint.
     Provides a predictive hint for the number of initial VMs that will be added to the MCS catalog when the scheme is successfully created. Callers should supply this parameter in situations where the completion of New-ProvScheme will be closely followed by a New-ProvVM call to create an initial batch of VMs in the catalog.	
 
-    17. Scope
+    17. DataDiskPersistence.
+    Supported Values: 'Persistent' and 'NonPersistent'.
+    Indicates whether the changes to the disk contents of the Prov-VMs will persist accross reboot.
+    When the value to this parameter is set to 'Persistent' or 'NonPersistent', the data disk created will have 'Dependent' or 'Independent - Nonpersistent' Disk Mode in VMware respectively.
+
+    18. Scope
     The administration scopes to be applied to the new provisioning scheme.	
 
 
 
-## 4. Specialized Script using Full Clone: Add-ProvScheme-FullClone.ps1
+## 4. Specialized Scenario - Using Full Clone:
 
-Utilizing the Full Clone feature necessitates an additional parameter for its operation.
+Utilizing the Full Clone feature, necessitates the following additional parameters for its operation:
 
-    14. UseFullDiskCloneProvisioning: Flag to enable Full Clone.
-
+    1. CleanOnBoot: A flag to set non-persistent catalog, ensuring VMs are reset to their baseline state at each startup. This should be set to false to enable the Full Clone feature.
+    2. UseFullDiskCloneProvisioning: Indicates whether VMs should be created using the dedicated full disk clone feature. By default, the Fast Clone approach is used unless this parameter is explicitly set to enable Full Clone.
+    
 The script can be executed with parameters as shown in the example below:
 
 ```powershell
@@ -161,28 +170,29 @@ The script can be executed with parameters as shown in the example below:
     -VMMemoryMB 1024 `
     -Scope @() `
     -InitialBatchSizeHint 1 `
-    -CleanOnBoot $true `
+    -CleanOnBoot:$false `
     -ZoneUid "00000000-0000-0000-0000-000000000000" `
-    -UseFullDiskCloneProvisioning $true
+    -UseFullDiskCloneProvisioning:$true
 ```
 
-The following page provides the details the XenServer feature - Full Clone: 
+The following page provides the details of the VMware feature - Full Clone: 
 
-* [The Full Clone of XenServer](../Full%20Clone/)
+* [The Full Clone Feature of VMware](../Full%20Clone/)
 
 
-## 5. Specialized Script using Write-Back Cache: Add-ProvScheme-WriteBackCache.ps1
+## 5. Specialized Scenario - using Write-Back Cache:
 
-Utilizing the Write-Back Cache feature necessitates an additional parameter for its operation.
+Utilizing the Write-Back Cache feature, necessitates the following additional parameters for its operation:
 
-    15. UseWriteBackCache: Indicates whether write-back cache is enabled for the VMs created from this provisioning scheme. Use additional parameters to configure the write-back cache. 
+    1. CleanOnBoot: A flag to set non-persistent catalog, ensuring VMs are reset to their baseline state at each startup. This should be set to True to enable the Write-Back Cache.
     
-    16. WriteBackCacheDiskSize: The size in GB of any temporary storage disk used by the write-back cache. Should be used in conjunction with WriteBackCacheMemorySize. 
+    2. UseWriteBackCache: A flag to enable the Write-Back Cache feature. This should be set to True to enable the Write-Back Cache.
     
-    17. WriteBackCacheMemorySize: The size in MB of any write-back cache if required. Should be used in conjunction with WriteBackCacheDiskSize. Setting RAM Cache to 0 but specifying Disk Cache effectively disables the RAM Cache. However, there will be some memory still used to allow the I/O Optimization to operate.
+    3. WriteBackCacheDiskSize: Specifies the disk size of the Write-Back Cache.
     
-    18. WriteBackCacheDriveLetter: The customized drive letter of write-back cache disk which can be any character between ‘E’ and ‘Z’. If not specified, the drive letter is auto assigned by operating system, i.e. generally ‘D’, but ‘E’ when ‘D’ is assigned to other disk like Azure temp disk. It only works with VDA 2305 or higher.
-
+    4. WriteBackCacheMemorySize: Defines the memory size of the Write-Back Cache.
+    
+    5. WriteBackCacheDriveLetter: Assigns the drive letter for the Write-Back Cache disk.
 
 The script can be executed with parameters as shown in the example below:
 
@@ -199,26 +209,57 @@ The script can be executed with parameters as shown in the example below:
     -VMMemoryMB 1024 `
     -Scope @() `
     -InitialBatchSizeHint 1 `
-    -CleanOnBoot $true `
+    -CleanOnBoot:$true `
     -ZoneUid "00000000-0000-0000-0000-000000000000" `
-    -UseWriteBackCache $True `
+    -UseWriteBackCache:$true `
     -WriteBackCacheDiskSize 128 `
     -WriteBackCacheMemorySize 256 `
     -WriteBackCacheDriveLetter "W"
 ```
 
-The following page provides the details the XenServer feature - Write-Back Cache: 
+The following page provides the details of the VMware feature - Write-Back Cache: 
 
-* [The Write-Back Cache of XenServer](../Write-Back%20Cache/)
+* [The Write-Back Cache Feature of VMware](../Write-Back%20Cache/)
 
 
-## 6. Common Errors During Operation
+## 6. Specialized Scenario - Using Data Disk:
+
+Utilizing the Data Disk feature, necessitates the following additional parameters for its operation:
+
+    1. DataDiskPersistence: Supported Values: `'Persistent'` and `'NonPersistent'`. Indicates whether the changes to the disk contents of the Prov-VMs will persist accross reboot.
+    2. CleanOnBoot: Required to be enabled, if using NonPersistent data disk. 
+
+The script can be executed with parameters as shown in the example below:
+
+```powershell
+.\Add-ProvScheme.ps1 `
+    -ProvisioningSchemeName "MyMachineCatalog" `
+    -HostingUnitName "MyHostingUnit" `
+    -IdentityPoolName "MyMachineCatalog" `
+    -ProvisioningSchemeType "MCS" `
+    -MasterImageVM "XDHyp:\HostingUnits\MyHostingUnit\MyVM.vm\MySnapshot.snapshot" `
+    -CustomProperties "" `
+    -NetworkMapping @{"0"="XDHyp:\HostingUnits\MyHostingUnit\MyNetwork.network"} `
+    -VMCpuCount 1 `
+    -VMMemoryMB 1024 `
+    -Scope @() `
+    -InitialBatchSizeHint 1 `
+    -ZoneUid "00000000-0000-0000-0000-000000000000" `
+    -DataDiskPersistence "Persistent"
+```
+
+The following page provides the details of the VMware feature - Data Disk: 
+
+* [The Data Disk Feature of VMware](../Data%20Disk/)
+* **IMPORTANT** [VMware Data Disk Supported Scenarios](../Data%20Disk/README.md#3-vmware-data-disk-supported-scenarios)
+
+## 7. Common Errors During Operation
 
 1. If the hosting unit path of the master image is invalid, the error message is "New-ProvScheme : Path XDHyp:\HostingUnits\MyHostingUnit\MyVM.vm\MySnapshot.snapshot is not valid: Cannot find path 'XDHyp:\HostingUnits\MyHostingUnit' because it does not exist."
 
 2. If the hosting unit path of the network mapping is invalid, the error message is "New-ProvScheme : Path XDHyp:\HostingUnits\MyHostingUnit\MyNetwork.network is not valid: Cannot find path 'XDHyp:\HostingUnits\MyHostingUnit' because it does not exist."
 
-## 7. Reference Documents
+## 8. Reference Documents
 
 For comprehensive information and further reading, the following resources are recommended. These include CVAD SDK documentation and other relevant references (as applicable):
 

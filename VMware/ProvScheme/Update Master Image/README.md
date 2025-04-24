@@ -70,7 +70,16 @@ The parameters for Publish-ProvMasterVMImage are described below.
 
     Valid paths are of the format: 
         XDHyp:\HostingUnits\<HostingUnitName>\<path>\<VMName>.vm\<SnapshotName>.snapshot XDHyp:\HostingUnits\<HostingUnitName>\<path>\<TemplateName>.template	
-    
+
+**NOTE:**
+  * If `-DataDiskPersistence` was set during Catalog/ProvScheme creation (See [The Data Disk Feature of VMware](../../ProvScheme/Data%20Disk/), for more info),
+    * The new MasterImageVM must also contain **exactly ONE Data Disk**.
+    * The Image Preparation will prepare both OS and Data disk
+	* After running the `Publish-ProvMasterVMImage` cmd,
+	  * The new VMs will be created with the updated OS and Data Disks.
+	  * The existing VMs' Non-Persistent disks will be updated on the next power cycle from Citrix Studio.
+	  * The existing VMs' Persistent disks will not be updated on the next power cycle from Citrix Studio.
+
 **Step 2: Verify New Image Addition.**
 
 Verifying the updated master image history is matched with the updated master image of ProvScheme by using Get-ProvSchemeMasterVMImageHistory and Get-ProvScheme.
@@ -80,7 +89,7 @@ The parameters for Get-ProvSchemeMasterVMImageHistory are described below.
     1. ProvisioningSchemeName.
     Specifies the name of the provisioning scheme.	
 
-    2. ImageStatus.
+    1. ImageStatus.
     Specifies the status of the provisioning scheme image.	
 
 The parameters for Get-ProvScheme are described below.

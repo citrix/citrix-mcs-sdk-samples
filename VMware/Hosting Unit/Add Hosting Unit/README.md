@@ -52,7 +52,7 @@ The base script is segmented into two key steps, providing a structured approach
 
 ## 3. Detail of the Base Script
 
-In this section, we dive into the specifics of each step in the base script for creating a Hosting Connection to XenServer. For each step, key parameters and their roles are outlined to give you a comprehensive understanding of the process.
+In this section, we dive into the specifics of each step in the base script for creating a Hosting Connection to VMware. For each step, key parameters and their roles are outlined to give you a comprehensive understanding of the process.
 
 **Step 1: Create a Storage Resource.**
 
