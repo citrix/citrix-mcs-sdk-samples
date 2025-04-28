@@ -29,6 +29,7 @@ Below is a list of **VMware-Specific Features** covered in this documentation:
 * Provisioning Schemes Features
     * [Utilize **Write-Back Cache**](./ProvScheme/Write-Back%20Cache/)
     * [Utilize **Full Clone** or **Fast Clone**](./ProvScheme/Full%20Clone/)
+    * [Utilize **Data Disk**](./ProvScheme/Data%20Disk/)
     * [Update **Folder Id**](./ProvScheme/Folder%20ID/)
     
 
@@ -78,6 +79,10 @@ The list below outlines the high-level CVAD operations for VMware that each sect
 
 * [**SampleAdminScenarios**](./SampleAdminScenarios/)
     * [Add a Machine Catalog](./SampleAdminScenarios/Add%20Machine%20Catalog/)
+        * Special Scenarios using VMware Supported Features
+            * [Specialized Scenario - Using Full Clone](./SampleAdminScenarios/Add%20Machine%20Catalog/README.md#4-specialized-scenario---using-full-clone)
+            * [Specialized Scenario - Using Write-Back Cache](./SampleAdminScenarios/Add%20Machine%20Catalog/README.md#5-specialized-scenario---using-Write-Back-Cache)
+            * [Specialized Scenario - Using Data Disk](./SampleAdminScenarios/Add%20Machine%20Catalog/README.md#6-specialized-scenario---using-data-disk)
     * [Remove a Machine Catalog](./SampleAdminScenarios/Remove%20Machine%20Catalog/)
     
 

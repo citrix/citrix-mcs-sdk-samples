@@ -21,4 +21,5 @@ The following folders explain the VMware features for **ProvScheme**:
 
 * [Full Clone](./Full%20Clone/): Descriptions for utilizing Full Clone.
 * [Write-Back Cache](./Write-Back%20Cache/): Descriptions for utilizing Write-Back Cache.
+* [Data Disk](./Data%20Disk/): Descriptions for utilizing Data Disk.
 * [Folder Id](./Folder%20ID/): Descriptions for updating Folder Id.

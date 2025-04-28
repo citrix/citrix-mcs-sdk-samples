@@ -23,10 +23,11 @@
     16. WriteBackCacheDiskSize: Specifies the disk size of the Write-Back Cache.
     17. WriteBackCacheMemorySize: Defines the memory size of the Write-Back Cache.
     18. WriteBackCacheDriveLetter: Assigns the drive letter for the Write-Back Cache disk.
+    19. DataDiskPersistence: Sets disk persistence for the data disk. Supported Values: 'Persistent' and 'NonPersistent'.
 .OUTPUTS
     A New Provisioning Scheme Object
 .NOTES
-    Version      : 1.0.0
+    Version      : 1.1.0
     Author       : Citrix Systems, Inc.
 .EXAMPLE
     # Create a ProvScheme
@@ -42,7 +43,7 @@
         -VMMemoryMB 1024 `
         -Scope @() `
         -InitialBatchSizeHint 1 `
-        -CleanOnBoot $true `
+        -CleanOnBoot:$true `
         -AdminAddress "MyDDC.MyDomain.local"
 
     # Create a ProvScheme with Full Clone
@@ -58,9 +59,9 @@
         -VMMemoryMB 1024 `
         -Scope @() `
         -InitialBatchSizeHint 1 `
-        -CleanOnBoot $true `
+        -CleanOnBoot:$true `
         -AdminAddress "MyDDC.MyDomain.local" `
-        -UseFullDiskCloneProvisioning $true
+        -UseFullDiskCloneProvisioning:$true
 
     # Create a ProvScheme with Write-Back Cache
     .\Add-ProvScheme.ps1 `
@@ -75,12 +76,29 @@
         -VMMemoryMB 1024 `
         -Scope @() `
         -InitialBatchSizeHint 1 `
-        -CleanOnBoot $true `
+        -CleanOnBoot:$true `
         -AdminAddress "MyDDC.MyDomain.local" `
-        -UseWriteBackCache $True `
+        -UseWriteBackCache:$true `
         -WriteBackCacheDiskSize 128 `
         -WriteBackCacheMemorySize 256 `
         -WriteBackCacheDriveLetter "W"
+
+    # Create a ProvScheme with Persistent Data Disk
+    # Refer VMware Data Disk Feature for more supported scenarios
+    .\Add-ProvScheme.ps1 `
+        -ProvisioningSchemeName "MyMachineCatalog" `
+        -HostingUnitName "MyHostingUnit" `
+        -IdentityPoolName "MyMachineCatalog" `
+        -ProvisioningSchemeType "MCS" `
+        -MasterImageVM "XDHyp:\HostingUnits\MyHostingUnit\MyVM.vm\MySnapshot.snapshot" `
+        -CustomProperties "" `
+        -NetworkMapping @{"0"="XDHyp:\HostingUnits\MyHostingUnit\MyNetwork.network"} `
+        -VMCpuCount 1 `
+        -VMMemoryMB 1024 `
+        -Scope @() `
+        -InitialBatchSizeHint 1 `
+        -CleanOnBoot:$true `
+        -DataDiskPersistence 'Persistent'
 #>
 
 # /*************************************************************************
@@ -107,7 +125,8 @@ param(
     [switch] $UseWriteBackCache = $false,
     [int] $WriteBackCacheDiskSize,
     [int] $WriteBackCacheMemorySize,
-    [string] $WriteBackCacheDriveLetter
+    [string] $WriteBackCacheDriveLetter,
+    [string] $DataDiskPersistence
 )
 
 # Enable Citrix PowerShell Cmdlets
@@ -138,18 +157,21 @@ $newProvSchemeParameters = @{
 }
 
 # If operating in an On-Prem environment, configure the AdminAddress.
-if ($AdminAddress) { $newItemParameters['AdminAddress'] = $AdminAddress }
+if ($AdminAddress) { $newProvSchemeParameters['AdminAddress'] = $AdminAddress }
 
 # If UseFullDiskCloneProvisioning is specified, configure the UseFullDiskCloneProvisioning.
-if ($UseFullDiskCloneProvisioning) { $newItemParameters['UseFullDiskCloneProvisioning'] = $UseFullDiskCloneProvisioning }
+if ($UseFullDiskCloneProvisioning) { $newProvSchemeParameters['UseFullDiskCloneProvisioning'] = $UseFullDiskCloneProvisioning }
 
 # If UseWriteBackCache is specified, configure the Write-Back Cache.
 if ($UseWriteBackCache) {
-    $newItemParameters['UseWriteBackCache'] = $UseWriteBackCache
-    $newItemParameters['WriteBackCacheDiskSize'] = $WriteBackCacheDiskSize
-    $newItemParameters['WriteBackCacheMemorySize'] = $WriteBackCacheMemorySize
-    $newItemParameters['WriteBackCacheDriveLetter'] = $WriteBackCacheDriveLetter
+    $newProvSchemeParameters['UseWriteBackCache'] = $UseWriteBackCache
+    $newProvSchemeParameters['WriteBackCacheDiskSize'] = $WriteBackCacheDiskSize
+    $newProvSchemeParameters['WriteBackCacheMemorySize'] = $WriteBackCacheMemorySize
+    $newProvSchemeParameters['WriteBackCacheDriveLetter'] = $WriteBackCacheDriveLetter
 }
+
+# If DataDiskPersistence is specified, configure the DataDiskPersistence.
+if ($DataDiskPersistence) { $newProvSchemeParameters['DataDiskPersistence'] = $DataDiskPersistence }
 
 # Create a Provisoning Scheme
 & New-ProvScheme @newProvSchemeParameters
