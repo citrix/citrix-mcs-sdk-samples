@@ -1,0 +1,159 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cvad-machine-creation
+rules:
+  - verbs:
+      - '*'
+    apiGroups:
+      - kubevirt.io
+    resources:
+      - virtualmachines
+      - virtualmachine
+      - virtualmachineinstances
+      - virtualmachineinstance
+  - verbs:
+      - list
+      - create
+      - watch
+      - get
+      - delete
+    apiGroups:
+      - export.kubevirt.io
+    resources:
+      - virtualmachineexports
+      - virtualmachineexport
+  - verbs:
+      - create
+    apiGroups:
+      - authorization.k8s.io
+    resources:
+      - selfsubjectaccessreviews
+  - verbs:
+      - list
+      - create
+      - watch
+      - get
+      - patch
+      - delete
+    apiGroups:
+      - cdi.kubevirt.io
+    resources:
+      - cdiconfigs
+      - dataimportcrons
+      - datasources
+      - datasource
+      - datavolumes
+      - datavolume
+      - objecttransfers
+      - storageprofiles
+      - volumeimportsources
+      - volumeuploadsources
+      - volumeclonesources
+  - verbs:
+      - list
+      - create
+      - watch
+      - get
+    apiGroups:
+      - k8s.cni.cncf.io
+    resources:
+      - network-attachment-definitions
+      - network-attachment-definition
+  - verbs:
+      - list
+      - create
+      - watch
+      - get
+    apiGroups:
+      - upload.cdi.kubevirt.io
+    resources:
+      - uploadtokenrequest
+      - uploadtokenrequests
+  - verbs:
+      - get
+      - list
+      - create
+      - update
+      - get
+    apiGroups:
+      - '*'
+    resources:
+      - persistentvolume
+      - persistentvolumes
+  - verbs:
+      - get
+      - list
+    apiGroups:
+      - '*'
+    resources:
+      - namespaces
+      - namespace
+      - pods
+      - pod
+      - services
+      - service
+  - verbs:
+      - '*'
+    apiGroups:
+      - '*'
+    resources:
+      - persistentvolumeclaims
+      - persistentvolumeclaim
+      - persistentvolumes
+      - persistentvolume
+  - verbs:
+      - update
+    apiGroups:
+      - subresources.kubevirt.io
+    resources:
+      - virtualmachines/start
+      - virtualmachines/stop
+      - virtualmachines/restart
+  - verbs:
+     - get
+     - list
+     - watch
+    apiGroups:
+     - ''
+    resources:
+     - configmaps 
+  - verbs:
+     - get
+     - list
+    apiGroups:
+     - ''
+    resources:
+     - secrets
+  - verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+      - delete
+      - deletecollection
+    apiGroups:
+      - snapshot.storage.k8s.io
+    resources:
+      - volumesnapshots
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - config.openshift.io
+    resources:
+      - clusterversions
+  - verbs:
+      - get
+      - list
+      - watch
+      - create
+      - update
+      - patch
+    apiGroups:
+      - networking.k8s.io
+    resources:
+      - networkpolicies
