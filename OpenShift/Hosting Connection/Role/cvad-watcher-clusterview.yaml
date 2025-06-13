@@ -1,0 +1,42 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cvad-watcher-clusterview
+rules:
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - kubevirt.io
+    resources:
+      - virtualmachine
+      - virtualmachines
+      - virtualmachineinstance
+      - virtualmachineinstances
+  - verbs:
+      - watch
+      - list
+      - get
+    apiGroups:
+      - k8s.cni.cncf.io
+    resources:
+      - network-attachment-definition
+      - network-attachment-definitions
+  - verbs:
+      - watch
+      - list
+      - get
+    apiGroups:
+      - ''
+    resources:
+      - namespaces
+      - namespaces/status
+  - verbs:
+      - get
+      - list
+      - watch
+    apiGroups:
+      - instancetype.kubevirt.io
+    resources:
+      - virtualmachineclusterinstancetypes
