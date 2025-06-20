@@ -22,6 +22,7 @@ Manually defining and assigning these roles can be time-consuming and error-pron
 
 - Automates creation of roles with minimum required permissions for CVAD operations.
 - Automates assignment of these roles to a specified Service Account.
+- Supports assignment of different roles to different namespaces as needed.
 
 
 ### Role Definitions
@@ -47,19 +48,44 @@ Use the `AssignRoles.ps1` script to create and assign the roles. The script requ
 - `Username`: OpenShift console username (e.g., `kubeadmin`)
 - `ServiceAccount`: The target service account (e.g., `sa-citrix`)
 - `ServiceAccountNamespace`: Namespace of the service account
-- `TargetNamespace`: Namespace where resources will be managed (e.g., VM creation)
-
+- `McsNamespaces`: One or more namespaces where MCS (machine creation) operations are required
+- `PowerManagementOnlyNamespaces`: One or more namespaces where only power management operations are required
 
 
 **Example usage:**
+
+Assigns the MCS role in `mynamespace1` and `mynamespace2`:
 
 ```powershell
 ./AssignRoles.ps1 `
     -ServerUrl "https://api.myOpenshift.myDomain.local:6443" `
     -Username "kubeadmin" `
-    -ServiceAccount "sa-citrix" `
-    -ServiceAccountNamespace "citrix" `
-    -TargetNamespace "citrix"
+    -ServiceAccount "sa-mysa-default" `
+    -ServiceAccountNamespace "default" `
+    -McsNamespaces "mynamespace1", "mynamespace2"
+```
+
+Assigns the Power Management role in `mynamespace3` and `mynamespace4`:
+
+```powershell
+./AssignRoles.ps1 `
+    -ServerUrl "https://api.myOpenshift.myDomain.local:6443" `
+    -Username "kubeadmin" `
+    -ServiceAccount "sa-mysa-default" `
+    -ServiceAccountNamespace "default" `
+    -PowerManagementOnlyNamespaces "mynamespace3", "mynamespace4"
+```
+
+Assigns MCS role in `mynamespace1`, `mynamespace2` and Power Management role in `mynamespace3`, `mynamespace4`:
+
+```powershell
+./AssignRoles.ps1 `
+    -ServerUrl "https://api.myOpenshift.myDomain.local:6443" `
+    -Username "kubeadmin" `
+    -ServiceAccount "sa-mysa-default" `
+    -ServiceAccountNamespace "default" `
+    -McsNamespaces "mynamespace1", "mynamespace2" `
+    -PowerManagementOnlyNamespaces "mynamespace3", "mynamespace4"
 ```
 
 You will be prompted for the user password during execution.
