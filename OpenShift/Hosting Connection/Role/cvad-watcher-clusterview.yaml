@@ -39,4 +39,5 @@ rules:
     apiGroups:
       - instancetype.kubevirt.io
     resources:
+      - virtualmachineinstancetypes
       - virtualmachineclusterinstancetypes

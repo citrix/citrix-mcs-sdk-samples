@@ -1,10 +1,11 @@
 <#
 .SYNOPSIS
-    This script assigns roles to a specified service account in OpenShift, ensuring roles exist and binding them appropriately.
+    Assigns roles to a specified service account in OpenShift, ensuring all required roles exist and binding them at either the cluster or namespace level as appropriate.
 
 .DESCRIPTION
     The script logs into an OpenShift server, verifies the existence of a service account, ensures specified roles exist by creating them if necessary, 
     and assigns these roles to the service account. It handles both cluster-wide and namespace-bound role bindings, using YAML files for role definitions.
+    Namespace-bound roles can be assigned to multiple namespaces as specified by the user. 
     The script and associated YAML files must be located in the same folder.
 
 .INPUTS
@@ -13,7 +14,8 @@
     -Username: The username for logging into the OpenShift server.
     -ServiceAccount: The name of the service account to which roles will be assigned.
     -ServiceAccountNamespace: The namespace where the service account resides.
-    -TargetNamespace: The namespace where namespace-bound roles are applied.
+    -McsNamespaces: One or more namespaces to which the MCS role will be assigned.
+    -PowerManagementOnlyNamespaces: One or more namespaces to which the Power Management only role will be assigned.
 
 .OUTPUTS
     This script does not produce direct outputs but provides console messages indicating the progress and status of operations, 
@@ -29,12 +31,32 @@
     ./AssignRoles.ps1 `
         -ServerUrl "https://api.myOpenshift.myDomain.local:6443" `
         -Username "kubeadmin" `
-        -ServiceAccount "sa-haan-default" `
+        -ServiceAccount "sa-mysa-default" `
         -ServiceAccountNamespace "default" `
-        -TargetNamespace "serenity-mcs"
-    
-        This example logs into the specified OpenShift server with the given username, verifies the service account,
-    ensures the roles exist, and assigns them to the service account in the specified namespaces.
+        -McsNamespaces "mynamespace1", "mynamespace2"
+
+    Assigns the MCS role in mynamespace1 and mynamespace2 namespaces.
+
+.EXAMPLE
+    ./AssignRoles.ps1 `
+        -ServerUrl "https://api.myOpenshift.myDomain.local:6443" `
+        -Username "kubeadmin" `
+        -ServiceAccount "sa-mysa-default" `
+        -ServiceAccountNamespace "default" `
+        -PowerManagementOnlyNamespaces "mynamespace3", "mynamespace4"
+
+    Assigns the Power Management role in the mynamespace3 and mynamespace4 namespaces.
+
+.EXAMPLE
+    ./AssignRoles.ps1 `
+        -ServerUrl "https://api.myOpenshift.myDomain.local:6443" `
+        -Username "kubeadmin" `
+        -ServiceAccount "sa-mysa-default" `
+        -ServiceAccountNamespace "default" `
+        -McsNamespaces "mynamespace1", "mynamespace2" `
+        -PowerManagementOnlyNamespaces "mynamespace3", "mynamespace4"
+
+    Assigns the MCS role in mynamespace1 and mynamespace2, and the Power Management role in mynamespace3 and mynamespace4.
 #>
 
 # /*************************************************************************
@@ -48,14 +70,21 @@ param(
     [string]$Username,
     [string]$ServiceAccount,
     [string]$ServiceAccountNamespace,
-    [string]$TargetNamespace
+    [string[]]$McsNamespaces,
+    [string[]]$PowerManagementOnlyNamespaces
 )
+
+# Validate input parameters: All except one of McsNamespaces or PowerManagementOnlyNamespaces are required
+if (-not $ServerUrl -or -not $Username -or -not $ServiceAccount -or -not $ServiceAccountNamespace -or (-not $McsNamespaces -and -not $PowerManagementOnlyNamespaces)) {
+    Write-Error "Missing required parameters. You must provide all connection/account parameters, and at least one of -McsNamespaces or -PowerManagementOnlyNamespaces."
+    exit 1
+}
 
 # This script assumes that `oc.exe` is registered in the system's PATH environment variable.
 $ocCommand = Get-Command oc -ErrorAction SilentlyContinue 
 if ($null -eq $ocCommand) { 
     Write-Error "oc command must be in directory that is part of your `$env:PATH variable"  
-    exit
+    exit 1
 }
 
 # Function to verify if a service account exists
@@ -84,9 +113,9 @@ function Ensure-RoleExist {
         $result = oc get clusterrole $RoleName 2>&1
         if ($result -match "NotFound") {
             # Apply the YAML file to create the role
-            Write-Host "Role '$RoleName' does not exist. Create role from file '$fullYamlFilePath'."
+            Write-Host "   Role Creation : " -NoNewline
             oc apply -f $fullYamlFilePath
-        } 
+        }
     } catch {
         throw "Error processing file '$fullYamlFilePath': $_"
     }
@@ -102,19 +131,18 @@ function Assign-ServiceAccountRole {
     )
     
     try {
-        $bindingName = "rb-$RoleName-$ServiceAccount"
         $account = $ServiceAccountNamespace + ":" + $ServiceAccount
+        $bindingName = "rb-$RoleName-$RoleTargetNamespace-$account"
 
         if ($RoleTargetNamespace) {
             # Namespace-bound Role Binding using a ClusterRole
-            Write-Host "Assign the namespace-bound role '$RoleName' to service account '$ServiceAccount' in namespace '$RoleTargetNamespace'."
+            Write-Host "   Role Binding  : " -NoNewline
             oc create rolebinding $bindingName --clusterrole=$RoleName --namespace=$RoleTargetNamespace --serviceaccount=$account
             
         } else {
             # Cluster-Wide Role Binding
-            Write-Host "Assign the cluster-wide role '$RoleName' to service account '$ServiceAccount'."
+            Write-Host "   Role Binding  : " -NoNewline
             oc create clusterrolebinding $bindingName --clusterrole=$RoleName --serviceaccount=$account
-            
         }
     } catch {
         Write-Host "Error assigning role '$RoleName' to service account '$account': $_"
@@ -135,12 +163,33 @@ if (-not $isExist) {
     throw "The service account '$ServiceAccount' does not exist in namespace '$ServiceAccountNamespace'."
 } 
 
-# Define roles and target namespaces
-$roles = @(
-    ,@("cvad-watcher-clusterview", $null) # This role requires a Cluster-wide role binding.
-    ,@("cvad-power-management", $TargetNamespace) # This role requires a Namespace bound role binding.
-    ,@("cvad-machine-creation", $TargetNamespace) # This role requires a Namespace bound role binding.
-)
+# Verify the target namespaces are specified.
+if ((-not $McsNamespaces) -and (-not $PowerManagementOnlyNamespaces)) {
+    throw "You must specify at least one namespace for either -McsNamespaces or -PowerManagementOnlyNamespaces."
+}
+
+# Build the role assignment list
+$roles = @()
+
+# Add cluster-wide role
+$roles += ,@("cvad-watcher-clusterview", $null)
+
+# Add namespace-bound roles for power management
+foreach ($ns in $PowerManagementOnlyNamespaces) {
+    if ($null -ne $ns) {
+        $roles += ,@("cvad-power-management", $ns.Trim())
+    }
+}
+
+# Add namespace-bound roles for MCS
+foreach ($ns in $McsNamespaces) {
+    if ($null -ne $ns) {
+        $roles += ,@("cvad-machine-creation", $ns.Trim())
+    }
+}
+
+Write-Host "Starting role assignment for service account '$ServiceAccount' in namespace '$ServiceAccountNamespace'..."
+$iteration = 1
 
 # Iterate through the list and apply functions
 foreach ($role in $roles) {
@@ -148,9 +197,18 @@ foreach ($role in $roles) {
     $YamlFilePath = "$($role[0]).yaml"
     $RoleTargetNamespace = $role[1]
 
+    if ($null -eq $RoleTargetNamespace) {
+        Write-Host "$iteration. Assigning '$RoleName' at the cluster level..."
+    } else {
+        Write-Host "$iteration. Assigning '$RoleName' to namespace '$RoleTargetNamespace'..."
+    }
+    
     # Ensure the role exists
     Ensure-RoleExist -RoleName $RoleName -YamlFilePath $YamlFilePath
 
     # Assign the role with or without a target namespace
     Assign-ServiceAccountRole -RoleName $RoleName -RoleTargetNamespace $RoleTargetNamespace -ServiceAccount $ServiceAccount -ServiceAccountNamespace $ServiceAccountNamespace
+
+    # Update the iteration count for better message. 
+    $iteration += 1
 }
