@@ -4,11 +4,11 @@
 .DESCRIPTION
     CreateCatalog creates an MCS catalog and VMs in AWS.
     This script is similar to the "Create Machine Catalog" button in Citrix Studio. It creates the identity pool, ProvScheme, Broker Catalog, AD Accounts, and ProvVms.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2025. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/
@@ -148,4 +148,4 @@ if ($newProvVmResult.FailedVirtualMachines) {
 # Create Broker Machines of the new ProvVMs
 Write-Output "Step 6 Create the Broker Machine(s)"
 $newProvVMSids = @($newProvVmResult.CreatedVirtualMachines | Select-Object ADAccountSid)
-$newBrokerMachines = $newProvVMSids | ForEach-Object { New-BrokerMachine -CatalogUid $brokerCatalog.Uid -MachineName $_.ADAccountSid }
+$newProvVMSids | ForEach-Object { New-BrokerMachine -CatalogUid $brokerCatalog.Uid -MachineName $_.ADAccountSid }

@@ -5,11 +5,11 @@
     Applicable for Citrix DaaS and on-prem.
 .DESCRIPTION
     Update-NetworkMapping helps sets or change the network mapping on an existing MCS catalog.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2025. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/
