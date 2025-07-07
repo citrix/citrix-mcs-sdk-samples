@@ -20,6 +20,7 @@ Note: Unless otherwise specified, these scripts are written with Citrix DaaS in 
 This repository contains examples of several AWS & MCS features. Note that this is not an exhaustive list; there are many AWS & MCS features that are not listed here. The features listed below are those that currently have examples in this repository:
 - [Machine Profile](ProvScheme/MachineProfile)
 - [Reset Disk](ProvVM/Reset%20Disk/)
+- [Image Management](Image%20Management/)
 
 ## Sample Admin Scenario Scripts
 This repository contains common scripts for admins:
@@ -28,6 +29,12 @@ This repository contains common scripts for admins:
 [CreateHostingResources.ps1](SampleAdminScenarios/CreateHostingResources.ps1)
 This script is similar to the "Add Connection and Resources". It creates the Hosting Connection and Hosting Unit.<br>
 <img src="../images/AWS-createhostingresource.png" alt="create hosting resources" width="600"/>
+
+### Image Management
+[CreateImageVersion.ps1](SampleAdminScenarios/CreateImageVersion.ps1)
+This script creates a Provisioned Image Definition Connection and craetes an Image Version to Create Catalog.<br>
+This script is similar to the "Images" menu from the DaaS management console. It creates Image Definitions and Image Versions.<br>
+<img src="../images/AWS-ImagesInformation.png" alt="create images" width="600"/>
 
 ### Create Catalog
 [CreateCatalog.ps1](SampleAdminScenarios/CreateCatalog.ps1)

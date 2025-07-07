@@ -3,11 +3,11 @@
     Creates the HostingConnection and Hosting Unit.
 .DESCRIPTION
     Creates a Hosting Connection and Hosting Unit within the specified availability zone, cloud region, config zone, and VPC
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2025. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/
@@ -46,6 +46,6 @@ $jobGroup = [Guid]::NewGuid()
 $hostingUnitPath = "XDHyp:\HostingUnits\" + $HostingUnitName
 $rootPath = $connectionPath + "\" + $vpcName + ".virtualprivatecloud\"
 $availabilityZonePath = @($rootPath + $availabilityzone + ".availabilityzone")
-$networkPaths = (Get-ChildItem $availabilityZonePath[0] | Where ObjectType -eq "Network") | Select-Object -ExpandProperty FullPath # will select all the networks in the availability zone
+$networkPaths = (Get-ChildItem $availabilityZonePath[0] | Where-Object ObjectType -eq "Network") | Select-Object -ExpandProperty FullPath # will select all the networks in the availability zone
 
 New-Item -Path $hostingUnitPath -AvailabilityZonePath $availabilityZonePath -HypervisorConnectionName $connectionName -JobGroup $jobGroup -PersonalvDiskStoragePath @() -RootPath $rootPath -NetworkPath $networkPaths

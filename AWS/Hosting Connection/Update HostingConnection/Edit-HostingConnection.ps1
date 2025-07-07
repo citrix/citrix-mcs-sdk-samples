@@ -3,11 +3,11 @@
     Edit the HostingConnection.
 .DESCRIPTION
     Edit-HostingConnection.ps1 edits the HostingConnection properties.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2203 Long Term Service Release (LTSR).
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2025. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/
@@ -35,7 +35,7 @@ $connectionPath = "XDHyp:\Connections\" + $connectionName
 #########################################
 try
 {
-    $temp = Get-Item -LiteralPath $connectionPath -ErrorAction stop
+    Get-Item -LiteralPath $connectionPath -ErrorAction stop
 }
 catch
 {
@@ -53,3 +53,10 @@ Set-Item -LiteralPath $connectionPath -MaintenanceMode $maintenanceMode -UserNam
 #########################################
 
 Rename-Item -NewName $renameConnection -Path $connectionPath
+
+####################################################
+# Step 4: Take Connection out of MaintenanceMode   #
+####################################################
+
+$maintenanceMode = $false
+Set-Item -LiteralPath $connectionPath -MaintenanceMode $maintenanceMode
