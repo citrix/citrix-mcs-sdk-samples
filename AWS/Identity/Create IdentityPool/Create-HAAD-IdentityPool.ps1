@@ -19,17 +19,16 @@
 Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 
 # [User Input Required] Set parameters for New-AcctIdentityPool
-$identityPoolName = "demo-identitypool"
-$namingScheme = "demo-###"
-$domain = "cvad.local"
+$identityPoolName = "haad-identitypool"
+$namingScheme = "haad-###"
+$domain = "cvad-haad.local"
 $namingSchemeType = "Numeric"
 $zoneUid = "00000000-0000-0000-0000-000000000000"
-$startCount = 1
-$identityType = "ActiveDirectory"
+$identityType = "HybridAzureAD"
 $OU = "CN=Computers,DC=cvad,DC=local"
 
 # Validate Zone UID
-$zone = Get-ConfigZone -Uid $zoneUid
+$zone = Get-ConfigZone -Uid $zoneName
 if($null -eq $zone)
 {
     throw "Could not find the zone (zoneUid): $($zoneUid). Verify the zoneUid exists."
@@ -41,7 +40,6 @@ if($null -eq $zone)
 New-AcctIdentityPool -IdentityPoolName $identityPoolName `
     -NamingScheme $namingScheme `
     -NamingSchemeType $namingSchemeType `
-    -StartCount $startCount `
     -IdentityType $identityType `
     -OU $OU `
     -Domain $domain `
