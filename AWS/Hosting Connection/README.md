@@ -72,6 +72,31 @@ $connection = New-Item -Path $connectionPath `
 -ZoneUid $zoneUid
 ```
 
+If you want to create resources and provisioned VMs in another account using IAM roles, you can pass in the custom property `"CrossAccountRoleArn"` which points to the ARN of the role in the secondary AWS account where you intend to provision VMs. Optionally you can also provide the custom property `"MaximumAssumeRoleDurationInSeconds"`. Please refer to more information in the [Deployment Guide.](https://community.citrix.com/tech-zone/build/deployment-guides/aws-cross-account-provisioning/)
+
+```powershell
+$customProperties = @"
+<CustomProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.citrix.com/2014/xd/machinecreation">
+<Property xsi:type="StringProperty" Name="CrossAccountRoleArn" Value="arn:aws:iam::5678:role/citrix-role" /><Property xsi:type="StringProperty" Name="MaximumAssumeRoleDurationInSeconds" Value="3600" />
+</CustomProperties>
+"@
+$apiKey = "role_based_auth"
+$secureUserInput = Read-Host 'Please enter your secret key' -AsSecureString
+$encryptedInput = ConvertFrom-SecureString -SecureString $secureUserInput
+$securePassword = ConvertTo-SecureString -String $encryptedInput
+
+$connection = New-Item -Path $connectionPath `
+-ConnectionType "AWS" `
+-HypervisorAddress "https://ec2.$($cloudRegion).amazonaws.com" `
+-CustomProperties $customProperties `
+-Persist `
+-Scope @() ` 
+-UserName $apiKey `
+-SecurePassword $securePassword `
+-ZoneUid $zoneUid
+```
+
+
 Then add the host connection to the Broker Service. This will now be viewable in Studio
 ```powershell
 New-BrokerHypervisorConnection -HypHypervisorConnectionUid $connection.HypervisorConnectionUid

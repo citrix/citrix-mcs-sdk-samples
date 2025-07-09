@@ -1,0 +1,49 @@
+﻿<#
+.SYNOPSIS
+    Creates a Role Based HostingConnection.
+.DESCRIPTION
+    Create-RoleBased-HostingConnection.ps1 creates the HostingConnection when connectionName, cloudRegion, SubscriptionId, apiKey, secretKey, and zoneUid are provided.
+    apiKey and secretKey's value must be "role_based_auth"
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
+#>
+
+# /*************************************************************************
+# * Copyright © 2025. Cloud Software Group, Inc. All Rights Reserved.
+# * This file is subject to the license terms contained
+# * in the license file that is distributed with this file.
+# *************************************************************************/
+
+################################
+# Step 0: Setup the parameters #
+################################
+# Add Citrix snap-ins
+Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
+
+# [User Input Required] Setup parameters for creating hosting connection
+$connectionName = "demo-rolebased"
+$cloudRegion = "us-east-1"
+$apiKey = "role_based_auth"
+$zoneUid = "00000000-0000-0000-0000-000000000000"
+
+$secureUserInput = Read-Host 'Please enter your secret key' -AsSecureString
+$encryptedInput = ConvertFrom-SecureString -SecureString $secureUserInput
+$securePassword = ConvertTo-SecureString -String $encryptedInput
+$connectionPath = "XDHyp:\Connections\" + $connectionName
+$customProperties = '<CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Property xsi:type="StringProperty" Name="CrossAccountRoleArn" Value="arn:aws:iam::5678:role/citrix-role" /><Property xsi:type="StringProperty" Name="MaximumAssumeRoleDurationInSeconds" Value="3600" />
+</CustomProperties>'
+
+########################################
+# Step 1: Create a Hosting Connection. #
+########################################
+
+$connection = New-Item -Path $connectionPath `
+    -ConnectionType "AWS" `
+    -HypervisorAddress "https://ec2.$($cloudRegion).amazonaws.com" `
+    -Persist -Scope @() `
+    -UserName $apiKey `
+    -SecurePassword $securePassword `
+    -ZoneUid $zoneUid `
+    -CustomProperties $customProperties
+
+New-BrokerHypervisorConnection -HypHypervisorConnectionUid $connection.HypervisorConnectionUid
