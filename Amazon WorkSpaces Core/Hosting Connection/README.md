@@ -51,6 +51,29 @@ $connection = New-Item -Path $connectionPath `
 -CustomProperties $customProperties
   
 ```
+If the Cloud Connector is using a System Proxy (WinHTTP Proxy), you can pass in a custom property so that the connector will read the proxy configuration from the system and use it.
+
+```powershell
+$customProperties = @"
+<CustomProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.citrix.com/2014/xd/machinecreation">
+<Property xsi:type="StringProperty" Name="UseSystemProxyForHypervisorTrafficOnConnectors" Value="True" />
+</CustomProperties>
+"@
+$apiKey = "role_based_auth"
+$secureUserInput = Read-Host 'Please enter your secret key' -AsSecureString
+$encryptedInput = ConvertFrom-SecureString -SecureString $secureUserInput
+$securePassword = ConvertTo-SecureString -String $encryptedInput
+
+$connection = New-Item -Path $connectionPath `
+-ConnectionType "Custom" -PluginId "AmazonWorkSpacesCoreMachineManagerFactory" `
+-HypervisorAddress "https://workspaces-instances.$($cloudRegion).api.aws" `
+-CustomProperties $customProperties `
+-Persist `
+-Scope @() `
+-UserName $apiKey `
+-SecurePassword $securePassword `
+-ZoneUid $zoneUid
+```
 Then add the host connection to the Broker Service. This will now be viewable in Studio
 ```powershell
 New-BrokerHypervisorConnection -HypHypervisorConnectionUid $connection.HypervisorConnectionUid
