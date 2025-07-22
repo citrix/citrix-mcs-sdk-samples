@@ -12,7 +12,7 @@ GET-ITEM XDHyp:\HostingUnits\myHostingUnit\Clusters.folder\cluster01.cluster | f
 
 FullName                       Id
 --------                       --
-cluster01.cluster 00062c63-1fb0-58c9-4fc8-5c2573352378
+cluster01.cluster 00001111-2222-3333-4444-555556666666
 ```
 
 ### Parameters
