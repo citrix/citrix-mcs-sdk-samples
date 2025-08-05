@@ -28,6 +28,7 @@ This repository contains examples of several Azure & MCS features. Note that thi
 - [Ephemeral OS Disks](ProvScheme/Ephemeral%20OS%20Disks)
 - [Provision into Existing Resource Groups](ProvScheme/Provision%20into%20Existing%20Resource%20Groups)
 - [Backup VM SKU list Support](ProvScheme/Secondary%20VM%20Configuration)
+- [Create PVS Catalog](ProvScheme/Create%20PVS%20ProvScheme)
 
 ## Sample Admin Scenario Scripts
 This repository contains common scripts for admins:

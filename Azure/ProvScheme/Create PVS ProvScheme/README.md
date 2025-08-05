@@ -8,12 +8,18 @@ To create a PVS provisioning scheme, use the script available at [Create-PvsProv
 
 ## 1. Requirements for Azure
 
-For **Citrix Virtual Apps and Desktops (CVAD)** users deploying on **Azure**, the following minimum versions are required:
+For **Citrix Virtual Apps and Desktops (CVAD)** on-premises users deploying on **Azure**, the following minimum versions are required:
 
 | **Component**                             | **Supported Version** |
 |------------------------------------------|-----------------------|
 | CVAD Release for Studio UI               | 2402 and later        |
 | CVAD Release for PowerShell              | 2402 and later        |
+| Citrix Provisioning                      | 2402 and later        |
+
+For **Citrix DaaS (Citrix Cloud)** users deploying on Azure, the following minimum versions are required:
+
+| **Component**                             | **Supported Version** |
+|------------------------------------------|-----------------------|
 | Citrix Provisioning                      | 2402 and later        |
 
 ## 2. Key Steps

@@ -74,6 +74,10 @@ New-BrokerCatalog -Name $ProvisioningSchemeName `
 
 [New-BrokerCatalog Documentation](https://developer-docs.citrix.com/en-us/citrix-virtual-apps-desktops-sdk/current-release/Broker/new-brokercatalog)
 
+### Create a PVS catalog 
+
+The [Create PVS ProvScheme](./Create%20PVS%20ProvScheme) section explains how to create PVS catalogs in Azure.
+
 ### Getting ProvScheme Properties
 To get a specific ProvScheme, use the `ProvisioningSchemeName` parameter in `Get-ProvScheme`
 ```powershell
