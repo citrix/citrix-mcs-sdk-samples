@@ -3,7 +3,7 @@
     Remove an image version.
 .DESCRIPTION
     Remove-ImageVersion.ps1 removes the image version (include prepared image, master image) from the specified image definition.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR).
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 #>
 
 # /*************************************************************************
