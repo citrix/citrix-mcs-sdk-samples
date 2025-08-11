@@ -3,7 +3,7 @@
     Creates an image definition and the first image version.
 .DESCRIPTION
     Create-ImageDefinitionAndVersion.ps1 creates a prepared image for MCS provisioning.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2411.
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 .INPUTS
     1. DefinitionName: Name of the new image definition.
     2. ConnectionName: Name of the connection used.

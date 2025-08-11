@@ -3,7 +3,7 @@
     Remove an image definition and its versions.
 .DESCRIPTION
     Remove-ImageDefinitionAndVersions.ps1 removes an image definition and its versions (include all master specs and prepared specs).
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2411.
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 .INPUTS
     1. DefinitionName: Name of the image definition.
 #>

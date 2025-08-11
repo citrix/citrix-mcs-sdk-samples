@@ -3,7 +3,7 @@
     Add an image version (include a master spec and a prepared spec) to the specified image definition.
 .DESCRIPTION
     Add-ImageVersion.ps1 adds a image version, a master image, and a prepared image to the specified image definition.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2411.
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 .INPUTS
     1. DefinitionName: Name of the image definition.
     2. HostingUnitName: Name of the hosting unit used.

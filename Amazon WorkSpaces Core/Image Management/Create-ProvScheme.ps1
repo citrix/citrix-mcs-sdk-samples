@@ -3,7 +3,7 @@
     Creates a provisioning scheme by a prepared image.
 .DESCRIPTION
     Create-ProvScheme.ps1 creates a provisioning scheme by a prepared image.
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2411.
+    The original version of this script is compatible with Citrix DaaS July 2025 Release (DDC 125).
 .INPUTS
     1. ProvisioningSchemeName: Name of the new provisioning scheme.
     2. HostingUnitName: Name of the hosting unit used.
