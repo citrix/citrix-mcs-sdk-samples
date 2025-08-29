@@ -69,3 +69,12 @@ New-ProvScheme -ImageVersionSpecUid $prepedSpec.ImageVersionSpecUid
     -InitialBatchSizeHint $numberOfVms `
     -MachineProfile $machineProfile
 ```
+
+### Image Sharing Between Hosting Units
+Once an image version is created, it can be shared with other Hosting Units using this command:
+
+```powershell
+Add-ProvImageVersionSpecHostingUnit `
+   -ImageVersionSpecUid $ImageVersionSpecUid `
+   -HostingUnitName $HostingUnitName
+```
