@@ -19,6 +19,7 @@ Note: Unless otherwise specified, these scripts are written with Citrix DaaS in 
 ## Features
 This repository contains examples of several AWS & MCS features. Note that this is not an exhaustive list; there are many AWS & MCS features that are not listed here. The features listed below are those that currently have examples in this repository:
 - [Machine Profile](ProvScheme/MachineProfile)
+- [MCS Storage Optimization](ProvScheme/MCS%20Storage%20Optimization)
 - [Reset Disk](ProvVM/Reset%20Disk/)
 - [Image Management](Image%20Management/)
 
