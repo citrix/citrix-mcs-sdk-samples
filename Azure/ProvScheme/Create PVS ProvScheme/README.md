@@ -74,9 +74,7 @@ New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
                -CustomProperties $sampleCustomProperties `
                -MachineProfile $sampleMachineProfilePath `
                -UseWriteBackCache `
-               -WriteBackCacheDiskSize 32 `
-               -WriteBackCacheDriveLetter "0" `
-               -WriteBackCacheMemorySize 0
+               -WriteBackCacheDiskSize 40
 ```
 
 **Note**: For the correct syntax and more detailed examples, refer to the script [Create-PvsProvScheme.ps1](./Create-PvsProvScheme.ps1)
