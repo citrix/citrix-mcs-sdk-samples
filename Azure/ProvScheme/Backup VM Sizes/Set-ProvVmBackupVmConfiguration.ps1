@@ -1,11 +1,10 @@
 ﻿<#
 .SYNOPSIS
-    Sets or changes the BackupVmConfiguration Custom Property on an existing MCS catalog.
-	The updated BackupVmConfiguration property will be applicable to new machines post operation, not to the existing machines. For applying to existing machines, run Set-ProvVmUpdateTimeWindow.
+    Sets or changes the BackupVmConfiguration Custom Property on an existing MCS VM.
 	Applicable for Citrix DaaS and on-prem.
 .DESCRIPTION
-    Set-BackupVmConfiguration.ps1 helps change the BackupVmConfiguration configuration on an existing MCS catalog.
-    In this example, the BackupVmConfiguration custom property on the ProvScheme is updated to a new list.
+    Set-ProvVmBackupVmConfiguration.ps1 helps change the BackupVmConfiguration configuration on an existing MCS VM.
+    In this example, the BackupVmConfiguration custom property on the ProvVM is updated to a new list.
 
 #>
 
@@ -18,8 +17,9 @@
 # Add Citrix snap-ins
 Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 
-# [User Input Required] Set parameters for Set-ProvScheme
+# [User Input Required] Set parameters for Set-ProvVM
 $provisioningSchemeName = "demo-provScheme"
+$provisionedVmName = "demo-vm-001"
 
 # Update the CustomProperties to include the new value for BackupVmConfiguration consisting of ServiceOfferings with Regular priority
 $customProperties = @"
@@ -28,8 +28,8 @@ $customProperties = @"
 </CustomProperties>
 "@
 
-# Modify the ProvisioningScheme
-Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -CustomProperties $customProperties
+# Modify the Provisioned VM
+Set-ProvVM -VMName $provisionedVmName -ProvisioningSchemeName $provisioningSchemeName -CustomProperties $customProperties
 
-# Schedules all existing VMs to be updated with the new configuration on the next power on
-Set-ProvVmUpdateTimeWindow -ProvisioningSchemeName $provisioningSchemeName
+# Schedules existing VM to be updated with the new configuration on the next power on
+Set-ProvVmUpdateTimeWindow -ProvisioningSchemeName $provisioningSchemeName -VMName $provisionedVmName -StartsNow
