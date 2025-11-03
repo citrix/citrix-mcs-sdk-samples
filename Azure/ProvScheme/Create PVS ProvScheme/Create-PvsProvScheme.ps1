@@ -64,7 +64,7 @@ $createdProvScheme = New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
 -ServiceOffering $serviceOffering `
 -CustomProperties $sampleCustomProperties `
 -MachineProfile $sampleMachineProfilePath `
--UseWriteBackCache -WriteBackCacheDiskSize 32 -WriteBackCacheDriveLetter "`0" -WriteBackCacheMemorySize 0
+-UseWriteBackCache -WriteBackCacheDiskSize 40
 
 
 # Create the Broker Catalog. This allows you to see the catalog in Studio
