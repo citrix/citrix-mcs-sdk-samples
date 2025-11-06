@@ -29,7 +29,5 @@ $customProperties = @"
 "@
 
 # Modify the ProvisioningScheme
+# This will put the new BackupVmConfiguration on the ProvScheme for future VMs
 Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -CustomProperties $customProperties
-
-# Schedules all existing VMs to be updated with the new configuration on the next power on
-Set-ProvVmUpdateTimeWindow -ProvisioningSchemeName $provisioningSchemeName
