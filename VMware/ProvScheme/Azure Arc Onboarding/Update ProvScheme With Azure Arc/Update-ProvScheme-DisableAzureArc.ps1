@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Disable Azure Arc Onboarding on an existing MCS catalog. This change is only applicable to the new machines added after the operation. The existing machines in the catalog are not affected. Applicable for Citrix DaaS and on-prem.
 .DESCRIPTION
@@ -19,7 +19,7 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Cit
 
 # [User Input Required] Set parameters for Set-ProvScheme
 $provisioningSchemeName = "demo-provScheme"
-$enableAzureArcOnboarding = $false
+$enabledAzureArcOnboarding = $false
 
 # Disable Azure Arc Onboarding on existing catalog
-Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -EnableAzureArcOnboarding $enableAzureArcOnboarding
+Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -EnableAzureArcOnboarding $EnableAzureArcOnboarding 

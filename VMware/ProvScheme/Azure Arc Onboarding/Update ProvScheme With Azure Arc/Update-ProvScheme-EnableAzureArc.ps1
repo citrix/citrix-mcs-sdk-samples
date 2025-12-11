@@ -1,4 +1,4 @@
-﻿<#
+<#
 .SYNOPSIS
     Enable Azure Arc Onboarding on an existing MCS catalog. It also involves setting up ServiceAccount with AzureArcResourceManagement capability. This change is only applicable to the new machines added after the operation. The existing machines in the catalog are not affected. Applicable for Citrix DaaS and on-prem.
 .DESCRIPTION
@@ -19,7 +19,7 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Cit
 
 # [User Input Required] Set parameters for Set-ProvScheme
 $provisioningSchemeName = "demo-provScheme"
-$enableAzureArcOnboarding = $true
+$enabledAzureArcOnboarding = $true
 $azureArcSubscription = "subscriptionId-guid"
 $azureArcRegion = "eastus"
 $azureArcResourceGroup = "arc-resource-group"
@@ -32,11 +32,11 @@ $secretExpiryTime = 2025-09-09
 $identityProviderType = "AzureAD"
 
 # Enable Azure Arc Onboarding on existing catalog
-Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -EnableAzureArcOnboarding $enableAzureArcOnboarding -AzureArcSubscriptionId $AzureArcSubscription -AzureArcRegion $AzureArcRegion -AzureArcResourceGroup $AzureArcResourceGroup
+Set-ProvScheme -ProvisioningSchemeName $provisioningSchemeName -EnableAzureArcOnboarding $EnableAzureArcOnboarding -AzureArcSubscriptionId $AzureArcSubscription -AzureArcRegion $AzureArcRegion -AzureArcResourceGroup $AzureArcResourceGroup
 
 # Check or create the service account with 'AzureArcResourceManagement' Capability
 $serviceAccount = Get-AcctServiceAccount
-if ($null -eq $serviceAccount -or $serviceAccount.IdentityProviderIdentifier -ne $tenantId) {
+if ($serviceAccount -eq $null -or $serviceAccount.IdentityProviderIdentifier -ne $tenantId) {
     $secureString = ConvertTo-SecureString -String $applicationSecret -AsPlainText -Force
     $serviceAccount = New-AcctServiceAccount -IdentityProviderType $identityProviderType -IdentityProviderIdentifier $tenantId -AccountId $applicationId -AccountSecret $secureString -SecretExpiryTime $secretExpiryTime -Capabilities "AzureArcResourceManagement"
 }
