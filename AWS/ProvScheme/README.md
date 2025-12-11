@@ -40,6 +40,7 @@ Get-ChildItem -Path "XDHyp:\HostingUnits\[hosting unit name]\[availability zone 
 
 There are also feature specific parameters. Check out the following links to learn more
 - [MachineProfile](MachineProfile/README.md)
+- [MCS Storage Optimization](MCS%20Storage%20Optimization/README.md)
 
 Once you have the values, create the provisioning scheme with `New-ProvScheme`
 ```powershell
