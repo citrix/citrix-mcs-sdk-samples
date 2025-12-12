@@ -28,19 +28,14 @@ $HostingUnitName         = "MyHostingUnit"
 $ProvisioningSchemeType  = "MCS"
 $MasterImageVM           = "XDHyp:\HostingUnits\MyHostingUnit\MyVM.vm\MySnapshot.snapshot"
 $NetworkMapping          = @{"0"="XDHyp:\HostingUnits\MyHostingUnit\MyNetwork.network"}
+$VMCpuCount              = 1
+$VMemoryMB              = 1024
 $InitialBatchSizeHint    = 1
 $Scope                   = @()
-$CustomProperties        = @"
-    <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation">
-        <StringProperty Name="ContainerPath" Value="/myContainer.storage"/>
-        <StringProperty Name="vCPU" Value="3"/>
-        <StringProperty Name="RAM" Value="6144"/>
-        <StringProperty Name="CPUCores" Value="3"/>    
-    </CustomProperties>
-"@
-$AzureArcSubscription    = 00000000-0000-0000-0000-00000000000
-$AzureArcResourceGroup   = "myResourceGroup"
-$AzureArcRegion          = "myRegion"
+$CustomProperties        = ""
+$WriteBackCacheDiskSize = 128
+$WriteBackCacheMemorySize = 256
+$WriteBackCacheDriveLetter = "W"
 
 # [User Input Required] Set Arc parameters for New-ProvScheme
 $azureArcSubscription = "subscriptionId-guid"
@@ -56,11 +51,11 @@ $identityProviderType = "AzureAD"
 
 # Assign Service Account with 'AzureArcResourceManagement' Capability to Catalog IdentityPool
 $identityPool = Get-AcctIdentityPool -IdentityPoolName $identityPoolName
-if($null -eq $identityPool) {
+if($identityPool -eq $null) {
 	throw "IdentityPool does not exist"
 }
 $serviceAccount = Get-AcctServiceAccount
-if ($null -eq $serviceAccount -or $serviceAccount.IdentityProviderIdentifier -ne $tenantId) {
+if ($serviceAccount -eq $null -or $serviceAccount.IdentityProviderIdentifier -ne $tenantId) {
     $secureString = ConvertTo-SecureString -String $applicationSecret -AsPlainText -Force
     $serviceAccount = New-AcctServiceAccount -IdentityProviderType $identityProviderType -IdentityProviderIdentifier $tenantId -AccountId $applicationId -AccountSecret $secureString -SecretExpiryTime $secretExpiryTime -Capabilities "AzureArcResourceManagement"
 }
@@ -76,9 +71,11 @@ New-ProvScheme `
     -ProvisioningSchemeName $ProvisioningSchemeName `
     -IdentityPoolName $IdentityPoolName `
     -HostingUnitName $HostingUnitName `
-    -ProvisioningSchemeType $ProvisioningSchemeType `
+    -ProvisioningSchemeName $ProvisioningSchemeType `
     -MasterImageVM $MasterImageVM `
-    -NetworkMapping $NetworkMapping `    
+    -NetworkMapping $NetworkMapping `
+    -VMCpuCount $VMCpuCount `
+    -VMMemoryMB $VMemoryMB `
     -InitialBatchSizeHint $InitialBatchSizeHint `
     -Scope $Scope `
     -CustomProperties $CustomProperties `

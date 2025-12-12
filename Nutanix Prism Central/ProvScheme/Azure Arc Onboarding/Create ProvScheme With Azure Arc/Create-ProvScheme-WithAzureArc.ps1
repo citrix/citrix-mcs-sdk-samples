@@ -28,14 +28,14 @@ $HostingUnitName         = "MyHostingUnit"
 $ProvisioningSchemeType  = "MCS"
 $MasterImageVM           = "XDHyp:\HostingUnits\MyHostingUnit\MyVM.vm\MySnapshot.snapshot"
 $NetworkMapping          = @{"0"="XDHyp:\HostingUnits\MyHostingUnit\MyNetwork.network"}
+$VMCpuCount              = 1
+$VMemoryMB              = 1024
 $InitialBatchSizeHint    = 1
 $Scope                   = @()
 $CustomProperties        = @"
     <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation">
-        <StringProperty Name="ContainerPath" Value="/myContainer.storage"/>
-        <StringProperty Name="vCPU" Value="3"/>
-        <StringProperty Name="RAM" Value="6144"/>
-        <StringProperty Name="CPUCores" Value="3"/>    
+        <StringProperty Name="ClusterId" Value="00001111-2222-3333-4444-555556666666"/>
+        <StringProperty Name="CPUCores" Value="1"/>
     </CustomProperties>
 "@
 $AzureArcSubscription    = 00000000-0000-0000-0000-00000000000
@@ -78,7 +78,9 @@ New-ProvScheme `
     -HostingUnitName $HostingUnitName `
     -ProvisioningSchemeType $ProvisioningSchemeType `
     -MasterImageVM $MasterImageVM `
-    -NetworkMapping $NetworkMapping `    
+    -NetworkMapping $NetworkMapping `
+    -VMCpuCount $VMCpuCount `
+    -VMMemoryMB $VMemoryMB `
     -InitialBatchSizeHint $InitialBatchSizeHint `
     -Scope $Scope `
     -CustomProperties $CustomProperties `
