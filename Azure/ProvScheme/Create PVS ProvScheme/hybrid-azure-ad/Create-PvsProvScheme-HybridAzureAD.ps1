@@ -12,6 +12,9 @@
     Create-PvsProvScheme-HybridAzureAD.ps1 creates a PVS Provisioning Scheme (PVS provisioning using MCS)
     and a PVS‑backed Machine Catalog configured for Hybrid Azure AD joined machines.
 
+    The original version of this script is compatible with
+    Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR) or later.
+
     IMPORTANT:
     - Review and update ALL "Replaceable parameters" before running.
     - Run from a Delivery Controller (DDC) with Citrix PowerShell SDK installed.
