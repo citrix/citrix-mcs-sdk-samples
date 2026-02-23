@@ -96,11 +96,6 @@ $serviceOffering = "XDHyp:\HostingUnits\$hostingUnitName\serviceoffering.folder\
 # Machine profile path – template VM used for hardware configuration
 $sampleMachineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folder\$machineProfileResourceGroupName.resourcegroup\$machineProfile.vm"
 
-# NOTE:
-# If you intend to use a master image VM instead of a machine profile, set:
-#   $masterImagePath = "XDHyp:\HostingUnits\...\<your-master-image>.vm"
-# and update the New-ProvScheme call accordingly.
-
 #------------------------------------------------- Create Identity Pool -----------------------------------------------------------#
 # Identity pool defines how machine accounts are named and in which domain they are created.
 New-AcctIdentityPool `
