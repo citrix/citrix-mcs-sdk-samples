@@ -4,7 +4,7 @@ Scripts in this folder are tailored to Azure and its unique features. As mention
 	- An Azure Service Principal is required to create an Azure connection. This gives MCS access to create resources in your Azure environment.
 	- To learn more about Azure connections, see https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-azure-resource-manager
 - **Hosting Unit**
-	- An Azure hosting unit must specify a region. This is where your MCS resources will be provisioned.
+	- An Azure hosting unit must specify a region or Extended Zone. This is where your MCS resources will be provisioned.
 	- An Azure hosting unit must specify at least one network. This is the network that your provisioned VMs will use.
 - **Identity**
   - MCS provisioned Azure VMs support non-domain-joined, AD joined, Azure AD joined and Hybrid Azure AD joined as machine identity types.
@@ -29,6 +29,7 @@ This repository contains examples of several Azure & MCS features. Note that thi
 - [Provision into Existing Resource Groups](ProvScheme/Provision%20into%20Existing%20Resource%20Groups)
 - [Backup VM SKU list Support](ProvScheme/Secondary%20VM%20Configuration)
 - [Create PVS Catalog](ProvScheme/Create%20PVS%20ProvScheme)
+- [Azure Extended Zones](Hosting%20Unit/Extended%20Zones)
 
 ## Sample Admin Scenario Scripts
 This repository contains common scripts for admins:
@@ -56,6 +57,7 @@ More information on creating hosting connections can be found [here](Hosting%20C
 When creating an Azure Hosting Unit, you will need to supply networking and region configuration information:
 - **Region**. This is the Azure region where you would provision your resources.
     -   For example, if you want to provision in the East US region, you would supply the region as "East US"
+    -   To provision into an Extended Zone instead of a standard region, see [Azure Extended Zones](Hosting%20Unit/Extended%20Zones).
 - **Network**. This is the Azure Virtual Network that will be used by your provisioned VMs. To view your available networks. go to Azure Portal > Virtual Networks.\
     <img src="../images/Azure-Network.png" alt="drawing" width="600"/>
 - **Subnet.** This is the Azure Subnet that your provisioned VMs will use. This subnet must exist under the Virtual Network (supplied above). To view available subnets, go to Virtual Network > Subnets\
