@@ -5,7 +5,7 @@ This section explains how to create a **Citrix Provisioning Services (PVS) Provi
 The script [`Create-PvsProvScheme-LocalAD.ps1`](./Create-PvsProvScheme-LocalAD.ps1) provides an example of how to use `New-ProvScheme` to provision PVS catalogs.
 
 To create a PVS provisioning scheme, use the script available at:  
-[`Create-PvsProvScheme-LocalAD.ps1`](../Create%20PVS%20ProvScheme/local-ad/Create-PvsProvScheme-LocalAD.ps1).
+[`Create-PvsProvScheme-LocalAD.ps1`](./Create-PvsProvScheme-LocalAD.ps1).
 
 ---
 
