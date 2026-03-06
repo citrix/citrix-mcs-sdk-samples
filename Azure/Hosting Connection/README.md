@@ -11,6 +11,3 @@ This folder includes four scripts designed to facilitate users in performing CRU
 2. Get HostingConnection scripts - To get the information of an existing hosting connection
 3. Update HostingConnection scripts - To edit different settings on the existing hosting connection
 4. Remove HostingConnection scripts - To remove an existing hosting connection
-
-## Azure Partner Admin Link (PAL)
-Azure Partner Admin Link allows resource usage to be attributed to partner organizations. Citrix automatically associates the Citrix Partner ID (353109) with your Azure connections. To opt out or manage this association, see the [Partner Admin Link](Partner%20Admin%20Link) folder.
