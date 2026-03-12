@@ -135,10 +135,11 @@ When using **Azure** for Citrix Virtual Apps and Desktops (CVAD) / DaaS with PVS
 
 - Only **Generation 2 (Gen 2)** virtual machines (VMs) are supported.
 - A catalog can only be created using a **machine profile**.
+> The machine profile is used only to define the Azure hardware configuration, such as the VM size, vCPU/RAM allocation, NIC configuration, and related settings. When the VM boots, the operating system is streamed from the PVS vDisk, with the machine starting through the BDM (Boot Device Manager) disk.
 - **Hibernation** must **not** be enabled in the machine profile input.
 - The following **custom properties cannot be set** when creating the catalog:
   - `StorageType`
-  > By default, the storage type used for the identity disk and OS disk (BDM disk) in an MCS PVS catalog is Standard SSD.
+  > By default, the storage type used for the identity disk and OS disk (BDM disk) in an MCS PVS catalog is Standard SSD. This is configured at the lowest possible cost in Azure for such small disks.
   - `OsType`
   - `MachinesPerStorageAccount`
   - `StorageAccountsPerResourceGroup`
