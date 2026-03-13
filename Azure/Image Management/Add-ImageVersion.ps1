@@ -12,6 +12,13 @@
     5. ServiceOffering: The service offering used.
     6. MachineProfile: The machine profile used.
     7. CustomProperties: Custom properties for the image version spec.
+       Image version spec level properties:
+       - PreparedImageStorageType: Storage type for the prepared image. Valid values: Standard_LRS, 
+         Standard_ZRS, Premium_LRS. Default: Standard_LRS. 
+         For extended zones, only Premium_LRS is supported.
+       - DiskEncryptionSetId: Azure Disk Encryption Set ID for server-side encryption. Must be a 
+         valid Azure resource ID. If not specified, platform-managed encryption is used. Cannot 
+         be changed after the prepared image is created.
 #>
 
 # /*************************************************************************
@@ -50,8 +57,11 @@ $NewSpecParams = @{
 if ($MachineProfile) {
     $NewSpecParams["MachineProfile"] = $MachineProfile
 }
-if ($SpecCustomProperties) {
+if ($CustomProperties) {
     $NewSpecParams["CustomProperties"] = $CustomProperties
 }
 
+# Image version spec level custom properties:
+#   - PreparedImageStorageType: Storage type (Standard_LRS, Standard_ZRS, Premium_LRS). Default: Standard_LRS
+#   - DiskEncryptionSetId: Azure Disk Encryption Set ID (must be valid Azure resource ID). Cannot be changed after creation
 & New-ProvImageVersionSpec @NewSpecParams
