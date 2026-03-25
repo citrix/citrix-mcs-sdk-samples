@@ -57,3 +57,7 @@ $customProperties = @"
 [Create-MCSIO-PersistWbc.ps1](Create-MCSIO-PersistWbc.ps1) has an example script on how to persist write-back cache on a vm shutdown.
 
 Documentation: https://docs.citrix.com/en-us/citrix-daas/install-configure/machine-catalogs-create.html#machine-creation-services-mcs-storage-optimization 
+
+## Repairing the base Write-Back Cache disk
+To optimize machines using write back cache, now there is a base WBC image that is uploaded per catalog. This image gets cloned to create WBC disks for provisioned machines in the catalog. If this base image gets deleted, machines that need a WBC created will fail to boot.
+[Repair-MCSIO-Disks.ps1](Repair-MCSIO-Disks.ps1) has an example script on how to repair this image in case it was deleted
