@@ -32,7 +32,7 @@ $customProperties = @"
 
 You can also change the Availability Zone configuration on an existing catalog using the Set-ProvScheme command. An example is provided in the Set-AvailabilityZones.ps1 script.
 
-**Note**: The updated availability zones will be applicable to new machines post Set-ProvScheme, not to the existing machines. It is not yet supported on existing machines. 
+**Note**: The updated availability zones will be applicable to new machines post Set-ProvScheme, and optionally to existing machines after running Set-ProvVMUpdateTimeWindow and rebooting. When applying availability zone updates to existing machines, if the updated availability zones list no longer includes the VM's current availability zone, it will be randomly distributed to a new availability zone in the list. Existing disks will be moved to the new zone along with the VM.
 
 ## Common error cases
 If a user enters invalid or unsupported zones, these errors will be caught early when running New-ProvScheme and will return helpful error messages.

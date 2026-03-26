@@ -8,7 +8,7 @@
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2026. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/
@@ -24,10 +24,13 @@ $durationInMinutes = 60 # The default duration is 120 minutes, and a value less 
 
 # 1. Update the CustomProperties to include the new value for StorageType
 # 2. Update the CustomProperties to include the new value for StorageTypeAtShutdown
+# 3. Update the CustomProperties to include the new value for Zones. Only one zone can be provided. This may copy over the VM's
+#    disks (OS, identity, WBC) to the new zone if the disks aren't already in the zone provided.
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <Property xsi:type="StringProperty" Name="StorageType" Value="StandardSSD_LRS" />
 <Property xsi:type="StringProperty" Name="StorageTypeAtShutdown" Value="Standard_LRS" />
+<Property xsi:type="StringProperty" Name="Zones" Value="1" />
 </CustomProperties>
 "@
 
