@@ -39,7 +39,7 @@ New-ProvSchemeHardwareUpdate -AllVMs `
 ###########################################################################
 # Create Provisioning Maintenance Cycle for new vms only and starting now
 ###########################################################################
-New-ProvSchemeHardwareUpdate -NewVMsOnly `
+New-ProvSchemeHardwareUpdate -NewVMs `
   -ProvisioningSchemeName $provisioningSchemeName `
   -StartsNow`
   -MaintenanceCycleDescription $description `
