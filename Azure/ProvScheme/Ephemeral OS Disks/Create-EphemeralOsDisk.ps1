@@ -7,7 +7,7 @@
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2026. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/
@@ -40,11 +40,13 @@ $machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folde
 # This feature has two prerequisites that must be set in the custom properties:
 #     1. UseManagedDisks must be true. Ephemeral OS Disks are not supported with unmanaged disks/vhds
 #     2. UseSharedImageGallery must be true. Ephemeral OsDisks are only supported when the mastered image is stored in an Azure Compute Gallery (ACG). An ACG is also known as a Shared Image Gallery (SIG)
+# You can also optionally set the StorageType for the base ephemeral OS disk, enabling faster reads with SSD storage types. Default is Standard_LRS, valid values also include Premium_LRS and StandardSSD_LRS.
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <Property xsi:type="StringProperty" Name="UseManagedDisks" Value="true"/>
 <Property xsi:type="StringProperty" Name="UseSharedImageGallery" Value="true"/>
 <Property xsi:type="StringProperty" Name="UseEphemeralOsDisk" Value="true"/>
+<Property xsi:type="StringProperty" Name="StorageType" Value="StandardSSD_LRS"/>
 </CustomProperties>
 "@
 

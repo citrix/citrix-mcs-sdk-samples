@@ -1,4 +1,4 @@
-# Ephemeral OS Disks (UseEphemeralOsDisks)
+# Ephemeral OS Disks (UseEphemeralOsDisk)
 ## Overview
 Using MCS Provisioning, you can provision machines using Ephemeral OS Disks in Azure environments. With Ephemeral OS Disks, your OS Disk will be stored on the cache or temporary disk. The cache disk is preferred, but the temporary disk will be used if the cache disk does not have enough space. More information on this feature can be found [here][Documentation].
 
@@ -24,19 +24,39 @@ $serviceOffering.AdditionalData
 To view the ephemeral OS Disk support, use the AdditionalData parameter for the item. The AdditionalData has a key *SupportsEphemeralOSDisk* which indicates whether the ServiceOffering in that region supports ephemeral OS Disk. If *SupportsEphemeralOSDisk* is false, that means ephemeral OS Disks are not supported for that service offering in that region.
 
 ## How to use Ephemeral OS Disks
-To configure ephemeral OS Disks through PowerShell, use the `UseEphemeralOsDisks` custom property available with the New-ProvScheme operation. The UseEphemeralOsDisks property is a boolean.
+To configure ephemeral OS Disks through PowerShell, use the `UseEphemeralOsDisk` custom property available with the New-ProvScheme operation. The UseEphemeralOsDisk property is a boolean.
 
-Ephemeral OS Disks require managed disks (`UseManagedDisks`) and an Azure Compute Gallery (`UseSharedImageGallery`). In this example, we set UseEphemeralOsDisks, UseManagedDisks, and UseSharedImageGallery to True:
+Ephemeral OS Disks require managed disks (`UseManagedDisks`) and an Azure Compute Gallery (`UseSharedImageGallery`). In this example, we set UseEphemeralOsDisk, UseManagedDisks, and UseSharedImageGallery to True:
 ```powershell
 $customProperties = @"
 <CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-roperty xsi:type="StringProperty" Name="UseManagedDisks" Value="true" />
-roperty xsi:type="StringProperty" Name="UseSharedImageGallery" Value="true" />
-<Property xsi:type="StringProperty" Name="UseEphemeralOsDisks" Value="true" />
+<Property xsi:type="StringProperty" Name="UseManagedDisks" Value="true" />
+<Property xsi:type="StringProperty" Name="UseSharedImageGallery" Value="true" />
+<Property xsi:type="StringProperty" Name="UseEphemeralOsDisk" Value="true" />
 </CustomProperties>
 "@
 ```
 **Note:** You cannot change the UseEphemeralOsDisk custom property on an existing catalog and VMs. 
+
+## Configuring StorageType
+Ephemeral OS Disks are made up of two disks:
+ - A diff disk, usually stored on the machine's local temp disk, stores all writes made
+ - A base disk, where the original disk contents are read
+
+By default, the storage type used for the base disk is Standard_LRS.
+The storage type can be configured to either StandardSSD_LRS or Premium_LRS to achieve a higher SLA and better read performance.
+To configure the storage type used for the base disk, provide the `StorageType` custom property:
+```powershell
+$customProperties = @"
+<CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Property xsi:type="StringProperty" Name="UseEphemeralOsDisk" Value="true" />
+<Property xsi:type="StringProperty" Name="StorageType" Value="Premium_LRS" />
+</CustomProperties>
+"@
+```
+**Note:** There may be increased costs when upgrading to SSD tiers.
+
+More information on using SSD storage types with Ephemeral OS Disk can be found on the [Microsoft blog announcing support](https://techcommunity.microsoft.com/blog/azurecompute/generally-available-ssd-storage-account-support-for-ephemeral-os-disks/4429107).
 
 ## Common error cases
 If an invalid configuration is specified, errors will be caught early when running New-ProvScheme and will return helpful error messages.
