@@ -76,7 +76,7 @@ New-BrokerCatalog -Name $ProvisioningSchemeName `
 
 ### Create a PVS catalog 
 
-The [Create PVS ProvScheme](./Create%20PVS%20ProvScheme) section explains how to create PVS catalogs in Azure.
+The [Create PVS ProvScheme](../MCS-PVS/Create%20PVS%20ProvScheme) section explains how to create PVS catalogs in Azure.
 
 ### Getting ProvScheme Properties
 To get a specific ProvScheme, use the `ProvisioningSchemeName` parameter in `Get-ProvScheme`
