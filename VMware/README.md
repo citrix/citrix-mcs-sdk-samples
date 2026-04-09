@@ -6,19 +6,22 @@ This guide supports administrators in developing customized scripts for Citrix V
 
 ## 1. Documentation Structure
 
-The content is organized into six key sections, each targeting a specific domain:
+The content is organized into seven key sections, each targeting a specific domain:
 
 * **Hosting Connection**
 * **Hosting Unit**
 * **Identity** 
 * **ProvScheme** 
 * **ProvVM**
+* **MCS-PVS**
 
 Each section offers basic starter scripts for high-level CVAD operations, along with concise, **feature-focused cmdlets and descriptions** tailored for VMware. For instance, ``New-ProvScheme`` is detailed for its role in enabling Full/Fast Clone capabilities.
 
 * **SampleAdminScenarios**
 
 The folder above provides **comprehensive cmdlet sets** for executing common MCS administrator operations with practical examples, such as a set of end-to-end cmdlets for creating a Machine Catalog.
+
+The **MCS-PVS** folder provides reference scripts for creating **PVS-backed Machine Catalogs** on VMware by combining Citrix Provisioning with MCS PowerShell automation.
 
 
 
@@ -69,6 +72,9 @@ The list below outlines the high-level CVAD operations for VMware that each sect
     * [Set Maintenance Mode](./ProvVm/Set%20Maintenance%20Mode/)
     * [Get the Details of Provisioning VMs](./ProvVm/Get%20ProvVM%20Detail/)
     
+* [Operation for Managing **MCS-PVS Catalogs**](./MCS-PVS/)
+    * [Create a PVS ProvScheme](./MCS-PVS/Create%20PVS%20ProvScheme/)
+
 * [Operation for Managing **Identities**](./Identity/)
     * [Add an Identity Pool](./Identity/Add%20IdentityPool/)
     * [Add AD Accounts](./Identity/Add%20ADAccount/)
