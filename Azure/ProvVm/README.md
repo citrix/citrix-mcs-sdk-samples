@@ -17,3 +17,4 @@ This folder contains scripts for various operations, including provisioning a ne
 2. Get ProvVM scripts - To get the information of an existing virtual machine
 3. Update ProvVM scripts - To update different settings on the existing virtual machine
 4. Remove ProvVM scripts - To remove/forget/purge an existing virtual machine
+5. Maintenance Cycle - To support individual vm operations which can be executed by maintenance cycle

@@ -8,6 +8,7 @@ The following parameters are optional
 - `CpuCount`
 - `CustomProperties`
 - `ServiceOffering`
+- `ServiceOffering`
 - `MachineProfile`
 - `NetworkMapping`
 - `RemoveCustomizations`
