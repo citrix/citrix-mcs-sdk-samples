@@ -18,10 +18,11 @@ The `Add-MachineCatalog.ps1` script creates a Machine Catalog and requires the f
     - ProvisioningSchemeType: The Provisioning Scheme Type
     - HostingUnitName: Name of the hosting unit used
     - NetworkMapping: Specifies how the attached NICs are mapped to networks
-    - CustomProperties: Used to provide Container Path(as hypervisor path), vCPU count, Memory, and CPUCores(Cores per CPU) values
+    - CustomProperties: Used to provide Container Path(as hypervisor path), vCPU count, Memory, and CPUCores(Cores per CPU, overrides the setting in master image or machine profile Template Version) values
     - MasterImageVM: Path to VM snapshot or template
-    - VMCpuCount: Number of vCPUs
-    - VMMemoryMB: VM memory in MB
+    - MachineProfile: OPTIONAL Path to Prism Central Template Version for hardware specification
+    - VMCpuCount: Number of vCPUs (overrides the setting in master image or machine profile Template Version)
+    - VMMemoryMB: VM memory in MB (overrides the setting in master image or machine profile Template Version)
     - CleanOnBoot: Reset VM's to their initial state on each power on
     - RunAsynchronously: Run command asynchronously, returns ProvTask ID
     - PersistUserChanges: User data persistence method
@@ -62,7 +63,39 @@ $customProperties = @"
         -CustomProperties $customProperties `
         -Scope @() `
         -Count 2
+
+# Example using Machine Profile for hardware specification
+.\Add-MachineCatalog.ps1 `
+        -ProvisioningSchemeName "MyCatalogWithProfile" `
+        -ProvisioningSchemeType MCS `
+        -HostingUnitName "myHostingUnit" `
+        -Domain "MyDomain.local" `
+        -UserName "MyUserName" `
+        -ZoneUid "00000000-0000-0000-0000-000000000000" `
+        -NetworkMapping @{"0"="XDHyp:\HostingUnits\myHostingUnit\Clusters.folder\cluster01.cluster\Network-A.network"} `
+        -AdminAddress "MyDDC.MyDomain.local" `
+        -NamingScheme "MyVM###" `
+        -NamingSchemeType "Numeric" `
+        -SessionSupport "Single" `
+        -AllocationType "Random" `
+        -PersistUserChanges "Discard" `
+        -CleanOnBoot $True `
+        -MasterImageVM "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\CitrixVda.template\win2022-vda-2411.templateversion" `
+        -MachineProfile "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\HardwareProfile.template\hardwarespec.templateversion" `
+        -CustomProperties $customProperties `
+        -Scope @() `
+        -Count 2
 ```
+
+**Important:** The MachineProfile must have at least one NIC, and the number of NICs in the MachineProfile must match the subnet mappings in NetworkMapping.
+
+The total number of NICs for the template version can be obtained from the AdditionalData of its inventory item using the following:
+```powershell
+$tv = Get-Item -Path "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\HardwareProfile.template\hardwarespec.templateversion"
+$tv.AdditionalData.TotalNics
+```
+
+**Note:** When using `MachineProfile`, hardware properties are captured from the Machine Profile template version. The `OS Disk`, `vTPM`, and `Secure Boot` properties are always captured from the master image, even when a machine profile is used. The Machine Profile must have at least one NIC, and the number of NICs in the MachineProfile must match the subnet mappings in NetworkMapping. Command-line parameters like `VMCpuCount`, `VMMemoryMB`, and `CPUCores` in `CustomProperties` take precedence over values in the Machine Profile.
 
 Administrators should tailor these parameters to fit their specific environment.
 
