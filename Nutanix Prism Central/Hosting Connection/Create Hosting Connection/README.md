@@ -33,7 +33,7 @@ The script can be executed like the example below. The example includes only the
         -HypervisorAddress "1.2.3.4" `
         -UserName "myUserName" `
         -ZoneUid "11111111-2222-3333-4444-555555555555" `
-        -SllThumbprint 111122223333444455556667778889990000AAAA
+        -SslThumbprint 111122223333444455556667778889990000AAAA
 
 PS C:\code\mcs-github-scripts\Nutanix Prism Central\Hosting Connection\Create Hosting Connection> .\Create-HostingConnection.ps1 -ConnectionName MyDemo -HypervisorAddress 1.2.3.4 -UserName myusername -ZoneUid 11111111-2222-3333-4444-555555555555  -SslThumbprint 111122223333444455556667778889990000AAAA
 ```

@@ -10,15 +10,15 @@
      3. HostingUnitName:        Name of the hosting unit used
      4. IdentityPoolName:       Name of the Identity Pool used
      5. NetworkMapping:         Specifies how the attached NICs are mapped to networks
-     6. CustomProperties:       Used to provide Cluster and CPUCores(Cores per CPU) values
+     6. CustomProperties:       Used to provide Cluster and CPUCores (Cores per CPU, overrides the setting in master image or machine profile Template Version) values
      7. MasterImageVM:          Path to Prism Central Template Version
-     8. VMCpuCount:             OPTIONAL: Number of vCPUs, overrides settings in Template Version
-     9. VMMemoryMB:             OPTIONAL: VM memory in MB, overrides settings in Template Version
-    10. InitialBatchSizeHint:   The number of VMs that will be intially added to the Provisioning Scheme
-    11. CleanOnBoot:            Reset VM's to their initial state on each power on
-    12. Scope:                  Administration scopes for the identity pool
-    13. RunAsynchronously:      Run command asynchronously, returns ProvTask ID
-    14. PersistUserChanges:     User data persistence method
+     8. MachineProfile:         OPTIONAL: Path to Prism Central Template Version for hardware specification
+     9. VMCpuCount:             OPTIONAL: Number of vCPUs, overrides the setting in master image or machine profile Template Version
+    10. VMMemoryMB:             OPTIONAL: VM memory in MB, overrides the setting in master image or machine profile Template Version
+    11. InitialBatchSizeHint:   The number of VMs that will be intially added to the Provisioning Scheme
+    12. CleanOnBoot:            Reset VM's to their initial state on each power on
+    13. Scope:                  Administration scopes for the identity pool
+    14. RunAsynchronously:      Run command asynchronously, returns ProvTask ID
 .EXAMPLE
 # Setting up customProperties as a variable for better readability
 $customProperties = @"
@@ -57,8 +57,39 @@ $customProperties = @"
     -VMMemoryMB 6144 `
     -InitialBatchSizeHint 1 `
     -Scope @() `
-    -RunAsynchronously `
-    -PersistUserChanges OnLocal
+    -RunAsynchronously
+
+# Create a Provisioning Scheme using Machine Profile for hardware specification
+.\Create-ProvScheme.ps1 `
+    -ProvisioningSchemeName "myProvScheme" `
+    -ProvisioningSchemeType "MCS" `
+    -HostingUnitName "myHostingUnit" `
+    -IdentityPoolName "myIdp" `
+    -NetworkMapping @{"0"="XDHyp:\HostingUnits\myHostingUnit\Clusters.folder\cluster01.cluster\Network-A.network"} `
+    -CustomProperties $customProperties `
+    -MasterImageVM "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\CitrixVda.template\win2022-vda-2411.templateversion" `
+    -MachineProfile "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\HardwareProfile.template\hardwarespec.templateversion" `
+    -InitialBatchSizeHint 1 `
+    -CleanOnBoot `
+    -Scope @() `
+    -RunAsynchronously
+
+# Create a Provisioning Scheme using Machine Profile with overridden hardware specification
+.\Create-ProvScheme.ps1 `
+    -ProvisioningSchemeName "myProvScheme" `
+    -ProvisioningSchemeType "MCS" `
+    -HostingUnitName "myHostingUnit" `
+    -IdentityPoolName "myIdp" `
+    -NetworkMapping @{"0"="XDHyp:\HostingUnits\myHostingUnit\Clusters.folder\cluster01.cluster\Network-A.network"} `
+    -CustomProperties $customProperties `
+    -MasterImageVM "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\CitrixVda.template\win2022-vda-2411.templateversion" `
+    -MachineProfile "XDHyp:\HostingUnits\myHostingUnit\Templates.folder\HardwareProfile.template\hardwarespec.templateversion" `
+    -VMCpuCount 4 `
+    -VMMemoryMB 8192 `
+    -InitialBatchSizeHint 1 `
+    -CleanOnBoot `
+    -Scope @() `
+    -RunAsynchronously
 #>
 
 # /*************************************************************************
@@ -75,13 +106,13 @@ param(
     [Parameter(mandatory=$true)]  [hashtable] $NetworkMapping,
     [Parameter(mandatory=$true)]  [string]    $CustomProperties,
     [Parameter(mandatory=$true)]  [string]    $MasterImageVM,
+    [Parameter(mandatory=$false)] [string]    $MachineProfile,
     [Parameter(mandatory=$false)] [int]       $VMCpuCount,
     [Parameter(mandatory=$false)] [int]       $VMMemoryMB,
     [Parameter(mandatory=$false)] [string]    $InitialBatchSizeHint="1",
     [Parameter(mandatory=$false)] [switch]    $CleanOnBoot = $false,
     [Parameter(mandatory=$false)] [string[]]  $Scope = @(),
-    [Parameter(mandatory=$false)] [switch]    $RunAsynchronously = $false,
-    [Parameter(mandatory=$false)] [string]    $PersistUserChanges
+    [Parameter(mandatory=$false)] [switch]    $RunAsynchronously = $false
 )
 
 # Enable Citrix PowerShell Cmdlets
@@ -94,7 +125,7 @@ $newProvSchemeParameters = @{
     ProvisioningSchemeName  = $ProvisioningSchemeName
     ProvisioningSchemeType  = $ProvisioningSchemeType
     HostingUnitName         = $HostingUnitName
-    IdentityPoolName        = $identityPoolName
+    IdentityPoolName        = $IdentityPoolName
     NetworkMapping          = $NetworkMapping
     CustomProperties        = $CustomProperties
     MasterImageVM           = $MasterImageVM
@@ -104,6 +135,10 @@ $newProvSchemeParameters = @{
     RunAsynchronously       = $RunAsynchronously
 }
 
+if ($PSBoundParameters.ContainsKey("MachineProfile"))
+{
+    $newProvSchemeParameters.Add("MachineProfile", $MachineProfile)
+}
 
 if ($PSBoundParameters.ContainsKey("VMCpuCount"))
 {
@@ -116,7 +151,7 @@ if ($PSBoundParameters.ContainsKey("VMMemoryMB"))
 }
 
 
-# Create a Provisoning Scheme
+# Create a Provisioning Scheme
 try
 {
     & New-ProvScheme @newProvSchemeParameters

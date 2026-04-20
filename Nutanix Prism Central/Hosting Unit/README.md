@@ -1,5 +1,5 @@
 # Hosting Unit
-This document points to the scripts do to create, get, delete and update Hosting Units.
+This document points to the scripts to create, get, delete and update Hosting Units.
 
 - Create Hosting Unit: [`Create-HostingUnit.ps1`](./Create%20Hosting%20Unit/)
 - Remove Hosting Unit: [`Remove-HostingUnit.ps1`](./Remove%20Hosting%20Unit/)

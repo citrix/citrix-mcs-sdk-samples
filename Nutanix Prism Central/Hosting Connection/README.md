@@ -1,5 +1,5 @@
 # Hosting Connection
-This document points to the scripts do to create, get, delete and update Hosting Connections.
+This document points to the scripts to create, get, delete and update Hosting Connections.
 
 - Create Hosting Connection: [`Create-HostingConnection.ps1`](./Create%20Hosting%20Connection/)
 - Remove Hosting Connection: [`Remove-HostingConnection.ps1`](./Remove%20Hosting%20Connection/)
