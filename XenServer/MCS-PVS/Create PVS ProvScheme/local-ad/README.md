@@ -141,7 +141,7 @@ For XenServer, the PVS provisioning scheme requires a **machine profile** so MCS
 An example machine profile path:
 
 ```powershell
-XDHyp:\HostingUnits\MyHostingUnit\pvstemplate.vm\pvs_template.snapshot
+XDHyp:\HostingUnits\MyHostingUnit\MyVmName.vm\MySnapshotName.snapshot
 ```
 
 An example network mapping:
