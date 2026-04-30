@@ -16,6 +16,10 @@ These examples are intended as **reference implementations**. Always validate an
   local-ad/
     Create-PvsProvScheme-LocalAD.ps1
     README.md
+
+  hybrid-azure-ad/
+    Create-PvsProvScheme-HybridAzureAD.ps1
+    README.md
 ```
 
 ## `local-ad/` - MCS PVS Catalogs with Local / On-prem AD
@@ -32,3 +36,17 @@ Use `local-ad/` if:
 
 - XenServer is the compute platform for the catalog, and
 - Machine identities are managed through **local / on-prem Active Directory**.
+
+## `hybrid-azure-ad/` - MCS PVS Catalogs with Hybrid Azure AD Join
+
+This folder contains scripts and documentation for creating **PVS-backed MCS Catalogs** where machines are:
+
+- Joined to **on-prem AD** (for traditional domain services), and
+- Registered as **Hybrid Azure AD joined** devices in **Azure AD**.
+
+### When to use
+
+Use `hybrid-azure-ad/` if:
+
+- XenServer is the compute platform for the catalog, and
+- Machine identities need both **on-prem AD** and **Azure AD** (Conditional Access, Intune, etc.).

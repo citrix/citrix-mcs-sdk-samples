@@ -46,11 +46,12 @@ $networkName = "Pool Network 0"
 
 # Machine profile used to define the hardware configuration (CPU, memory, NIC, etc.) for the catalog.
 # The machine profile must be a VM snapshot that exists in the same hosting unit.
-# Example VM name: "pvstemplate"
-$machineProfileVmName = "pvstemplate"
+# The path format is: XDHyp:\HostingUnits\<HostingUnitName>\<VmName>.vm\<SnapshotName>.snapshot
+# Example VM name: "MyVmName"
+$machineProfileVmName = "MyVmName"
 
-# Example snapshot name: "pvs_template"
-$machineProfileSnapshotName = "pvs_template"
+# Example snapshot name: "MySnapshotName"
+$machineProfileSnapshotName = "MySnapshotName"
 
 # Initial batch size hint for MCS workflow planning.
 # This value is passed to -InitialBatchSizeHint and does NOT create VMs by itself.

@@ -25,7 +25,7 @@ Follow these key steps to create a PVS catalog. Each step below expands into the
 
 1. Set up the PVS server  
 2. Create the master image and base vDisk  
-3. Create an Azure hosting connection  
+3. Create an Azure hosting connection and hosting unit  
 4. Run the PVS Configuration Wizard to join CVAD/DaaS  
 5. Retrieve PVS site details  
 6. Review limitations for Azure  
@@ -86,7 +86,7 @@ Prepare the **master target device** (golden image) and capture it into a **vDis
 
 ---
 
-## 2.4 Create an Azure Hosting Connection
+## 2.3 Create an Azure Hosting Connection and Hosting Unit
 
 Set up an **Azure hosting connection and hosting unit** in Studio / Web Studio, just as you would for an MCS catalog in Citrix Virtual Apps and Desktops (CVAD). This connection will allow the provisioning of virtual machines in Azure.
 
@@ -96,7 +96,7 @@ Set up an **Azure hosting connection and hosting unit** in Studio / Web Studio, 
 
 ---
 
-## 2.5 Run the PVS Configuration Wizard to join PVS farm to CVAD/DaaS
+## 2.4 Run the PVS Configuration Wizard to join PVS farm to CVAD/DaaS
 
 Run the PVS Configuration Wizard on every PVS Server in the farm to join the PVS farm to a CVAD/Citrix DaaS site. This step:
 
@@ -109,7 +109,7 @@ Run the PVS Configuration Wizard on every PVS Server in the farm to join the PVS
 
 ---
 
-## 2.6 How to Retrieve PVS Site Details
+## 2.5 How to Retrieve PVS Site Details
 
 Use the CVAD/DaaS PowerShell SDK to retrieve PVS details that are required when creating the PVS catalog. The PVS site and VDisk information is required in the script [`Create-PvsProvScheme-LocalAD.ps1`](./Create-PvsProvScheme-LocalAD.ps1)
 
@@ -129,7 +129,7 @@ Use the CVAD/DaaS PowerShell SDK to retrieve PVS details that are required when 
 
 ---
 
-## 2.7 Limitations for Azure
+## 2.6 Limitations for Azure
 
 When using **Azure** for Citrix Virtual Apps and Desktops (CVAD) / DaaS with PVS catalogs:
 
