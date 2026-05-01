@@ -83,13 +83,9 @@ $hostingUnitName         = "demo-hostingUnit"
 $networkName             = "MyNetwork"
 
 # Machine profile used to define the hardware configuration (CPU, memory, NIC, etc.) for the catalog.
-# The machine profile must be a VM snapshot that exists in the same hosting unit.
-# The path format is: XDHyp:\HostingUnits\<HostingUnitName>\<VmName>.vm\<SnapshotName>.snapshot
-# Example VM name: "MyVmName"
+# The machine profile must be a VM template that exists in the same hosting unit.
+# Example: "MyVmName"
 $machineProfileVmName       = "MyVmName"
-
-# Example snapshot name: "MySnapshotName"
-$machineProfileSnapshotName = "MySnapshotName"
 
 # Initial batch size hint for MCS workflow planning.
 # This value is passed to -InitialBatchSizeHint and does NOT create VMs by itself.
@@ -152,8 +148,7 @@ $networkMapping = @{
 }
 
 # Machine profile path used to define VM hardware characteristics.
-# Format: XDHyp:\HostingUnits\<HostingUnitName>\<VmName>.vm\<SnapshotName>.snapshot
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.vm\$machineProfileSnapshotName.snapshot"
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.template"
 
 # ==============================
 # End of replaceable parameters
