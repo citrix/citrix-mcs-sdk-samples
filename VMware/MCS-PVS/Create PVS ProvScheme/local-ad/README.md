@@ -141,7 +141,7 @@ For VMware, the PVS provisioning scheme requires a **machine profile** so MCS ca
 An example machine profile path:
 
 ```powershell
-XDHyp:\HostingUnits\MyHostingUnit\pvstemplate.vm\pvs_template.snapshot
+XDHyp:\HostingUnits\MyHostingUnit\pvstemplate.template
 ```
 
 An example network mapping:

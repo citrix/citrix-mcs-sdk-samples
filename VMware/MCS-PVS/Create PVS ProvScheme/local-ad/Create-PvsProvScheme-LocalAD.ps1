@@ -45,12 +45,9 @@ $hostingUnitName = "demo-hostingUnit"
 $networkName = "MyNetwork"
 
 # Machine profile used to define the hardware configuration (CPU, memory, NIC, etc.) for the catalog.
-# The machine profile must be a VM snapshot that exists in the same hosting unit.
-# Example VM name: "pvstemplate"
+# The machine profile must be a VM template that exists in the same hosting unit.
+# Example: "pvstemplate"
 $machineProfileVmName = "pvstemplate"
-
-# Example snapshot name: "pvs_template"
-$machineProfileSnapshotName = "pvs_template"
 
 # Initial number of VMs to create when provisioning (hint; can be increased later)
 $numberOfVms = 1
@@ -109,7 +106,7 @@ $networkMapping = @{
 }
 
 # Machine profile path used to define VM hardware characteristics.
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.vm\$machineProfileSnapshotName.snapshot"
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.template"
 
 #------------------------------------------------- Create Identity Pool -----------------------------------------------------------#
 # Identity pool defines how machine accounts are named and in which domain they are created.
