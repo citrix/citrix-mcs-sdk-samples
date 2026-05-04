@@ -6,11 +6,11 @@
 
 <#
 .SYNOPSIS
-    Creates a Hybrid Azure AD joined PVS catalog using MCS on VMware.
+    Creates a Hybrid Entra joined joined PVS catalog using MCS on XenServer.
 
 .DESCRIPTION
-    Create-PvsProvScheme-HybridAzureAD.ps1 creates a PVS Provisioning Scheme (PVS provisioning using MCS)
-    and a PVS-backed Machine Catalog configured for Hybrid Azure AD joined machines hosted on VMware.
+    Create-PvsProvScheme-HybridEntraJoined.ps1 creates a PVS Provisioning Scheme (PVS provisioning using MCS)
+    and a PVS-backed Machine Catalog configured for Hybrid Entra joined joined machines hosted on XenServer.
 
     The original version of this script is compatible with
     Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR) or later.
@@ -24,10 +24,10 @@
 # Replaceable parameters
 # ==============================
 
-# Identity / domain (Hybrid Azure AD)
+# Identity / domain (Hybrid Entra joined)
 
-# Hybrid Azure AD identity pool name
-# Example: "CTX-HybridAAD-MultiSession-VMware"
+# Hybrid Entra joined identity pool name
+# Example: "CTX-HybridAAD-MultiSession-XenServer"
 $identityPoolName        = "HybridAADJoinedCatalog"
 
 # AD DNS prefix (NetBIOS-style, left part of FQDN)
@@ -62,7 +62,7 @@ $securePassword  = ConvertTo-SecureString -String $EncryptedInput
 # Example: 10, 25, 50 depending on initial deployment size
 $accountCount            = 10
 
-# PVS / hosting / VMware (PVS provisioning using MCS)
+# PVS / hosting / XenServer (PVS provisioning using MCS)
 
 # CleanOnBoot:
 #   $true  = non-persistent (recommended for pooled workloads)
@@ -71,21 +71,25 @@ $accountCount            = 10
 $isCleanOnBoot           = $true
 
 # Name of provisioning scheme & broker catalog
-# Example: "CTX-HybridAAD-PVS-MCS-VMware"
+# Example: "CTX-HybridAAD-PVS-MCS-XenServer"
 $provisioningSchemeName  = "demo-provScheme-hybridAAD"
 
 # Hosting unit name as defined in Studio / Web Studio
-# Example: "VMware-Prod-HostingUnit"
+# Example: "XenServer-Prod-HostingUnit"
 $hostingUnitName         = "demo-hostingUnit"
 
 # Hosting unit network name for the first NIC
-# Example: "MyNetwork"
-$networkName             = "MyNetwork"
+# Example: "Pool Network 0"
+$networkName             = "Pool Network 0"
 
 # Machine profile used to define the hardware configuration (CPU, memory, NIC, etc.) for the catalog.
-# The machine profile must be a VM template that exists in the same hosting unit.
-# Example: "MyVmName"
+# The machine profile must be a VM snapshot that exists in the same hosting unit.
+# The path format is: XDHyp:\HostingUnits\<HostingUnitName>\<VmName>.vm\<SnapshotName>.snapshot
+# Example VM name: "MyVmName"
 $machineProfileVmName       = "MyVmName"
+
+# Example snapshot name: "MySnapshotName"
+$machineProfileSnapshotName = "MySnapshotName"
 
 # Initial batch size hint for MCS workflow planning.
 # This value is passed to -InitialBatchSizeHint and does NOT create VMs by itself.
@@ -110,10 +114,10 @@ $pvsSite                 = "samplePvsSiteGuid"
 $pvsVDisk                = "samplePvsVDiskGuid"
 
 # Naming scheme for computer accounts (Hybrid AAD guidance)
-# Example: "HYBAAD-VMW-" -> HYBAAD-VMW-01, HYBAAD-VMW-02, ...
+# Example: "HYBAAD-XEN-" -> HYBAAD-XEN-01, HYBAAD-XEN-02, ...
 $sampleNamingScheme      = "HybridAAD-VM-"
 
-# VMware-specific custom properties, if required for your environment.
+# XenServer-specific custom properties, if required for your environment.
 # Leave empty unless you need hosting-platform-specific settings.
 $sampleCustomProperties  = ""
 
@@ -126,7 +130,7 @@ $sampleCustomProperties  = ""
 $allocationType          = "Random"
 
 # Description shown in Studio / Web Studio
-$description             = "PVS provisioning using MCS on VMware - Hybrid Azure AD joined catalog"
+$description             = "PVS provisioning using MCS on XenServer - Hybrid Entra joined joined catalog"
 
 # PersistUserChanges:
 #   "Discard" = non-persistent
@@ -142,13 +146,14 @@ $sessionSupport          = "MultiSession"
 # Derived paths (XDHyp:\)
 # ==============================
 
-# Network mapping for the first NIC on VMware.
+# Network mapping for the first NIC on XenServer.
 $networkMapping = @{
     "0" = "XDHyp:\HostingUnits\$hostingUnitName\$networkName.network"
 }
 
 # Machine profile path used to define VM hardware characteristics.
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.template"
+# Format: XDHyp:\HostingUnits\<HostingUnitName>\<VmName>.vm\<SnapshotName>.snapshot
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.vm\$machineProfileSnapshotName.snapshot"
 
 # ==============================
 # End of replaceable parameters
@@ -157,7 +162,7 @@ $machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmNam
 # Add Citrix snap-ins
 Add-PSSnapin -Name "Citrix.ADIdentity.Admin.V2","Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Citrix.Broker.Admin.V2" -ErrorAction SilentlyContinue
 
-#------------------------------------------------- Create Hybrid Azure AD Identity Pool ------------------------------------------#
+#------------------------------------------------- Create Hybrid Entra joined Identity Pool ------------------------------------------#
 
 New-AcctIdentityPool `
     -AllowUnicode `
@@ -169,7 +174,7 @@ New-AcctIdentityPool `
     -OU $ouDn `
     -Scope @()
 
-#------------------------------------------------- Create AD Accounts for Hybrid Azure AD ----------------------------------------#
+#------------------------------------------------- Create AD Accounts for Hybrid Entra joined ----------------------------------------#
 
 New-AcctADAccount `
     -IdentityPoolName $identityPoolName `
@@ -205,7 +210,7 @@ $createdProvScheme = New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
     -VMMemoryMB $vmMemoryMB `
     -UseWriteBackCache -WriteBackCacheDiskSize $writeBackCacheDiskSizeGB
 
-#------------------------------------------------- Create the Broker Catalog (Hybrid Azure AD) -----------------------------------#
+#------------------------------------------------- Create the Broker Catalog (Hybrid Entra joined) -----------------------------------#
 
 New-BrokerCatalog -Name $provisioningSchemeName `
     -ProvisioningSchemeId $createdProvScheme.ProvisioningSchemeUid `

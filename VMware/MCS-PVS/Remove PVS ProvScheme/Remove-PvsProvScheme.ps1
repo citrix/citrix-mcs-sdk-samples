@@ -16,7 +16,6 @@
       4. Removes Broker Machine(s) from the delivery group/catalog
       5. Removes the BrokerCatalog
       6. Removes the ProvScheme
-      7. Cleans up ProvTask(s)
 
     The original version of this script is compatible with
     Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR) or later.
@@ -120,8 +119,7 @@ if ($vmIds.Count -gt 0) {
     }
     if ($AdminAddress) { $removeProvVMParameters['AdminAddress'] = $AdminAddress }
 
-    $removeProvVMResult = Remove-ProvVM @removeProvVMParameters
-    $removeProvVMResult
+    Remove-ProvVM @removeProvVMParameters
 }
 
 ###################################
@@ -196,8 +194,7 @@ if ($PurgeDBOnly) {
     $removeProvSchemeParameters['ForgetVM'] = $true
 }
 
-$removeProvSchemeResult = Remove-ProvScheme @removeProvSchemeParameters
-$removeProvSchemeResult
+Remove-ProvScheme @removeProvSchemeParameters
 
 #################################
 # Step 6: Remove Broker Catalog #
@@ -210,17 +207,5 @@ $removeBrokerCatalogParameters = @{
 if ($AdminAddress) { $removeBrokerCatalogParameters['AdminAddress'] = $AdminAddress }
 
 Remove-BrokerCatalog @removeBrokerCatalogParameters
-
-##############################
-# Step 7: Remove ProvTask(s) #
-##############################
-Write-Output "Step 7: Remove ProvTask(s)"
-
-if ($removeProvVMResult) {
-    Remove-ProvTask -TaskId $removeProvVMResult.TaskId -ErrorAction SilentlyContinue | Out-Null
-}
-if ($removeProvSchemeResult) {
-    Remove-ProvTask -TaskId $removeProvSchemeResult.TaskId -ErrorAction SilentlyContinue | Out-Null
-}
 
 Write-Output "Catalog '$ProvisioningSchemeName' removal complete."

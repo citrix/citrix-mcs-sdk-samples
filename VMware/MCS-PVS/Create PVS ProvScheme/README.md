@@ -13,16 +13,16 @@ These examples are intended as **reference implementations**. Always validate an
 
 ```text
 /Create PVS ProvScheme/
-  local-ad/
-    Create-PvsProvScheme-LocalAD.ps1
+  traditional-ad/
+    Create-PvsProvScheme-TraditionalAD.ps1
     README.md
 
-  hybrid-azure-ad/
-    Create-PvsProvScheme-HybridAzureAD.ps1
+  hybrid-entra-joined/
+    Create-PvsProvScheme-HybridEntraJoined.ps1
     README.md
 ```
 
-## `local-ad/` - MCS PVS Catalogs with Local / On-prem AD
+## `traditional-ad/` - MCS PVS Catalogs with Traditional AD
 
 This folder contains scripts and documentation for creating **PVS-backed MCS Catalogs** where machines are:
 
@@ -32,21 +32,21 @@ This folder contains scripts and documentation for creating **PVS-backed MCS Cat
 
 ### When to use
 
-Use `local-ad/` if:
+Use `traditional-ad/` if:
 
 - VMware is the compute platform for the catalog, and
 - Machine identities are managed through **local / on-prem Active Directory**.
 
-## `hybrid-azure-ad/` - MCS PVS Catalogs with Hybrid Azure AD Join
+## `hybrid-entra-joined/` - MCS PVS Catalogs with Hybrid Entra join
 
 This folder contains scripts and documentation for creating **PVS-backed MCS Catalogs** where machines are:
 
 - Joined to **on-prem AD** (for traditional domain services), and
-- Registered as **Hybrid Azure AD joined** devices in **Azure AD**.
+- Registered as **Hybrid Entra joined** devices in **Azure AD**.
 
 ### When to use
 
-Use `hybrid-azure-ad/` if:
+Use `hybrid-entra-joined/` if:
 
 - VMware is the compute platform for the catalog, and
 - Machine identities need both **on-prem AD** and **Azure AD** (Conditional Access, Intune, etc.).

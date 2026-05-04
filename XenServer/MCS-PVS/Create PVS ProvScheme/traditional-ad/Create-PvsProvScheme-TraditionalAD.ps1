@@ -6,11 +6,11 @@
 
 <#
 .SYNOPSIS
-    Creates a PVS provisioning scheme and a broker catalog using MCS provisioning on VMware.
+    Creates a PVS provisioning scheme and a broker catalog using MCS provisioning on XenServer.
 
 .DESCRIPTION
-    Create-PvsProvScheme-LocalAD.ps1 creates a PVS Provisioning Scheme and an associated
-    Machine Catalog that uses MCS provisioning with PVS-backed machines hosted on VMware.
+    Create-PvsProvScheme-TraditionalAD.ps1 creates a PVS Provisioning Scheme and an associated
+    Machine Catalog that uses MCS provisioning with PVS-backed machines hosted on XenServer.
 
     The original version of this script is compatible with
     Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR) or later.
@@ -30,27 +30,32 @@ Add-PSSnapin -Name "Citrix.ADIdentity.Admin.V2","Citrix.Host.Admin.V2","Citrix.M
 $isCleanOnBoot = $true
 
 # Name of the provisioning scheme and identity pool (can be different if desired)
-# Example: "CTX-PVS-VMware-Prod-Scheme"
+# Example: "CTX-PVS-XenServer-Prod-Scheme"
 $provisioningSchemeName = "demo-provScheme"
 
 # Identity pool name (typically same as provisioning scheme)
 $identityPoolName       = $provisioningSchemeName
 
-# Hosting unit name as configured in Studio / Web Studio (VMware hosting unit)
-# Example: "VMware-Prod-HostingUnit"
+# Hosting unit name as configured in Studio / Web Studio (XenServer hosting unit)
+# Example: "XenServer-Prod-HostingUnit"
 $hostingUnitName = "demo-hostingUnit"
 
 # Hosting unit network name for the first NIC
-# Example: "MyNetwork"
-$networkName = "MyNetwork"
+# Example: "Pool Network 0"
+$networkName = "Pool Network 0"
 
 # Machine profile used to define the hardware configuration (CPU, memory, NIC, etc.) for the catalog.
-# The machine profile must be a VM template that exists in the same hosting unit.
-# Example: "pvstemplate"
-$machineProfileVmName = "pvstemplate"
+# The machine profile must be a VM snapshot that exists in the same hosting unit.
+# The path format is: XDHyp:\HostingUnits\<HostingUnitName>\<VmName>.vm\<SnapshotName>.snapshot
+# Example VM name: "MyVmName"
+$machineProfileVmName = "MyVmName"
 
-# Initial number of VMs to create when provisioning (hint; can be increased later)
-$numberOfVms = 1
+# Example snapshot name: "MySnapshotName"
+$machineProfileSnapshotName = "MySnapshotName"
+
+# Initial batch size hint for MCS workflow planning.
+# This value is passed to -InitialBatchSizeHint and does NOT create VMs by itself.
+$initialBatchSizeHint = 1
 
 # CPU and memory settings to apply to provisioned VMs
 # Example CPU count: 2, 4, 8
@@ -60,7 +65,7 @@ $vmCpuCount  = 2
 $vmMemoryMB  = 8192
 
 # Naming scheme and domain for machine accounts
-# Example naming scheme: "CTX-PVS-VMW-VDI-" => machines become CTX-PVS-VMW-VDI-01, CTX-PVS-VMW-VDI-02, ...
+# Example naming scheme: "CTX-PVS-XEN-VDI-" => machines become CTX-PVS-XEN-VDI-01, CTX-PVS-XEN-VDI-02, ...
 $sampleNamingScheme = "sampleNaming"
 
 # Example domain: "corp.local" or "corp.company.com"
@@ -73,7 +78,7 @@ $pvsSite  = "samplePvsSiteGuid"
 # Example PVS vDisk GUID: "a1b2c3d4-5678-90ab-cdef-1234567890ab"
 $pvsVDisk = "samplePvsVDiskGuid"
 
-# VMware-specific custom properties, if required for your environment.
+# XenServer-specific custom properties, if required for your environment.
 # Leave empty unless you need hosting-platform-specific settings.
 $sampleCustomProperties = ""
 
@@ -88,7 +93,7 @@ $writeBackCacheDiskSizeGB = 40        # Adjust as needed, e.g. 20, 40, 80
 $allocationType = "Random"
 
 # Description shown in Studio / Web Studio
-$description = "PVS provisioning using MCS on VMware - sample catalog (update for production use)."
+$description = "PVS provisioning using MCS on XenServer - sample catalog (update for production use)."
 
 # PersistUserChanges:
 #   "Discard" = changes are discarded (pooled/non-persistent)
@@ -100,13 +105,13 @@ $persistUserChanges = "Discard"
 $sessionSupport = "MultiSession"
 
 #------------------------------------------------- Derived paths (XDHyp:\) --------------------------------------------------------#
-# Network mapping for the first NIC on VMware.
+# Network mapping for the first NIC on XenServer.
 $networkMapping = @{
     "0" = "XDHyp:\HostingUnits\$hostingUnitName\$networkName.network"
 }
 
 # Machine profile path used to define VM hardware characteristics.
-$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.template"
+$machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\$machineProfileVmName.vm\$machineProfileSnapshotName.snapshot"
 
 #------------------------------------------------- Create Identity Pool -----------------------------------------------------------#
 # Identity pool defines how machine accounts are named and in which domain they are created.
@@ -125,7 +130,7 @@ $createdProvScheme = New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
     -PVSvDisk $pvsVDisk `
     -HostingUnitName $hostingUnitName `
     -IdentityPoolName $identityPoolName `
-    -InitialBatchSizeHint $numberOfVms `
+    -InitialBatchSizeHint $initialBatchSizeHint `
     -MachineProfile $machineProfilePath `
     -NetworkMapping $networkMapping `
     -CustomProperties $sampleCustomProperties `
