@@ -18,7 +18,6 @@ The script performs a full teardown in the following order:
 | 4 | Remove Broker Machine(s) from the catalog | `Remove-BrokerMachine` |
 | 5 | Remove the provisioning scheme | `Remove-ProvScheme` |
 | 6 | Remove the broker catalog | `Remove-BrokerCatalog` |
-| 7 | Clean up provisioning tasks | `Remove-ProvTask` |
 
 ---
 

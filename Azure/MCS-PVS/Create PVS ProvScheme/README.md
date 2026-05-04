@@ -3,7 +3,7 @@
 This repository contains example PowerShell scripts and documentation for creating **Citrix Provisioning (PVS)**–backed Machine Catalogs in **Azure**, using two identity models:
 
 - **Local / On‑prem Active Directory (AD)**
-- **Hybrid Azure AD joined** (on‑prem AD + Azure AD)
+- **Hybrid Entra joined** (on‑prem AD + Azure AD)
 
 The scripts automate creation of:
 
@@ -16,16 +16,16 @@ The scripts automate creation of:
 
 ```text
 /Create PVS ProvScheme/
-  local-ad/
-    Create-PvsProvScheme-LocalAD.ps1
+  traditional-ad/
+    Create-PvsProvScheme-TraditionalAD.ps1
     README.md
 
-  hybrid-azure-ad/
-    Create-PvsProvScheme-HybridAzureAD.ps1
+  hybrid-entra-joined/
+    Create-PvsProvScheme-HybridEntraJoined.ps1
     README.md
 
    ```
-## `local-ad/` – MCS PVS Catalogs with Local / On‑prem AD
+## `traditional-ad/` – MCS PVS Catalogs with Traditional AD
 
 This folder contains scripts and documentation for creating **PVS‑backed MCS Catalogs** where machines are:
 
@@ -34,27 +34,27 @@ This folder contains scripts and documentation for creating **PVS‑backed MCS C
 
 ### When to use
 
-Use `local-ad/` if:
+Use `traditional-ad/` if:
 
 - Azure is used only as the **compute platform**, and
 - Identity and device management are **on‑prem AD–centric**.
 
-## `hybrid-azure-ad/` – MCS PVS Catalogs with Hybrid Azure AD Join
+## `hybrid-entra-joined/` – MCS PVS Catalogs with Hybrid Entra join
 
 This folder contains scripts and documentation for creating **PVS‑backed MCS Catalogs** where machines are:
 
 - Joined to **on‑prem AD** (for traditional domain services), and  
-- Registered as **Hybrid Azure AD joined** devices in **Azure AD**.
+- Registered as **Hybrid Entra joined** devices in **Azure AD**.
 
 ### When to use
 
-Use `hybrid-azure-ad/` if you want:
+Use `hybrid-entra-joined/` if you want:
 
 - Machines to be **domain‑joined** for:
   - GPOs
   - Legacy apps
   - File/print services
-- And also **Hybrid Azure AD joined** for:
+- And also **Hybrid Entra joined** for:
   - Conditional Access
   - Intune device management
   - Modern authentication and device‑based access controls

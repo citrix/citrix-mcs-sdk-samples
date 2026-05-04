@@ -12,7 +12,7 @@ The scripts demonstrate how to:
 Typical scripts in this folder include examples for:
 
 - **Local Active Directory-joined** PVS catalogs.
-- **Hybrid Azure AD joined** PVS catalogs.
+- **Hybrid Entra joined** PVS catalogs.
 - **Complete catalog removal** (including VMs).
 
 Use these scripts as reference automation for end-to-end **Citrix MCS + PVS provisioning** scenarios on XenServer.

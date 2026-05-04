@@ -1,11 +1,11 @@
-# PVS Catalog Creation with MCS Provisioning (Local AD)
+# PVS Catalog Creation with MCS Provisioning (Traditional AD)
 
 This section explains how to create a **Citrix Provisioning Services (PVS) Provisioning Scheme (ProvScheme)** in **Citrix Virtual Apps and Desktops (CVAD)** for **local Active Directory–joined** catalogs.
 
-The script [`Create-PvsProvScheme-LocalAD.ps1`](./Create-PvsProvScheme-LocalAD.ps1) provides an example of how to use `New-ProvScheme` to provision PVS catalogs.
+The script [`Create-PvsProvScheme-TraditionalAD.ps1`](./Create-PvsProvScheme-TraditionalAD.ps1) provides an example of how to use `New-ProvScheme` to provision PVS catalogs.
 
 To create a PVS provisioning scheme, use the script available at:  
-[`Create-PvsProvScheme-LocalAD.ps1`](./Create-PvsProvScheme-LocalAD.ps1).
+[`Create-PvsProvScheme-TraditionalAD.ps1`](./Create-PvsProvScheme-TraditionalAD.ps1).
 
 ---
 
@@ -111,7 +111,7 @@ Run the PVS Configuration Wizard on every PVS Server in the farm to join the PVS
 
 ## 2.5 How to Retrieve PVS Site Details
 
-Use the CVAD/DaaS PowerShell SDK to retrieve PVS details that are required when creating the PVS catalog. The PVS site and VDisk information is required in the script [`Create-PvsProvScheme-LocalAD.ps1`](./Create-PvsProvScheme-LocalAD.ps1)
+Use the CVAD/DaaS PowerShell SDK to retrieve PVS details that are required when creating the PVS catalog. The PVS site and VDisk information is required in the script [`Create-PvsProvScheme-TraditionalAD.ps1`](./Create-PvsProvScheme-TraditionalAD.ps1)
 
 1. **Get the Site and Farm IDs**  
    Use `Get-HypPvsSite` to retrieve the **Site ID** and associated **Farm ID**.

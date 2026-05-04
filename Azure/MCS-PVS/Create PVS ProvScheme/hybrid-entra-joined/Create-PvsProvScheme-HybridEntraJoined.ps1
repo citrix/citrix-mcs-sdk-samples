@@ -1,4 +1,4 @@
-﻿# /*************************************************************************
+# /*************************************************************************
 # * Copyright © Citrix Systems, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
@@ -6,11 +6,11 @@
 
 <#
 .SYNOPSIS
-    Creates a Hybrid Azure AD joined PVS catalog using MCS.
+    Creates a Hybrid Entra joined joined PVS catalog using MCS.
 
 .DESCRIPTION
-    Create-PvsProvScheme-HybridAzureAD.ps1 creates a PVS Provisioning Scheme (PVS provisioning using MCS)
-    and a PVS‑backed Machine Catalog configured for Hybrid Azure AD joined machines.
+    Create-PvsProvScheme-HybridEntraJoined.ps1 creates a PVS Provisioning Scheme (PVS provisioning using MCS)
+    and a PVS‑backed Machine Catalog configured for Hybrid Entra joined joined machines.
 
     The original version of this script is compatible with
     Citrix Virtual Apps and Desktops 7 2402 Long Term Service Release (LTSR) or later.
@@ -24,9 +24,9 @@
 # Replaceable parameters
 # ==============================
 
-# Identity / domain (Hybrid Azure AD)
+# Identity / domain (Hybrid Entra joined)
 
-# Hybrid Azure AD identity pool name
+# Hybrid Entra joined identity pool name
 # Example: "CTX-HybridAAD-MultiSession-EastUS"
 $identityPoolName        = "HybridAADJoinedCatalog"
 
@@ -138,7 +138,7 @@ $allocationType          = "Random"
 
 # Description shown in Studio / Web Studio
 # Example: "Hybrid AAD joined multi-session catalog using PVS with MCS"
-$description             = "PVS provisioning using MCS – Hybrid Azure AD joined catalog"
+$description             = "PVS provisioning using MCS – Hybrid Entra joined joined catalog"
 
 # PersistUserChanges:
 #   "Discard" = non-persistent
@@ -177,7 +177,7 @@ $machineProfilePath = "XDHyp:\HostingUnits\$hostingUnitName\machineprofile.folde
 # Add Citrix snap-ins
 Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2","Citrix.Broker.Admin.V2" -ErrorAction SilentlyContinue
 
-#------------------------------------------------- Create Hybrid Azure AD Identity Pool ------------------------------------------#
+#------------------------------------------------- Create Hybrid Entra joined Identity Pool ------------------------------------------#
 
 New-AcctIdentityPool `
     -AllowUnicode `
@@ -189,7 +189,7 @@ New-AcctIdentityPool `
     -OU $ouDn `
     -Scope @()
 
-#------------------------------------------------- Create AD Accounts for Hybrid Azure AD ----------------------------------------#
+#------------------------------------------------- Create AD Accounts for Hybrid Entra joined ----------------------------------------#
 
 New-AcctADAccount `
     -IdentityPoolName $identityPoolName `
@@ -224,7 +224,7 @@ $createdProvScheme = New-ProvScheme -CleanOnBoot:$isCleanOnBoot `
     -MachineProfile $machineProfilePath `
     -UseWriteBackCache -WriteBackCacheDiskSize $writeBackCacheDiskSizeGB
 
-#------------------------------------------------- Create the Broker Catalog (Hybrid Azure AD) -----------------------------------#
+#------------------------------------------------- Create the Broker Catalog (Hybrid Entra joined) -----------------------------------#
 
 New-BrokerCatalog -Name $provisioningSchemeName `
     -ProvisioningSchemeId $createdProvScheme.ProvisioningSchemeUid `
