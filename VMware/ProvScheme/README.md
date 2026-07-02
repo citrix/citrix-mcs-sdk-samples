@@ -23,3 +23,4 @@ The following folders explain the VMware features for **ProvScheme**:
 * [Write-Back Cache](./Write-Back%20Cache/): Descriptions for utilizing Write-Back Cache.
 * [Data Disk](./Data%20Disk/): Descriptions for utilizing Data Disk.
 * [Folder Id](./Folder%20ID/): Descriptions for updating Folder Id.
+* [vTPM Provision Policy](./vTPM%20Provision%20Policy/): Descriptions for controlling the vTPM provision policy (None, Clone, Clean).
