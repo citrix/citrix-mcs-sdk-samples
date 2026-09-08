@@ -24,3 +24,7 @@ The following folders explain the VMware features for **ProvScheme**:
 * [Data Disk](./Data%20Disk/): Descriptions for utilizing Data Disk.
 * [Folder Id](./Folder%20ID/): Descriptions for updating Folder Id.
 * [vTPM Provision Policy](./vTPM%20Provision%20Policy/): Descriptions for controlling the vTPM provision policy (None, Clone, Clean).
+
+## 3. Troubleshooting Image Preparation Failures
+
+* [Image Prep Debugging](./Image%20Prep%20Debugging/): Keep the image preparation VM on failure so its logs can be inspected, then find and remove it.
