@@ -13,6 +13,7 @@
     6. VMCpuCount: Number of vCPUs.
     7. VMMemoryMB: Memory size in MB.
     8. MachineProfile: The machine profile used.
+    9. Scope: One or more administrative scope names to assign to the image definition. Optional; defaults to none.
 #>
 
 # /*************************************************************************
@@ -29,13 +30,25 @@ param(
     [hashtable]$NetworkMapping,
     [string] $VMCpuCount,
     [string] $VMMemoryMB,
-    [Parameter(Mandatory = $false)][string]$MachineProfile
+    [Parameter(Mandatory = $false)][string]$MachineProfile,
+    [Parameter(Mandatory = $false)][string[]]$Scope = @()
 )
 
 # Enable Citrix PowerShell Cmdlets
 Add-PSSnapin -Name "Citrix.Host.Admin.V2", "Citrix.MachineCreation.Admin.V2"
 
-$Definition = New-ProvImageDefinition -ImageDefinitionName $DefinitionName -OsType Windows -VDASessionSupport MultiSession
+$NewDefinitionParams = @{
+    ImageDefinitionName = $DefinitionName
+    OsType              = "Windows"
+    VDASessionSupport   = "MultiSession"
+}
+
+# The -Scope parameter requires Citrix DaaS DDC 129 or later. Only pass it when scopes are supplied.
+if ($Scope) {
+    $NewDefinitionParams["Scope"] = $Scope
+}
+
+$Definition = New-ProvImageDefinition @NewDefinitionParams
 
 $Version = New-ProvImageVersion -ImageDefinitionName $Definition.ImageDefinitionName
 

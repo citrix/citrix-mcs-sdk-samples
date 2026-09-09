@@ -15,6 +15,7 @@
     8. ConnCustomProperties: Custom properties for the connection. You need to specify the primary clusterId where the prepared image will be placed on. See Readme.md for how to get and specify the ClusterId in CustomProperties.
     9. SpecCustomProperties: Custom properties for the image version spec.
     10. AdditionalStorageIds: The cluster id where the prepared image will be replicated to. See Readme.md for how to get the ClusterId.
+    11. Scope: One or more administrative scope names to assign to the image definition. Optional; defaults to none.
 #>
 
 # /*************************************************************************
@@ -33,13 +34,25 @@ param(
     [Parameter(Mandatory = $false)][string]$MachineProfile,
     [Parameter(Mandatory = $false)][string]$ConnCustomProperties,
     [Parameter(Mandatory = $false)][string]$SpecCustomProperties,
-    [Parameter(Mandatory = $false)][string]$AdditionalStorageIds
+    [Parameter(Mandatory = $false)][string]$AdditionalStorageIds,
+    [Parameter(Mandatory = $false)][string[]]$Scope = @()
 )
 
 # Enable Citrix PowerShell Cmdlets
 Add-PSSnapin -Name "Citrix.Host.Admin.V2", "Citrix.MachineCreation.Admin.V2"
 
-$Definition = New-ProvImageDefinition -ImageDefinitionName $DefinitionName -OsType Windows -VDASessionSupport MultiSession
+$NewDefinitionParams = @{
+    ImageDefinitionName = $DefinitionName
+    OsType              = "Windows"
+    VDASessionSupport   = "MultiSession"
+}
+
+# The -Scope parameter requires Citrix DaaS DDC 129 or later. Only pass it when scopes are supplied.
+if ($Scope) {
+    $NewDefinitionParams["Scope"] = $Scope
+}
+
+$Definition = New-ProvImageDefinition @NewDefinitionParams
 
 $Version = New-ProvImageVersion -ImageDefinitionName $Definition.ImageDefinitionName
 
