@@ -38,6 +38,27 @@ An Image Definition holds information about:
 New-ProvImageDefinition -ImageDefinitionName "demo" -OsType Windows -VDASessionSupport MultiSession
 ```
 
+### Image Definition Scope
+Requires Citrix DaaS DDC 129 or later.
+
+You can assign administrative scopes to an image definition at creation time using the optional `-Scope` parameter:
+
+```powershell
+New-ProvImageDefinition -ImageDefinitionName "demo" -OsType Windows -VDASessionSupport MultiSession -Scope @("ScopeA", "ScopeB")
+```
+
+Add scopes to an existing image definition:
+
+```powershell
+Add-ProvImageDefinitionScope -ImageDefinitionName "demo" -Scope @("ScopeA")
+```
+
+Remove scopes from an existing image definition:
+
+```powershell
+Remove-ProvImageDefinitionScope -ImageDefinitionName "demo" -Scope @("ScopeA")
+```
+
 ### Image Definition Connection
 Image definition connection is the hypervisor connection which holds master images.
 
