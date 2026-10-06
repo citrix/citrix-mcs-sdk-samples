@@ -7,7 +7,7 @@
     Dsv6 series (NVMe-only — Azure v6 and later VM generations support NVMe exclusively) and the machine profile is
     a template spec whose VM resource has storageProfile.diskControllerType explicitly set to NVMe.
 
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2503.
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2607 LTSR CU1.
 #>
 
 # /*************************************************************************
@@ -43,7 +43,6 @@ $subnetName                          = "default"
 
 # [User Input Required] Machine profile
 # The machine profile template spec has storageProfile.diskControllerType set to "NVMe" in its VM resource.
-# Note: If the machine profile OS disk has diskControllerTypes set, it must match the master image's SupportedDiskControllerTypes.
 # Result: NVMe
 $machineProfileResourceGroupName     = "demo-machineProfileResourceGroupName"
 $templateSpecName                    = "demo-templateSpec"

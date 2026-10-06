@@ -7,7 +7,7 @@
     Dsv5 series (supports SCSI only). VMs provisioned with these sizes always use SCSI storage regardless
     of the machine profile VM DiskControllerType setting.
 
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2503.
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2607 LTSR CU1.
 #>
 
 # /*************************************************************************
@@ -28,7 +28,7 @@ $hostingUnitName                     = "demo-hostingUnit"
 $numberOfVms                         = 1
 $region                              = "East US"
 
-# [User Input Required] Master image — must support NVMe (SupportedDiskControllerTypes includes NVMe)
+# [User Input Required] Master image — must support the SCSI disk controller type (SupportedDiskControllerTypes includes SCSI)
 $masterImageResourceGroupName        = "demo-masterImageResourceGroupName"
 $masterImageSnapshotName             = "demo-snapshot.snapshot"
 
@@ -44,7 +44,6 @@ $subnetName                          = "default"
 # [User Input Required] Machine profile
 # The machine profile VM storageProfile.diskControllerType should be set to "SCSI" or left unset.
 # Dsv5 sizes support SCSI only — the result is always SCSI.
-# Note: If the machine profile OS disk has diskControllerTypes set, it must match the master image's SupportedDiskControllerTypes.
 # Result: SCSI
 $machineProfileResourceGroupName     = "demo-machineProfileResourceGroupName"
 $machineProfileVmName                = "demo-vm"  # This VM has storageProfile.diskControllerType = SCSI (or the field can be left unset)
