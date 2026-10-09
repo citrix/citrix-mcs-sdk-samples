@@ -10,7 +10,7 @@
     For VM sizes that support both SCSI and NVMe, the machine profile VM DiskControllerType determines the result.
     Omitting the field defaults to SCSI; setting it to SCSI also produces SCSI; setting it to NVMe produces NVMe.
 
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2503.
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2607 LTSR CU1.
 #>
 
 # /*************************************************************************
@@ -31,7 +31,7 @@ $hostingUnitName                     = "demo-hostingUnit"
 $numberOfVms                         = 1
 $region                              = "East US"
 
-# [User Input Required] Master image — must support NVMe (SupportedDiskControllerTypes includes NVMe)
+# [User Input Required] Master image — must support the SCSI disk controller type (SupportedDiskControllerTypes includes SCSI)
 $masterImageResourceGroupName        = "demo-masterImageResourceGroupName"
 $masterImageSnapshotName             = "demo-snapshot.snapshot"
 
@@ -47,7 +47,6 @@ $subnetName                          = "default"
 # [User Input Required] Machine profile
 # The machine profile template spec must have storageProfile.diskControllerType set to "SCSI" in its VM resource.
 # Because the Ebsv5 size supports both SCSI and NVMe, the machine profile Disk Controller Type determines which is used.
-# Note: If the machine profile OS disk has diskControllerTypes set, it must match the master image's SupportedDiskControllerTypes.
 # Result: SCSI
 $machineProfileResourceGroupName     = "demo-machineProfileResourceGroupName"
 $templateSpecName                    = "demo-templateSpec"

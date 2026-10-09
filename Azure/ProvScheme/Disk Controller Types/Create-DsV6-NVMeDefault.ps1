@@ -8,7 +8,7 @@
     does not have storageProfile.diskControllerType set. For NVMe-only VM sizes, Azure defaults to NVMe
     when the field is unspecified, so no explicit setting is required.
 
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2503.
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2607 LTSR CU1.
 #>
 
 # /*************************************************************************
@@ -45,7 +45,6 @@ $subnetName                          = "default"
 # [User Input Required] Machine profile
 # The machine profile VM does not have storageProfile.diskControllerType set in its ARM template.
 # For NVMe-only VM sizes (Dsv6 and other v6+ series), Azure defaults to NVMe when the field is unspecified.
-# Note: If the machine profile OS disk has diskControllerTypes set, it must match the master image's SupportedDiskControllerTypes.
 # Result: NVMe
 $machineProfileResourceGroupName     = "demo-machineProfileResourceGroupName"
 $machineProfileVmName                = "demo-vm"  # This VM does not have storageProfile.diskControllerType set

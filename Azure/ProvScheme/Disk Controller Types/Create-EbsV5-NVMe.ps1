@@ -10,7 +10,7 @@
     For VM sizes that support both SCSI and NVMe, you must explicitly set storageProfile.diskControllerType
     to NVMe in the machine profile VM to enable NVMe. Omitting the field defaults to SCSI.
 
-    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2503.
+    The original version of this script is compatible with Citrix Virtual Apps and Desktops 7 2607 LTSR CU1.
 #>
 
 # /*************************************************************************
@@ -47,7 +47,6 @@ $subnetName                          = "default"
 # [User Input Required] Machine profile
 # The machine profile VM must have storageProfile.diskControllerType set to "NVMe" in its ARM template.
 # For Ebsv5 sizes (SCSI+NVMe capable), explicitly setting NVMe is required to enable NVMe storage.
-# Note: If the machine profile OS disk has diskControllerTypes set, it must match the master image's SupportedDiskControllerTypes.
 # Result: NVMe
 $machineProfileResourceGroupName     = "demo-machineProfileResourceGroupName"
 $machineProfileVmName                = "demo-vm"  # This VM has storageProfile.diskControllerType = NVMe
