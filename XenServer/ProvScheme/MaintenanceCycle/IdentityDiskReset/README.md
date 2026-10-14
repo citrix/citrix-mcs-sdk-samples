@@ -31,8 +31,11 @@ New-ProvMaintenanceCycle -AllVMs `
   -ScheduledStartTimeInUTC $startTime `
   -Operation ResetIDDisk
 
-# For specific VMs
-New-ProvMaintenanceCycle -VMName reset03, reset05 `
+# For specific VMs. Narrow the repair above to the same VMs so that
+# only they get a new AD password:
+#   $vmNames | ForEach-Object { Get-ProvVm -ProvisioningSchemeName $provisioningSchemeName -VMName $_ } |
+#     Repair-AcctIdentity -Target IdentityInfo
+New-ProvMaintenanceCycle -VMName $vmNames `
   -ProvisioningSchemeName $provisioningSchemeName `
   -ScheduledStartTimeInUTC $startTime `
   -Operation ResetIDDisk

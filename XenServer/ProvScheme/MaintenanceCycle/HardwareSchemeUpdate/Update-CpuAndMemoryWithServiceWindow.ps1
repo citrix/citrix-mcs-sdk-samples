@@ -118,9 +118,8 @@ New-ProvVmHardwareUpdate @serviceWindowParams `
     -ADAccountSid $($testVM.SID)
 
 # A-3. (Optional) Canary rollout - apply to a small batch of VMs before the
-#      full fleet. This lets you validate the update on a controlled subset
-#      and catch issues early, making the rollout safer.
-
+#      full fleet. Uncomment and run this separately, once A-2 is validated.
+<#
 $vmList = @("VM-001", "VM-002", "VM-003")
 foreach ($vmName in $vmList) {
     $vm = Get-BrokerMachine -DNSName "$vmName.domain.local"
@@ -129,6 +128,7 @@ foreach ($vmName in $vmList) {
         -ProvisioningSchemeVersion 2 `
         -ADAccountSid $($vm.SID)
 }
+#>
 
 # A-4. Once the single-VM or canary batch passes, roll out to the remaining VMs.
 #      Uncomment and run this separately, after the earlier steps are validated.

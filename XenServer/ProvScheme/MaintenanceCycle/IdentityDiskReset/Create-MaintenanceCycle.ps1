@@ -19,8 +19,9 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 # Prepare Parameters
 #####################
 $provisioningSchemeName = "test"
-$startTimeForMaintenanceCycle = [datetime]::SpecifyKind([datetime]'2026-11-15 22:14:33', 'utc')
-$description = "Resetting the Identity information of all virtual machines on 15th November"
+$vmNames = @("reset03", "reset05")
+$startTimeForMaintenanceCycle = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+$description = "Resetting the Identity information of all virtual machines"
 $maxDurationInMinutes = 100
 $dataToBeStoredInDB = 30
 $sessionWarningTimeInMinutes = 45
@@ -48,8 +49,14 @@ New-ProvMaintenanceCycle -AllVMs `
 
 ########################################################
 # Create Provisioning Maintenance Cycle for list of vms
+# Use this instead of the all-VMs cycle above. The repair is
+# narrowed to match, so only these VMs get a new AD password.
 ########################################################
-New-ProvMaintenanceCycle -VMName reset03, reset05 `
+<#
+$vmNames | ForEach-Object { Get-ProvVm -ProvisioningSchemeName $provisioningSchemeName -VMName $_ } |
+  Repair-AcctIdentity -Target IdentityInfo
+
+New-ProvMaintenanceCycle -VMName $vmNames `
   -ProvisioningSchemeName $provisioningSchemeName `
   -ScheduledStartTimeInUTC $startTimeForMaintenanceCycle `
   -Operation ResetIDDisk `
@@ -59,3 +66,4 @@ New-ProvMaintenanceCycle -VMName reset03, reset05 `
   -SessionWarningTimeInMinutes $sessionWarningTimeInMinutes `
   -SessionWarningLogOffTitle $SessionWarningLogOffTitle `
   -SessionWarningLogOffMessage $SessionWarningLogOffMessage
+#>

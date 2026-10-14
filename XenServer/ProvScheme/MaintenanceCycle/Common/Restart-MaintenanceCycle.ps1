@@ -19,7 +19,7 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 #####################
 #real maintenance cycle guid should be passed in
 $maintenanceCycleId = "00000000-0000-0000-0000-000000000000"
-$newStartTime = [datetime]::SpecifyKind([datetime]'2026-11-18 22:14:33', 'utc')
+$newStartTime = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
 $newMaxDuration = 400
 
 ####################################################

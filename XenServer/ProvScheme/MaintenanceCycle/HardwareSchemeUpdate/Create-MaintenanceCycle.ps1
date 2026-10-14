@@ -18,8 +18,8 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 # Prepare Parameters
 #####################
 $provisioningSchemeName = "test"
-$startTimeForMaintenanceCycle = [datetime]::SpecifyKind([datetime]'2026-11-15 22:14:33', 'utc')
-$description = "Updating cpu counts of all virtual machines on 15th November from 4 to 8"
+$startTimeForMaintenanceCycle = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+$description = "Updating cpu counts of all virtual machines from 4 to 8"
 $maxDurationInMinutes = 100
 $dataToBeStoredInDB = 30
 $sessionWarningTimeInMinutes = 45

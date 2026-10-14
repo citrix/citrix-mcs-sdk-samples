@@ -22,8 +22,8 @@ Add-PSSnapin -Name "Citrix.Host.Admin.V2","Citrix.MachineCreation.Admin.V2"
 $maintenanceCycleId = "00000000-0000-0000-0000-000000000000"
 #real provisioning scheme guid should be passed in
 $provisioningSchemeUid = "00000000-0000-0000-0000-000000000000"
-$newStartTimeForMaintenanceCycle = [datetime]::SpecifyKind([datetime]'2026-11-24 22:14:33', 'utc')
-$newDescription = "Updating maintenance cycle on 24th November"
+$newStartTimeForMaintenanceCycle = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+$newDescription = "Updating maintenance cycle"
 $newMaxDurationInMinutes = 400
 $newDataToBeStoredInDB = 40
 $newSessionWarningTimeInMinutes = 100
