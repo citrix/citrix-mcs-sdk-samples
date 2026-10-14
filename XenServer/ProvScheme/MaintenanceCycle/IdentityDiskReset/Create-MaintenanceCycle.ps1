@@ -53,6 +53,9 @@ New-ProvMaintenanceCycle -AllVMs `
 # narrowed to match, so only these VMs get a new AD password.
 ########################################################
 <#
+# Refresh the start time; it was computed when the script first ran.
+$startTimeForMaintenanceCycle = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+
 $vmNames | ForEach-Object { Get-ProvVm -ProvisioningSchemeName $provisioningSchemeName -VMName $_ } |
   Repair-AcctIdentity -Target IdentityInfo
 

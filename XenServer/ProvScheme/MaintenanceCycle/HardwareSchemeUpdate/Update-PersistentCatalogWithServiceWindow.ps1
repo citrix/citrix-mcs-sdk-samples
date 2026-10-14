@@ -119,6 +119,9 @@ New-ProvVmHardwareUpdate @serviceWindowParams `
 
 # Option 2: Canary rollout - apply to a small batch of VMs
 <#
+# Refresh the start time; it was computed when the script first ran.
+$serviceWindowParams.ScheduledStartTimeInUTC = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+
 $vmList = @("VM-001", "VM-002", "VM-003")
 foreach ($vmName in $vmList) {
     $vm = Get-BrokerMachine -DNSName "$vmName.domain.local"
@@ -132,6 +135,9 @@ foreach ($vmName in $vmList) {
 # Option 3: Once validated, roll out to all VMs.
 #           Uncomment and run this separately, after Option 1 or 2 is validated.
 <#
+# Refresh the start time; it was computed when the script first ran.
+$serviceWindowParams.ScheduledStartTimeInUTC = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+
 New-ProvSchemeHardwareUpdate -AllVMs @serviceWindowParams `
     -ProvisioningSchemeVersion 2
 #>

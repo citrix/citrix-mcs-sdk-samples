@@ -120,6 +120,9 @@ New-ProvVmHardwareUpdate @serviceWindowParams `
 # A-3. (Optional) Canary rollout - apply to a small batch of VMs before the
 #      full fleet. Uncomment and run this separately, once A-2 is validated.
 <#
+# Refresh the start time; it was computed when the script first ran.
+$serviceWindowParams.ScheduledStartTimeInUTC = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+
 $vmList = @("VM-001", "VM-002", "VM-003")
 foreach ($vmName in $vmList) {
     $vm = Get-BrokerMachine -DNSName "$vmName.domain.local"
@@ -133,6 +136,9 @@ foreach ($vmName in $vmList) {
 # A-4. Once the single-VM or canary batch passes, roll out to the remaining VMs.
 #      Uncomment and run this separately, after the earlier steps are validated.
 <#
+# Refresh the start time; it was computed when the script first ran.
+$serviceWindowParams.ScheduledStartTimeInUTC = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
+
 New-ProvSchemeHardwareUpdate -AllVMs @serviceWindowParams `
     -ProvisioningSchemeVersion 2
 #>
@@ -140,6 +146,9 @@ New-ProvSchemeHardwareUpdate -AllVMs @serviceWindowParams `
 # ---- Option B: Apply to all VMs directly -------------------------------------
 <#
     If you are confident and want to update every VM in the catalog at once:
+
+    # Refresh the start time; it was computed when the script first ran.
+    $serviceWindowParams.ScheduledStartTimeInUTC = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
 
     New-ProvSchemeHardwareUpdate -AllVMs @serviceWindowParams `
         -ProvisioningSchemeVersion 2
@@ -181,6 +190,9 @@ Get-ProvMaintenanceCycleVM `
 <#
     If a machine failed during the update, roll it back to the previous version
     and investigate the issue before retrying.
+
+    # Refresh the start time; it was computed when the script first ran.
+    $serviceWindowParams.ScheduledStartTimeInUTC = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
 
     # Roll back a single VM:
     $failedVM = Get-BrokerMachine -DNSName "failed-vm-name.domain.local"
