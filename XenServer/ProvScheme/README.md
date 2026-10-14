@@ -22,6 +22,12 @@ The following folders explain the XenServer features for **ProvScheme**:
 * [Full Clone](./Full%20Clone/): Descriptions for utilizing Full Clone.
 * [Write-Back Cache](./Write-Back%20Cache/): Descriptions for utilizing Write-Back Cache.
 
-## 3. Troubleshooting Image Preparation Failures
+## 3. Provisioning Maintenance Cycle
+
+The Maintenance Cycle feature allows scheduling and automating maintenance operations on MCS-provisioned VMs on XenServer. Operations include image updates, OS disk resets, identity disk resets, and hardware configuration changes.
+
+* [MaintenanceCycle](./MaintenanceCycle/): Scripts for creating, managing, and monitoring Maintenance Cycles.
+
+## 4. Troubleshooting Image Preparation Failures
 
 * [Image Prep Debugging](./Image%20Prep%20Debugging/): Keep the image preparation VM on failure so its logs can be inspected, then find and remove it.
