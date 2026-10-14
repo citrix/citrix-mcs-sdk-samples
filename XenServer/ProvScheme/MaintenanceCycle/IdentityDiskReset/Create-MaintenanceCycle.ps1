@@ -30,7 +30,7 @@ $SessionWarningLogOffMessage = "Your workstation will soon be turned down for ma
 #####################
 # Repair the Identity
 #####################
-Get-ProvVm | Repair-AcctIdentity -Target IdentityInfo
+Get-ProvVm -ProvisioningSchemeName $provisioningSchemeName | Repair-AcctIdentity -Target IdentityInfo
 
 ####################################################
 # Create Provisioning Maintenance Cycle for all vms

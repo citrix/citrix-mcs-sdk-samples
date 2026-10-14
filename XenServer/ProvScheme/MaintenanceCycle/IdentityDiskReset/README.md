@@ -22,8 +22,8 @@ Creates an Identity Disk Reset maintenance cycle for all VMs or a specific list.
 - `SessionWarningLogOffMessage`
 
 ```powershell
-# Repair identity first
-Get-ProvVm | Repair-AcctIdentity -Target IdentityInfo
+# Repair identity first, scoped to the catalog being reset
+Get-ProvVm -ProvisioningSchemeName $provisioningSchemeName | Repair-AcctIdentity -Target IdentityInfo
 
 # For all VMs
 New-ProvMaintenanceCycle -AllVMs `

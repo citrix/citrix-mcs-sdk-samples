@@ -54,7 +54,7 @@ $sessionWarningLogOffTitle   = "Scheduled Maintenance"
 $sessionWarningLogOffMessage = "Your workstation will be restarted for a hardware update. Please save your work."
 # Schedule the service window to start at a specific time (UTC).
 # Use -StartsNow instead of -ScheduledStartTimeInUTC to execute immediately.
-$scheduledStartTimeInUTC     = [datetime]::SpecifyKind([datetime]'2026-04-15 02:00:00', 'utc')
+$scheduledStartTimeInUTC     = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
 
 # Common splatted parameters reused across service-window commands
 $serviceWindowParams = @{
@@ -130,9 +130,12 @@ foreach ($vmName in $vmList) {
         -ADAccountSid $($vm.SID)
 }
 
-# A-4. Once single-VM or canary batch passes, roll out to remaining VMs.
+# A-4. Once the single-VM or canary batch passes, roll out to the remaining VMs.
+#      Uncomment and run this separately, after the earlier steps are validated.
+<#
 New-ProvSchemeHardwareUpdate -AllVMs @serviceWindowParams `
     -ProvisioningSchemeVersion 2
+#>
 
 # ---- Option B: Apply to all VMs directly -------------------------------------
 <#

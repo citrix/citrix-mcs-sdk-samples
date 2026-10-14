@@ -47,7 +47,7 @@ $provisioningSchemeName      = "MyPersistentCatalog"
 $newCpuCount                 = 4
 $newMemoryMB                 = 4096
 $description                 = "Updating persistent catalog CPU to $newCpuCount and memory to $($newMemoryMB / 1024) GB"
-$scheduledStartTimeInUTC     = [datetime]::SpecifyKind([datetime]'2026-04-15 02:00:00', 'utc')
+$scheduledStartTimeInUTC     = [datetime]::UtcNow.Date.AddDays(7).AddHours(2)
 
 $serviceWindowParams = @{
     ProvisioningSchemeName       = $provisioningSchemeName
@@ -129,9 +129,12 @@ foreach ($vmName in $vmList) {
 }
 #>
 
-# Option 3: Once validated, roll out to all VMs
+# Option 3: Once validated, roll out to all VMs.
+#           Uncomment and run this separately, after Option 1 or 2 is validated.
+<#
 New-ProvSchemeHardwareUpdate -AllVMs @serviceWindowParams `
     -ProvisioningSchemeVersion 2
+#>
 
 # ============================================================================
 # Step 5 - Monitor and verify
