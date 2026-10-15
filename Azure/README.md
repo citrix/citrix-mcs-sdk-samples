@@ -10,6 +10,7 @@ Scripts in this folder are tailored to Azure and its unique features. As mention
   - MCS provisioned Azure VMs support non-domain-joined, AD joined, Azure AD joined and Hybrid Azure AD joined as machine identity types.
   - MCS provisioned Azure AD joined VMs support to be placed in Azure AD dynamic security group.
   - MCS provisioned Azure VMs support Microsoft Intune as device management type.
+  - A [Service Account](ServiceAccount) lets MCS manage the Azure AD devices and Intune managed devices of a catalog, authenticating with an application client secret or a managed identity.
   - To learn more about how to create machine identities joined catalogs see https://docs.citrix.com/en-us/citrix-daas/install-configure/create-machine-identities-joined-catalogs 
 - **ProvScheme**
 	- Azure ProvSchemes supports a variety of Custom Properties, which can be used to customize your configuration.
@@ -30,6 +31,7 @@ This repository contains examples of several Azure & MCS features. Note that thi
 - [Backup VM SKU list Support](ProvScheme/Secondary%20VM%20Configuration)
 - [Create PVS Catalog](MCS-PVS/Create%20PVS%20ProvScheme)
 - [Azure Extended Zones](Hosting%20Unit/Extended%20Zones)
+- [Service Account with an application client secret or managed identity](ServiceAccount)
 
 ## Sample Admin Scenario Scripts
 This repository contains common scripts for admins:
