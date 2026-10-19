@@ -16,6 +16,7 @@ This folder contains scripts for various operations, including provisioning a ne
 1. Add ProvVM scripts - To provision a virtual machine in an existing provisioning scheme
 2. Get ProvVM scripts - To get the information of an existing virtual machine
 3. Remove ProvVM scripts - To remove/forget/purge an existing virtual machine
+4. [Get ProvVMDetails](Get%20ProvVMDetails/README.md) - Inspect the hardware, disks, security, and image details of an MCS VM
 
 ## Note
 Updating/Modifying existing provVMs is not supported in SCVMM.
