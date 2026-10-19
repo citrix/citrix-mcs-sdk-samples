@@ -1,7 +1,8 @@
 ﻿<#
 .SYNOPSIS
     Sets or changes Availability Zones on an existing MCS catalog.
-	The updated availability zones will be applicable to new machines post operation, not to the existing machines. It is not yet supported on existing machines.
+	The updated availability zones apply to new machines immediately, and to existing machines after running Set-ProvVMUpdateTimeWindow and rebooting them.
+	Clearing the Zones property reverts the machines to regional placement, where Azure decides the zone.
 	Applicable for Citrix DaaS and on-prem.
 .DESCRIPTION
     Set-AvailabilityZones.ps1 helps change Availability Zone configuration on an existing MCS catalog.
@@ -10,7 +11,7 @@
 #>
 
 # /*************************************************************************
-# * Copyright © 2024. Cloud Software Group, Inc. All Rights Reserved.
+# * Copyright © 2026. Cloud Software Group, Inc. All Rights Reserved.
 # * This file is subject to the license terms contained
 # * in the license file that is distributed with this file.
 # *************************************************************************/

@@ -34,6 +34,18 @@ You can also change the Availability Zone configuration on an existing catalog u
 
 **Note**: The updated availability zones will be applicable to new machines post Set-ProvScheme, and optionally to existing machines after running Set-ProvVMUpdateTimeWindow and rebooting. When applying availability zone updates to existing machines, if the updated availability zones list no longer includes the VM's current availability zone, it will be randomly distributed to a new availability zone in the list. Existing disks will be moved to the new zone along with the VM.
 
+**Note**: You can remove availability zone placement from an existing catalog by clearing the `Zones` custom property — set it to an empty value when running Set-ProvScheme:
+
+```powershell
+$customProperties = @"
+<CustomProperties xmlns="http://schemas.citrix.com/2014/xd/machinecreation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<Property xsi:type="StringProperty" Name="Zones" Value="" />
+</CustomProperties>
+"@
+```
+
+This reverts the machines to regional placement, where Azure decides which zone to place them in. As with other zone updates, it applies to new machines immediately. For existing machines, run Set-ProvVMUpdateTimeWindow and boot the selected machines; each selected machine then moves off its pinned zone to regional placement.
+
 ## Common error cases
 If a user enters invalid or unsupported zones, these errors will be caught early when running New-ProvScheme and will return helpful error messages.
 
