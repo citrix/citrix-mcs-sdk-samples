@@ -74,6 +74,36 @@ $connection = New-Item -Path $connectionPath `
 -SecurePassword $securePassword `
 -ZoneUid $zoneUid
 ```
+
+By default, DDC API traffic to AWS routes through the Cloud Connector. To bypass the connector and have the DDC call AWS APIs directly, set the BypassConnectorForAwsApiRequests connection custom property when creating the hosting connection.
+
+Note:  BypassConnectorForAwsApiRequests cannot be enabled along with IAM role based auth, Cross-account provisioning or System Proxy.
+
+```powershell
+$customProperties = @"
+<CustomProperties xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.citrix.com/2014/xd/machinecreation">
+<Property xsi:type="StringProperty" Name="BypassConnectorForAwsApiRequests" Value="True" />
+</CustomProperties>
+"@
+
+$connectionName = "demo-hostingconnection"
+$cloudRegion = "us-east-1"
+$apiKey = "aaaaaaaaaaaaaaaaaaaa"
+$zoneUid = "00000000-0000-0000-0000-000000000000"
+
+$securePassword = Read-Host 'Please enter your secret key' -AsSecureString
+$connectionPath = "XDHyp:\Connections\" + $connectionName
+
+# Create Connection
+$connection = New-Item -Path $connectionPath `
+-ConnectionType "Custom" -PluginId "AmazonWorkSpacesCoreMachineManagerFactory" `
+-HypervisorAddress "https://workspaces-instances.$($cloudRegion).api.aws" `
+-Persist -Scope @()`
+-UserName $apiKey -SecurePassword $securePassword `
+-ZoneUid $zoneUid `
+-CustomProperties $customProperties
+```
+
 Then add the host connection to the Broker Service. This will now be viewable in Studio
 ```powershell
 New-BrokerHypervisorConnection -HypHypervisorConnectionUid $connection.HypervisorConnectionUid
