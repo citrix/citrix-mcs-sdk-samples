@@ -19,6 +19,7 @@ Follow links to know more about [New-Item](https://developer-docs.citrix.com/en-
 3. To enable [secure environment for GCP managed traffic](https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-gcp#create-a-secure-environment-for-gcp-managed-traffic), use Create-HostingConnection-WithPrivateGoogleAccess script. Make sure to follow this link for [prerequisites to use private Google access](https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-gcp#requirements-to-create-a-secure-environment-for-gcp-managed-traffic).
 4. Please refer to this link to understand [permissions required to create a hosting connection](https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-gcp#creating-a-host-connection).
 5. For detailed information on the GCP permissions needed for various operations, please refer to the following link	[Required GCP permissions](https://docs.citrix.com/en-us/citrix-daas/install-configure/connections/connection-gcp#required-gcp-permissions).
+6. To use GCP service account keyless authentication (no service account JSON key required), use the Create-HostingConnection-Keyless script. Keyless authentication uses the service account attached to the machine that runs the plugin, so no private key is stored.
 
 ## Errors users may encounter during this operation
 1. In case of an invalid ZoneName provided, an error message will be displayed stating, "Could not find the zone (ZoneName). Verify the ZoneName exists or try the default Primary."
