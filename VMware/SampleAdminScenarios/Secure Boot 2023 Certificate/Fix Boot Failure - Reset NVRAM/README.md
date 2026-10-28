@@ -36,6 +36,8 @@ The `Reset-SecureBootNvram.ps1` script resets Secure Boot NVRAM and requires the
 
     7. GuestUsername: Guest OS admin username. When used with -PowerOnAndVerify, enables certificate verification inside the guest OS. Requires VMware Tools.
 
+    8. SkipCertificateCheck: Skip server certificate validation for this run. Not recommended: on an untrusted network the vCenter credentials, and the guest OS credentials when -GuestUsername is used, can be intercepted. Prefer trusting the vCenter certificate on this machine.
+
 The script also supports the `-WhatIf` parameter for dry-run mode, which shows what would happen without making any changes.
 
 The script can be executed with parameters as shown in the examples below:
@@ -166,6 +168,10 @@ Turns off maintenance mode on all VMs via `Set-BrokerMachine -InMaintenanceMode 
     3. Citrix PowerShell SDK must be installed and loaded before running the script (both MachineCreation and Broker modules). Run on a Delivery Controller or a machine with the SDK installed. For on-premises: `Add-PSSnapin Citrix.*`. For Citrix Cloud: `Import-Module Citrix.MachineCreation.Admin.V2` and `Import-Module Citrix.Broker.Admin.V2`, and run `Get-XDAuthentication` first.
 
     4. For verification (-PowerOnAndVerify with -GuestUsername): VMware Tools must be installed and running inside each VM. Guest credentials must have administrator privileges.
+
+    5. The machine running the script must trust the vCenter certificate, and -VCenterServer must be a name the certificate is issued to, usually the vCenter FQDN. To trust it, download the trusted root CA certificates from the vCenter landing page (https://<vCenter FQDN>/certs/download.zip), extract the archive, and import each root certificate file (.0, .1, and so on) into Local Computer > Trusted Root Certification Authorities, as described in Broadcom KB 330833: https://knowledge.broadcom.com/external/article/330833/download-and-install-vcenter-server-root.html. For verification (-PowerOnAndVerify with -GuestUsername), the ESXi host certificates must also be trusted, because the verification output is downloaded directly from the ESXi host.
+
+**Note**: If the script stops with a certificate error, do not change the PowerCLI InvalidCertificateAction setting to get past it, even though the PowerCLI error message suggests this. Set-PowerCLIConfiguration saves the setting for the current Windows user by default, so it would apply to every later PowerCLI session. Trust the vCenter certificate as described above, or use `-SkipCertificateCheck` for a single run.
 
 
 
