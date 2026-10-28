@@ -39,10 +39,3 @@ rules:
       - ''
     resources:
       - configmaps
-  - verbs:
-      - get
-      - list
-    apiGroups:
-      - ''
-    resources:
-      - secrets
