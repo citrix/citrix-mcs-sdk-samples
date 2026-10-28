@@ -31,6 +31,7 @@
     5. ForceTurnOff: Force power off VMs that are currently running before deleting NVRAM.
     6. PowerOnAndVerify: Power on VMs after NVRAM deletion and optionally verify certificates. Without this switch, VMs are left powered off after NVRAM deletion.
     7. GuestUsername: Guest OS admin username. When used with -PowerOnAndVerify, enables certificate verification inside the guest OS. Requires VMware Tools.
+    8. SkipCertificateCheck: Skip server certificate validation for this run. Not recommended: on an untrusted network the vCenter credentials, and the guest OS credentials when -GuestUsername is used, can be intercepted. Prefer trusting the vCenter certificate on this machine.
 .OUTPUTS
     1. A timestamped log file with detailed per-VM results in the current directory.
     2. Console output with phase progress, per-VM status, and a summary table.
@@ -107,7 +108,8 @@ param(
     [string]$VCenterUsername,
     [switch]$ForceTurnOff,
     [switch]$PowerOnAndVerify,
-    [string]$GuestUsername
+    [string]$GuestUsername,
+    [switch]$SkipCertificateCheck
 )
 
 # =====================
@@ -132,6 +134,7 @@ param(
 # Initialize error handling and batch size for async VM operations
 $ErrorActionPreference = "Stop"
 $BatchSize = 10
+$script:savedCertAction = $null
 
 # Create timestamped log file, e.g., Reset-SecureBootNvram_20260505_143000.log
 $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
@@ -405,11 +408,14 @@ function Initialize-VMwareConnection {
         Write-Log -Message "PowerCLI version: $pcliVersion" -Level "INFO" -LogOnly
     }
 
-    $savedWhatIf = $WhatIfPreference
-    $WhatIfPreference = $false
-    $script:savedCertAction = (Get-PowerCLIConfiguration -Scope Session -ErrorAction SilentlyContinue).InvalidCertificateAction
-    Set-PowerCLIConfiguration -Scope Session -InvalidCertificateAction Ignore -Confirm:$false | Out-Null
-    $WhatIfPreference = $savedWhatIf
+    if ($SkipCertificateCheck) {
+        Write-Log -Message "-SkipCertificateCheck specified: server certificate validation is disabled for this run. vCenter and guest OS credentials can be intercepted on an untrusted network." -Level "WARN"
+        $savedWhatIf = $WhatIfPreference
+        $WhatIfPreference = $false
+        $script:savedCertAction = (Get-PowerCLIConfiguration -Scope Session -ErrorAction SilentlyContinue).InvalidCertificateAction
+        Set-PowerCLIConfiguration -Scope Session -InvalidCertificateAction Ignore -Confirm:$false | Out-Null
+        $WhatIfPreference = $savedWhatIf
+    }
 
     Write-Log -Message "Connecting to vCenter: $VCenterServer ..." -Level "INFO"
     $savedWhatIf = $WhatIfPreference
@@ -426,6 +432,9 @@ function Initialize-VMwareConnection {
     }
     catch {
         Write-Log -Message "Failed to connect to vCenter - $_" -Level "ERROR"
+        if ("$_" -match "certificate") {
+            Write-Log -Message "  Trust the vCenter certificate on this machine and connect with the name it is issued to (see the README Prerequisites) rather than changing InvalidCertificateAction, or rerun with -SkipCertificateCheck." -Level "ERROR"
+        }
         exit 1
     }
     $WhatIfPreference = $savedWhatIf
