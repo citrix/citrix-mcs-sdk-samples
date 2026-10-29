@@ -120,7 +120,6 @@ rules:
      - configmaps 
   - verbs:
      - get
-     - list
     apiGroups:
      - ''
     resources:
