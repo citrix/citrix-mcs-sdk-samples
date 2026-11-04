@@ -79,6 +79,11 @@ New-ProvImageVersionSpec `
     -SourceImageVersionSpecUid $masterSpec.ImageVersionSpecUid 
 ```
 
+### Update Prepared Image
+You can update an existing prepared image version spec after it has been created.
+
+See `Update Image/README.md` and `Update Image/Update-Image.ps1` for the Azure update-image workflow.
+
 ### Share Images Cross Hosting Units
 Prepared images can be shared to other hosting units of the same hypervisor connection.
 
