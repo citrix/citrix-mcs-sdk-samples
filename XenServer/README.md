@@ -6,7 +6,7 @@ This guide supports administrators in developing customized scripts for Citrix V
 
 ## 1. Documentation Structure
 
-The content is organized into seven key sections, each targeting a specific domain:
+The content is organized into eight key sections, each targeting a specific domain:
 
 * **Hosting Connection**
 * **Hosting Unit**
@@ -14,6 +14,7 @@ The content is organized into seven key sections, each targeting a specific doma
 * **ProvScheme** 
 * **ProvVM**
 * **MCS-PVS**
+* **Inventory Search**
 * **SampleAdminScenarios**
 
 Each section offers basic starter scripts for high-level CVAD operations, along with concise, **feature-focused cmdlets and descriptions** tailored for XenServer. For instance, ``New-ProvScheme`` is detailed for its role in enabling Full/Fast Clone capabilities.
@@ -84,6 +85,11 @@ The list below outlines the high-level CVAD operations for XenServer that each s
     * [Remove AD Accounts](./Identity/Remove%20ADAccount/)
     * [Get the Detail of an Identity Pool](./Identity/Get%20IdentityPool%20Details/)
     * [Get the Detail of ADAccounts](./Identity/Get%20ADAccounts%20Details/)
+
+* [Operation for **Searching Hypervisor Inventory**](./Inventory%20Search/)
+    * [Search VM Inventory](./Inventory%20Search/Search%20VM%20Inventory/)
+    * [Search Golden Image Inventory](./Inventory%20Search/Search%20Golden%20Image%20Inventory/)
+    * [Search Machine Profile Inventory](./Inventory%20Search/Search%20Machine%20Profile%20Inventory/)
 
 * [**SampleAdminScenarios**](./SampleAdminScenarios/)
     * [Add a Machine Catalog](./SampleAdminScenarios/Add%20Machine%20Catalog/)
