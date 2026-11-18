@@ -23,6 +23,8 @@ Scripts in this folder are tailored to SCVMM/HyperV and its unique features. As 
 This repository contains examples of SCVMM & MCS features. The features listed below are those that currently have examples in this repository:
 - [MachineProfile](../SCVMM/ProvScheme/Machine%20Profile)
 - [MCS Storage Optimization](../SCVMM/ProvScheme/MCS%20Storage%20Optimization)
+- [Provisioning Scheme Hardware Details](ProvScheme/Get%20ProvSchemeDetails/README.md)
+- [Virtual Machine Hardware Details](ProvVm/Get%20ProvVMDetails/README.md)
 
 ## Sample Admin Scenario Scripts
 This repository contains common scripts for admins:
